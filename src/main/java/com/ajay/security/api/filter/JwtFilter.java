@@ -46,10 +46,10 @@ public class JwtFilter extends OncePerRequestFilter {
 		if(tenantHeader!=null)
 			System.out.println("Tenant : "+tenantHeader);
 		
-		MasterTenantEntity masterTenant = masterTenantService.findByName(tenantHeader);
-		if(masterTenant==null) {
-			throw new BadCredentialsException("Invalid Tenant and user!!");
-		}
+//		MasterTenantEntity masterTenant = masterTenantService.findByName(tenantHeader);
+//		if(masterTenant==null) {
+//			throw new BadCredentialsException("Invalid Tenant and user!!");
+//		}
 		TenantStorage.setCurrentTenent(tenantHeader);
 
 		if (autherizationHeader != null && autherizationHeader.startsWith("Bearer ")) {
