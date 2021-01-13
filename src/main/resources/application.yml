@@ -1,0 +1,32 @@
+#spring:
+#  h2:
+#    console:
+#      enabled: true
+#      
+
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL55Dialect
+    show-sql: true
+    
+multitenancy:
+  master:
+    datasource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbcUrl: jdbc:mysql://localhost:3306/masterdb
+      password: root
+      username: root
+      
+#tenants:
+#  datasources:
+#    test1:
+#      driverClassName: com.mysql.cj.jdbc.Driver
+#      jdbcUrl: jdbc:mysql://localhost:3306/test1
+#      password: root
+#      username: root
+#
+#    test2:
+#      driverClassName: com.mysql.cj.jdbc.Driver
+#      jdbcUrl: jdbc:mysql://localhost:3306/test2
+#      password: root
+#      username: root
