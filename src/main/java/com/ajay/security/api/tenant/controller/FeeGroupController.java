@@ -1,0 +1,49 @@
+package com.ajay.security.api.tenant.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ajay.security.api.tenant.entity.FeeGroup;
+import com.ajay.security.api.tenant.service.FeeGroupService;
+
+@RestController
+@RequestMapping("/feeGroup")
+public class FeeGroupController {
+
+	@Autowired
+	private FeeGroupService feeGroupService;
+
+	@GetMapping("/all")
+	public List<FeeGroup> getAllFeeGroup() {
+		return feeGroupService.getAllFeeGroups();
+	}
+
+	@GetMapping("/one/{id}")
+	public FeeGroup getOneFeeGroup(@PathVariable Integer id) {
+		return feeGroupService.getOneFeeGroup(id);
+	}
+
+	@PostMapping("/save")
+	public String saveFeeGroup(@RequestBody FeeGroup feeGroup) {
+		return feeGroupService.saveFeeGroup(feeGroup);
+	}
+
+	@PutMapping("/update")
+	public String updateFeeGroup(@RequestBody FeeGroup feeGroup) {
+		return feeGroupService.updateFeeGroup(feeGroup);
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public String deleteOneFeeGroup(@PathVariable Integer id) {
+		return feeGroupService.deleteOneFeeGroup(id);
+	}
+}

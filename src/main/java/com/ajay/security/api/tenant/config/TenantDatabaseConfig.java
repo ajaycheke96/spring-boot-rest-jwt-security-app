@@ -20,19 +20,19 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.ajay.security.api.entity.User;
-import com.ajay.security.api.mastertenant.DataSourceBasedMultiTenantConnectionProviderImpl;
-import com.ajay.security.api.repository.UserRepository;
-import com.ajay.security.api.service.UserService;
+import com.ajay.security.api.mastertenant.config.DataSourceBasedMultiTenantConnectionProviderImpl;
+import com.ajay.security.api.tenant.entity.User;
+import com.ajay.security.api.tenant.repository.UserRepository;
+import com.ajay.security.api.tenant.service.UserService;
 
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "com.ajay.security.api.repository",
-        "com.ajay.security.api.entity" })
+@ComponentScan(basePackages = { "com.ajay.security.api.tenant.repository",
+        "com.ajay.security.api.tenant.entity" })
 @EnableJpaRepositories(basePackages = {
-        "com.ajay.security.api.repository",
-        "com.ajay.security.api.service" }, 
+        "com.ajay.security.api.tenant.repository",
+        "com.ajay.security.api.tenant.service" }, 
         entityManagerFactoryRef = "tenantEntityManagerFactory", 
         transactionManagerRef = "tenantTransactionManager")
 public class TenantDatabaseConfig {
@@ -116,7 +116,7 @@ public class TenantDatabaseConfig {
                 "org.hibernate.dialect.MySQL5Dialect");
         properties.put(org.hibernate.cfg.Environment.SHOW_SQL, true);
         properties.put(org.hibernate.cfg.Environment.FORMAT_SQL, true);
-        properties.put(org.hibernate.cfg.Environment.HBM2DDL_AUTO, "update");
+        properties.put(org.hibernate.cfg.Environment.HBM2DDL_AUTO, "none");
 
         emfBean.setJpaPropertyMap(properties);
         System.out.println("tenantEntityManagerFactory set up successfully!");
