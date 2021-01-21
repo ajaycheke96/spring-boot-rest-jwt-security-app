@@ -5,9 +5,10 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -29,14 +30,17 @@ public class StudentFeeRecordDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
+	private Integer id;
 
+	@Column(length = 20)
 	private int amount;
 
 	@Column(name = "created_at")
 	private Timestamp createdAt;
 
-	@Lob
+	@Column(length = 50)
 	private String options;
 
 	@Column(name = "updated_at")

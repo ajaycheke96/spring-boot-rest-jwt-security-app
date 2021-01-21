@@ -10,6 +10,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -37,12 +39,15 @@ public class Transaction implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
+	private Integer id;
 
+	@Column(length = 20)
 	private BigDecimal amount;
 
 	@Lob
-	@Column(name = "cancellation_remarks")
+	@Column(name = "cancellation_remarks", length = 30)
 	private String cancellationRemarks;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -65,9 +70,10 @@ public class Transaction implements Serializable {
 	@Column(name = "handling_fee")
 	private BigDecimal handlingFee;
 
+	@Column(length = 50)
 	private String head;
 
-	@Column(name = "instrument_bank_detail")
+	@Column(name = "instrument_bank_detail", length = 50)
 	private String instrumentBankDetail;
 
 	@Temporal(TemporalType.DATE)
@@ -78,7 +84,7 @@ public class Transaction implements Serializable {
 	@Column(name = "instrument_date")
 	private Date instrumentDate;
 
-	@Column(name = "instrument_number")
+	@Column(name = "instrument_number", length = 50)
 	private String instrumentNumber;
 
 	@Column(name = "is_advance_salary")
@@ -92,20 +98,22 @@ public class Transaction implements Serializable {
 
 	private int number;
 
-	@Lob
+	@Column(length = 50)
 	private String options;
 
+	@Column(length = 20)
 	private String prefix;
 
-	@Column(name = "reference_number")
+	@Column(name = "reference_number", length = 50)
 	private String referenceNumber;
 
-	@Lob
+	@Column(length = 50)
 	private String remarks;
 
+	@Column(length = 50)
 	private String source;
 
-	@Column(name = "source_detail")
+	@Column(name = "source_detail", length = 50)
 	private String sourceDetail;
 
 	private byte type;
@@ -116,10 +124,11 @@ public class Transaction implements Serializable {
 	@Column(name = "upload_token")
 	private String uploadToken;
 
+	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to StudentFeeRecordDetail
-	@OneToMany(mappedBy = "transaction",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<StudentFeeRecordDetail> studentFeeRecordDetails;
 
 	// bi-directional many-to-one association to Account

@@ -2,7 +2,10 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,7 +29,9 @@ public class StudentGroupCollection implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
+	private Integer id;
 
 	// bi-directional many-to-one association to StudentGroup
 	@ManyToOne
