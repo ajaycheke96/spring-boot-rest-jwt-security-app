@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,20 +16,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the class_timings database table.
  * 
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
 @Entity
 @Table(name = "class_timings")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ClassTiming implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -60,16 +66,18 @@ public class ClassTiming implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to ClassTimingSession
-	@OneToMany(mappedBy = "classTiming", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "classTiming", fetch = FetchType.EAGER)
+//	@JsonManagedReference
 	private List<ClassTimingSession> classTimingSessions;
 
 	// bi-directional many-to-one association to AcademicSession
 	@ManyToOne
-	@JoinColumn(name = "academic_session_id")
+	@JoinColumn(name = "academic_session_id", insertable = false, updatable = false)
+//	@JsonBackReference
 	private AcademicSession academicSession;
 
 	// bi-directional many-to-one association to TimetableAllocation
-	@OneToMany(mappedBy = "classTiming",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "classTiming", fetch = FetchType.LAZY)
 	private List<TimetableAllocation> timetableAllocations;
 
 }

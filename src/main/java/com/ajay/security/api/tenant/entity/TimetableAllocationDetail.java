@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,20 +13,27 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the timetable_allocation_details database table.
  * 
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
 @Entity
 @Table(name = "timetable_allocation_details")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TimetableAllocationDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +53,8 @@ public class TimetableAllocationDetail implements Serializable {
 
 	// bi-directional many-to-one association to ClassTimingSession
 	@ManyToOne
-	@JoinColumn(name = "class_timing_session_id")
+	@JoinColumn(name = "class_timing_session_id",insertable = false,updatable = false)
+//	@JsonBackReference
 	private ClassTimingSession classTimingSession;
 
 	// bi-directional many-to-one association to Subject
@@ -54,7 +63,7 @@ public class TimetableAllocationDetail implements Serializable {
 
 	// bi-directional many-to-one association to TimetableAllocation
 	@ManyToOne
-	@JoinColumn(name = "timetable_allocation_id")
+	@JoinColumn(name = "timetable_allocation_id", insertable = false, updatable = false)
 	private TimetableAllocation timetableAllocation;
 
 }

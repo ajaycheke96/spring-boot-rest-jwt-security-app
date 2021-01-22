@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,12 +50,12 @@ public class TimetableAllocation implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to TimetableAllocationDetail
-	@OneToMany(mappedBy = "timetableAllocation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "timetableAllocation", fetch = FetchType.LAZY)
 	private List<TimetableAllocationDetail> timetableAllocationDetails;
 
 	// bi-directional many-to-one association to ClassTiming
 	@ManyToOne
-	@JoinColumn(name = "class_timing_id")
+	@JoinColumn(name = "class_timing_id",insertable = false,updatable = false)
 	private ClassTiming classTiming;
 
 	// bi-directional many-to-one association to Timetable

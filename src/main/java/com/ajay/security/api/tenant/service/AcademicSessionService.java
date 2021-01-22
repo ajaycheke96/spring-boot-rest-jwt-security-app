@@ -1,6 +1,5 @@
 package com.ajay.security.api.tenant.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,7 @@ public class AcademicSessionService {
 
 	public List<AcademicSession> getAllAcademicSessions() {
 		List<AcademicSession> list = academicSessionRepository.findAll();
-		System.out.println(list);
-		return new ArrayList<>();
+		return list;
 	}
 
 	public AcademicSession getOneAcademicSession(Integer id) {

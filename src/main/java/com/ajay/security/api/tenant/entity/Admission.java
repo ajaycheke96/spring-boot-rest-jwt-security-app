@@ -20,14 +20,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the admissions database table.
  * 
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -73,6 +75,6 @@ public class Admission implements Serializable {
 	private Registration registration;
 
 	// bi-directional many-to-one association to StudentRecord
-	@OneToMany(mappedBy = "admission",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "admission",fetch = FetchType.LAZY)
 	private List<StudentRecord> studentRecords;
 }

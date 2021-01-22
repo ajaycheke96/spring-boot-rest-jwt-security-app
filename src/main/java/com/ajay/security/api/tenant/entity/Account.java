@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,14 +16,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the accounts database table.
  * 
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -76,15 +77,15 @@ public class Account implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to AccountTransfer
-	@OneToMany(mappedBy = "account1", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "account1", fetch = FetchType.LAZY)
 	private List<AccountTransfer> accountTransfers1;
 
 	// bi-directional many-to-one association to AccountTransfer
-	@OneToMany(mappedBy = "account2", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "account2", fetch = FetchType.LAZY)
 	private List<AccountTransfer> accountTransfers2;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
 	private List<Transaction> transactions;
 
 }

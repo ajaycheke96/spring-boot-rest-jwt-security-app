@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ajay.security.api.tenant.entity.AccountTransfer;
 import com.ajay.security.api.tenant.repository.AccountTransferRepository;
 
 @Service
+@Transactional
 public class AccountTransferService {
 
 	@Autowired

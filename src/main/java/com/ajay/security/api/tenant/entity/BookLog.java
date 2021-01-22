@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,14 +20,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the book_logs database table.
  * 
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -77,7 +78,7 @@ public class BookLog implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to BookLogDetail
-	@OneToMany(mappedBy = "bookLog",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "bookLog",fetch = FetchType.LAZY)
 	private List<BookLogDetail> bookLogDetails;
 
 	// bi-directional many-to-one association to Employee
