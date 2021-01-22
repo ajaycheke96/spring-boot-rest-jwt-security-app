@@ -7,9 +7,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,15 +34,17 @@ public class VisitorLog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
+	private Integer id;
 
-	@Lob
+	@Column(length = 50)
 	private String address;
 
-	@Column(name = "company_name")
+	@Column(name = "company_name", length = 50)
 	private String companyName;
 
-	@Column(name = "contact_number")
+	@Column(name = "contact_number", length = 20)
 	private String contactNumber;
 
 	@Column(name = "created_at")
@@ -57,17 +60,19 @@ public class VisitorLog implements Serializable {
 	@Column(name = "exit_time")
 	private Time exitTime;
 
+	@Column(length = 50)
 	private String name;
 
-	@Lob
+	@Column(length = 50)
 	private String options;
 
-	@Column(name = "relation_with_student")
+	@Column(name = "relation_with_student", length = 50)
 	private String relationWithStudent;
 
-	@Lob
+	@Column(length = 50)
 	private String remarks;
 
+	@Column(length = 50)
 	private String type;
 
 	@Column(name = "updated_at")
@@ -76,6 +81,7 @@ public class VisitorLog implements Serializable {
 	@Column(name = "upload_token")
 	private String uploadToken;
 
+	@Column(length = 50)
 	private String uuid;
 
 	@Column(name = "visitor_count")
@@ -92,6 +98,6 @@ public class VisitorLog implements Serializable {
 	// bi-directional many-to-one association to VisitingPurpos
 	@ManyToOne
 	@JoinColumn(name = "visiting_purpose_id")
-	private VisitingPurpos visitingPurpos;
+	private VisitingPurpose visitingPurpos;
 
 }

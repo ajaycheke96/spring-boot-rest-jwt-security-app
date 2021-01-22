@@ -5,8 +5,9 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -27,25 +28,29 @@ public class VisitorMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
+	private Integer id;
 
-	@Column(name = "contact_number")
+	@Column(name = "contact_number", length = 20)
 	private String contactNumber;
 
 	@Column(name = "created_at")
 	private Timestamp createdAt;
 
+	@Column(length = 50)
 	private String email;
 
-	@Lob
+	@Column(length = 50)
 	private String message;
 
+	@Column(length = 50)
 	private String name;
 
-	@Lob
+	@Column(length = 50)
 	private String options;
 
-	@Lob
+	@Column(length = 50)
 	private String subject;
 
 	@Column(name = "updated_at")

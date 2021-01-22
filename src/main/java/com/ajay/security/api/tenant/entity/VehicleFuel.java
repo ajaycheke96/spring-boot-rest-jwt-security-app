@@ -7,9 +7,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,7 +34,9 @@ public class VehicleFuel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
+	private Integer id;
 
 	@Column(name = "created_at")
 	private Timestamp createdAt;
@@ -42,12 +45,12 @@ public class VehicleFuel implements Serializable {
 	@Column(name = "date_of_fueling")
 	private Date dateOfFueling;
 
-	@Lob
+	@Column(length = 50)
 	private String description;
 
 	private int log;
 
-	@Lob
+	@Column(length = 50)
 	private String options;
 
 	@Column(name = "price_per_unit")

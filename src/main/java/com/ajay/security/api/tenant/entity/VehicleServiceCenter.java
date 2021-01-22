@@ -8,8 +8,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -31,51 +32,60 @@ public class VehicleServiceCenter implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
+	private Integer id;
 
-	@Column(name = "address_line_1")
+	@Column(name = "address_line_1", length = 50)
 	private String addressLine1;
 
-	@Column(name = "address_line_2")
+	@Column(name = "address_line_2", length = 50)
 	private String addressLine2;
 
-	@Column(name = "alternate_phone")
+	@Column(name = "alternate_phone", length = 20)
 	private String alternatePhone;
 
+	@Column(length = 20)
 	private String city;
 
-	@Column(name = "contact_person")
+	@Column(name = "contact_person", length = 50)
 	private String contactPerson;
 
-	@Column(name = "contact_person_email")
+	@Column(name = "contact_person_email", length = 50)
 	private String contactPersonEmail;
 
-	@Column(name = "contact_person_phone")
+	@Column(name = "contact_person_phone", length = 50)
 	private String contactPersonPhone;
 
+	@Column(length = 20)
 	private String country;
 
 	@Column(name = "created_at")
 	private Timestamp createdAt;
 
+	@Column(length = 50)
 	private String email;
 
+	@Column(length = 50)
 	private String name;
 
-	@Lob
+	@Column(length = 50)
 	private String options;
 
+	@Column(length = 20)
 	private String phone;
 
+	@Column(length = 20)
 	private String state;
 
 	@Column(name = "updated_at")
 	private Timestamp updatedAt;
 
+	@Column(length = 20)
 	private String zipcode;
 
 	// bi-directional many-to-one association to VehicleServiceRecord
-	@OneToMany(mappedBy = "vehicleServiceCenter",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicleServiceCenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<VehicleServiceRecord> vehicleServiceRecords;
 
 }
