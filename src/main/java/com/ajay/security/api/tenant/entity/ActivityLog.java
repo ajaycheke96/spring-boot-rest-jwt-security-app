@@ -11,6 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +29,9 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+
+@DynamicUpdate
+@DynamicInsert
 
 @Entity
 @Table(name = "activity_log")
@@ -39,18 +47,18 @@ public class ActivityLog implements Serializable {
 	@Column(name = "causer_id")
 	private int causerId;
 
-	@Column(name = "causer_type",length = 20)
+	@Column(name = "causer_type", length = 20)
 	private String causerType;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss a", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Lob
 	@Column(length = 50)
 	private String description;
 
-
-	@Column(name = "log_name",length = 20)
+	@Column(name = "log_name", length = 20)
 	private String logName;
 
 	@Lob
@@ -64,10 +72,11 @@ public class ActivityLog implements Serializable {
 	@Column(name = "subject_id")
 	private int subjectId;
 
-	@Column(name = "subject_type",length = 20)
+	@Column(name = "subject_type", length = 20)
 	private String subjectType;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss a", timezone = "IST")
 	private Timestamp updatedAt;
 
 }
