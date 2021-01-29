@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,15 @@ public class EmailLogService {
 	}
 
 	public String saveEmailLog(EmailLog emailLog) {
+		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
+		emailLog.setCreatedAt(curTimestamp);
+		emailLog.setUpdatedAt(curTimestamp);
 		return emailLogRepository.save(emailLog) != null ? " successfully saved!" : "Failed! Please try again!!";
 	}
 
 	public String updateEmailLog(EmailLog emailLog) {
+		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
+		emailLog.setUpdatedAt(curTimestamp);
 		return emailLogRepository.save(emailLog) != null ? " successfully updated!" : "Failed! Please try again!!";
 	}
 
