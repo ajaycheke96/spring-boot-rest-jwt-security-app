@@ -8,18 +8,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the email_templates database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -33,12 +39,12 @@ public class EmailTemplate implements Serializable {
 	@Column(length = 20)
 	private Integer id;
 
-	@Lob
 	private String body;
 
 	private String category;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(name = "is_default")
@@ -46,15 +52,14 @@ public class EmailTemplate implements Serializable {
 
 	private String name;
 
-	@Lob
 	private String options;
 
 	private String slug;
 
-	@Lob
 	private String subject;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 }
