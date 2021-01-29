@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,31 @@ public class TagService {
 	private TagRepository tagRepository;
 
 	public List<Tag> getAllTags() {
-		return tagRepository.findAll();
+		List<Tag> findAll = tagRepository.findAll();
+		System.out.println(findAll);
+		return findAll;
 	}
 
 	public Tag getOneTag(Integer id) {
-		return tagRepository.findById(id).get();
+		Tag tag = tagRepository.findById(id).get();
+		System.out.println("Tag: "+tag);
+		return tag;
 	}
 
 	public String saveTag(Tag tag) {
+
+		Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+		tag.setCreatedAt(timestamp);
+		tag.setUpdatedAt(timestamp);
+		
 		return tagRepository.save(tag) != null ? " successfully saved!" : "Failed! Please try again!!";
 	}
 
 	public String updateTag(Tag tag) {
+		
+		Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+		tag.setUpdatedAt(timestamp);
+		
 		return tagRepository.save(tag) != null ? " successfully updated!" : "Failed! Please try again!!";
 	}
 

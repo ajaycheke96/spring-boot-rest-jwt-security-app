@@ -7,27 +7,42 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the tags database table.
  * 
  */
-@Data
+@DynamicInsert
+@DynamicUpdate
+
+//@Data
+@Setter
+@Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 
 @Entity
 @Table(name = "tags")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Tag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,6 +52,7 @@ public class Tag implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss a", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 50)
@@ -54,10 +70,12 @@ public class Tag implements Serializable {
 	private String type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss a", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Taggable
-	@OneToMany(mappedBy = "tag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "tag",cascade = CascadeType.ALL,orphanRemoval = true)
+	@JsonManagedReference
 	private List<Taggable> taggables;
 
 }
