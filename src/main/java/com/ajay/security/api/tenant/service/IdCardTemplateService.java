@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,18 @@ public class IdCardTemplateService {
 	}
 
 	public String saveIdCardTemplate(IdCardTemplate idCardTemplate) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		idCardTemplate.setCreatedAt(currentTimestamp);
+		idCardTemplate.setUpdatedAt(currentTimestamp);
+
 		return idCardTemplateRepository.save(idCardTemplate) != null ? " successfully saved!"
 				: "Failed! Please try again!!";
 	}
 
 	public String updateIdCardTemplate(IdCardTemplate idCardTemplate) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		idCardTemplate.setUpdatedAt(currentTimestamp);
+
 		return idCardTemplateRepository.save(idCardTemplate) != null ? " successfully updated!"
 				: "Failed! Please try again!!";
 	}
