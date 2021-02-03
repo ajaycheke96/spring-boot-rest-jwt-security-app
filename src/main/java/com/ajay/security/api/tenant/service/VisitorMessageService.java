@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,17 @@ public class VisitorMessageService {
 	}
 
 	public String saveVisitorMessage(VisitorMessage visitorMessage) {
+		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
+		visitorMessage.setCreatedAt(curTimestamp);
+		visitorMessage.setUpdatedAt(curTimestamp);
+
 		return visitorMessageRepository.save(visitorMessage) != null ? " successfully saved!"
 				: "Failed! Please try again!!";
 	}
 
 	public String updateVisitorMessage(VisitorMessage visitorMessage) {
+		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
+		visitorMessage.setUpdatedAt(curTimestamp);
 		return visitorMessageRepository.save(visitorMessage) != null ? " successfully updated!"
 				: "Failed! Please try again!!";
 	}
