@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,15 @@ public class LocaleService {
 	}
 
 	public String saveLocale(Locale locale) {
+		Timestamp currTimeStamp = new Timestamp(System.currentTimeMillis());
+		locale.setCreatedAt(currTimeStamp);
+		locale.setUpdatedAt(currTimeStamp);
 		return localeRepository.save(locale) != null ? " successfully saved!" : "Failed! Please try again!!";
 	}
 
 	public String updateLocale(Locale locale) {
+		Timestamp currTimeStamp = new Timestamp(System.currentTimeMillis());
+		locale.setUpdatedAt(currTimeStamp);
 		return localeRepository.save(locale) != null ? " successfully updated!" : "Failed! Please try again!!";
 	}
 
