@@ -13,11 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -29,8 +26,8 @@ import lombok.Setter;
  * The persistent class for the tags database table.
  * 
  */
-@DynamicInsert
-@DynamicUpdate
+//@DynamicInsert
+//@DynamicUpdate
 
 //@Data
 @Setter
@@ -74,8 +71,9 @@ public class Tag implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Taggable
-	@OneToMany(mappedBy = "tag",cascade = CascadeType.ALL,orphanRemoval = true)
-	@JsonManagedReference
+	@OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+//	@JsonManagedReference
+	@JsonIgnoreProperties(value = "tag") //,allowSetters = true
 	private List<Taggable> taggables;
 
 }

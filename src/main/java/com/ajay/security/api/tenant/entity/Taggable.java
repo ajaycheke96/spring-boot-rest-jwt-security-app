@@ -12,10 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -27,8 +24,8 @@ import lombok.Setter;
  * The persistent class for the taggables database table.
  * 
  */
-@DynamicInsert
-@DynamicUpdate
+//@DynamicInsert
+//@DynamicUpdate
 
 //@Data
 @Setter
@@ -36,7 +33,6 @@ import lombok.Setter;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-
 
 @Entity
 @Table(name = "taggables")
@@ -62,7 +58,9 @@ public class Taggable implements Serializable {
 	// bi-directional many-to-one association to Tag
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tag_id")
-	@JsonBackReference
+//	@JsonBackReference
+	@JsonIgnoreProperties(value = {"taggables", "hibernateLazyInitializer"}) //, allowSetters = true
+//	@JsonProperty(access = Access.WRITE_ONLY)
 	private Tag tag;
 
 }

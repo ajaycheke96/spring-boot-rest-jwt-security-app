@@ -25,23 +25,28 @@ public class TagService {
 
 	public Tag getOneTag(Integer id) {
 		Tag tag = tagRepository.findById(id).get();
-		System.out.println("Tag: "+tag);
+		System.out.println("Tag: " + tag);
 		return tag;
 	}
 
 	public String saveTag(Tag tag) {
 
-		Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		tag.setCreatedAt(timestamp);
 		tag.setUpdatedAt(timestamp);
-		
+
+		tag.getTaggables().forEach(taggable -> taggable.setTag(tag));
+//		tag.getTaggables().forEach(s->System.out.println(s.getTag().getName()));
+
 		return tagRepository.save(tag) != null ? " successfully saved!" : "Failed! Please try again!!";
 	}
 
 	public String updateTag(Tag tag) {
-		
-		Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		tag.setUpdatedAt(timestamp);
+
+		tag.getTaggables().forEach(taggable -> taggable.setTag(tag));
 		
 		return tagRepository.save(tag) != null ? " successfully updated!" : "Failed! Please try again!!";
 	}
