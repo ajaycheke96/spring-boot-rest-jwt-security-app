@@ -33,7 +33,7 @@ public class BillController {
 	}
 
 	@PostMapping("/save")
-	public String saveBill(@RequestBody Bill bill) {
+	public String saveBill(@RequestBody Bill bill) throws Exception {
 		return billService.saveBill(bill);
 	}
 

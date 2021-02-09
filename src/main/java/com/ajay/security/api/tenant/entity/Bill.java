@@ -14,12 +14,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,16 +52,15 @@ public class Bill implements Serializable {
 	private String billNumber;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
 	private Date date;
 
-	@Lob
 	@Column(length = 50)
 	private String description;
 
-	@Lob
 	@Column(length = 40)
 	private String memo;
 
@@ -66,14 +68,12 @@ public class Bill implements Serializable {
 	@Column(name = "next_service_date")
 	private Date nextServiceDate;
 
-	@Lob
 	@Column(length = 40)
 	private String options;
 
-	@Column(name = "reference_number",length = 30)
+	@Column(name = "reference_number", length = 30)
 	private String referenceNumber;
 
-	@Lob
 	@Column(length = 20)
 	private String subject;
 
@@ -89,14 +89,14 @@ public class Bill implements Serializable {
 	@Column(name = "subtotal_total")
 	private BigDecimal subtotalTotal;
 
-	@Lob
 	@Column(length = 30)
 	private String tnc;
-	
+
 	@Column(length = 20)
 	private String type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token", length = 50)
@@ -106,25 +106,33 @@ public class Bill implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to BillItem
-	@OneToMany(mappedBy = "bill",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("bill")
 	private List<BillItem> billItems;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JsonIgnoreProperties(value = { "bills", "hibernateLazyInitializer" })
 	private Employee employee;
 
 	// bi-directional many-to-one association to Vehicle
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vehicle_id")
+	@JsonIgnore
+	@JsonIgnoreProperties(value = { "bills1", "hibernateLazyInitializer" })
 	private Vehicle vehicle1;
 
 	// bi-directional many-to-one association to Vehicle
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendor_id")
+	@JsonIgnore
+	@JsonIgnoreProperties(value = { "bills2", "hibernateLazyInitializer" })
 	private Vehicle vehicle2;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "bill",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL) 
+	@JsonIgnoreProperties("bill")
 	private List<Transaction> transactions;
 
 }

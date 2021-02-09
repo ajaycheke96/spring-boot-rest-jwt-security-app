@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,15 +19,21 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employees database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -54,6 +59,7 @@ public class Employee implements Serializable {
 	private String contactNumber;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -150,80 +156,82 @@ public class Employee implements Serializable {
 	private String uniqueIdentificationNumber;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	private String uuid;
 
 	// bi-directional many-to-one association to Assignment
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Assignment> assignments;
 
 	// bi-directional many-to-one association to Bill
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
+	@JsonIgnoreProperties("employee")
 	private List<Bill> bills;
 
 	// bi-directional many-to-one association to BookLog
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<BookLog> bookLogs;
 
 	// bi-directional many-to-one association to Certificate
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Certificate> certificates;
 
 	// bi-directional many-to-one association to ClassTeacher
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<ClassTeacher> classTeachers;
 
 	// bi-directional many-to-one association to CommunicationEmployee
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<CommunicationEmployee> communicationEmployees;
 
 	// bi-directional many-to-one association to Complaint
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Complaint> complaints;
 
 	// bi-directional many-to-one association to EmployeeAccount
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeAccount> employeeAccounts;
 
 	// bi-directional many-to-one association to EmployeeAttendance
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeAttendance> employeeAttendances;
 
 	// bi-directional many-to-one association to EmployeeDesignation
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeDesignation> employeeDesignations;
 
 	// bi-directional many-to-one association to EmployeeDocument
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeDocument> employeeDocuments;
 
 	// bi-directional many-to-one association to EmployeeGroupCollection
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeGroupCollection> employeeGroupCollections;
 
 	// bi-directional many-to-one association to EmployeeLeaveAllocation
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeLeaveAllocation> employeeLeaveAllocations;
 
 	// bi-directional many-to-one association to EmployeeLeaveRequest
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeLeaveRequest> employeeLeaveRequests;
 
 	// bi-directional many-to-one association to EmployeeQualification
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeQualification> employeeQualifications;
 
 	// bi-directional many-to-one association to EmployeeSalary
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeSalary> employeeSalaries;
 
 	// bi-directional many-to-one association to EmployeeTerm
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<EmployeeTerm> employeeTerms;
 
 	// bi-directional many-to-one association to BloodGroup
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "blood_group_id")
 	private BloodGroup bloodGroup;
 
@@ -244,59 +252,60 @@ public class Employee implements Serializable {
 	private User user;
 
 	// bi-directional many-to-one association to Expens
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Expense> expenses;
 
 	// bi-directional many-to-one association to GatePass
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<GatePass> gatePasses;
 
 	// bi-directional many-to-one association to Income
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Income> incomes;
 
 	// bi-directional many-to-one association to LessonPlan
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<LessonPlan> lessonPlans;
 
 	// bi-directional many-to-one association to MeetingEmployee
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<MeetingEmployee> meetingEmployees;
 
 	// bi-directional many-to-one association to Note
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Note> notes;
 
 	// bi-directional many-to-one association to Payroll
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Payroll> payrolls;
 
 	// bi-directional many-to-one association to StockTransfer
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
+	@JsonIgnoreProperties("employee")
 	private List<StockTransfer> stockTransfers;
 
 	// bi-directional many-to-one association to SubjectTeacher
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<SubjectTeacher> subjectTeachers;
 
 	// bi-directional many-to-one association to Syllabus
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Syllabus> syllabuses;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<Transaction> transactions;
 
 	// bi-directional many-to-one association to VehicleIncharge
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<VehicleIncharge> vehicleIncharges;
 
 	// bi-directional many-to-one association to VehicleServiceRecord
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<VehicleServiceRecord> vehicleServiceRecords;
 
 	// bi-directional many-to-one association to VisitorLog
-	@OneToMany(mappedBy = "employee",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "employee")
 	private List<VisitorLog> visitorLogs;
 
 }

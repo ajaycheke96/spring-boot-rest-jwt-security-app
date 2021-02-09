@@ -5,10 +5,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,15 +17,21 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the students database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -48,6 +52,7 @@ public class Student implements Serializable {
 	private String contactNumber;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -130,49 +135,51 @@ public class Student implements Serializable {
 	private String uniqueIdentificationNumber;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to GatePass
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<GatePass> gatePasses;
 
 	// bi-directional many-to-one association to Registration
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<Registration> registrations;
 
 	// bi-directional many-to-one association to StockTransfer
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
+	@JsonIgnoreProperties("student")
 	private List<StockTransfer> stockTransfers;
 
 	// bi-directional many-to-one association to StudentAccount
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<StudentAccount> studentAccounts;
 
 	// bi-directional many-to-one association to StudentDocument
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<StudentDocument> studentDocuments;
 
 	// bi-directional many-to-one association to StudentGroupCollection
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<StudentGroupCollection> studentGroupCollections;
 
 	// bi-directional many-to-one association to StudentQualification
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<StudentQualification> studentQualifications;
 
 	// bi-directional many-to-one association to StudentRecord
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<StudentRecord> studentRecords;
 
 	// bi-directional many-to-one association to StudentSibling
-	@OneToMany(mappedBy = "student1", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student1")
 	private List<StudentSibling> studentSiblings1;
 
 	// bi-directional many-to-one association to StudentSibling
-	@OneToMany(mappedBy = "student2", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student2")
 	private List<StudentSibling> studentSiblings2;
 
 	// bi-directional many-to-one association to BloodGroup
@@ -202,7 +209,7 @@ public class Student implements Serializable {
 	private User user;
 
 	// bi-directional many-to-one association to VisitorLog
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student")
 	private List<VisitorLog> visitorLogs;
 
 }

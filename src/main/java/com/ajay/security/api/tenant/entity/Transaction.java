@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +19,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,6 +60,7 @@ public class Transaction implements Serializable {
 	private Date cancelledAt;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -121,6 +125,7 @@ public class Transaction implements Serializable {
 	private byte type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -130,69 +135,96 @@ public class Transaction implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to StudentFeeRecordDetail
-	@OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "transaction")
+	@JsonIgnore
+//	@JsonIgnoreProperties("transaction")
 	private List<StudentFeeRecordDetail> studentFeeRecordDetails;
 
 	// bi-directional many-to-one association to Account
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Account account;
 
 	// bi-directional many-to-one association to AccountTransfer
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	@JoinColumn(name = "account_transfer_id")
 	private AccountTransfer accountTransfer;
 
 	// bi-directional many-to-one association to Bill
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Bill bill;
 
 	// bi-directional many-to-one association to BookLogDetail
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_log_detail_id")
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private BookLogDetail bookLogDetail;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Employee employee;
 
 	// bi-directional many-to-one association to Expens
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	@JoinColumn(name = "expense_id")
 	private Expense expens;
 
 	// bi-directional many-to-one association to Income
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Income income;
 
 	// bi-directional many-to-one association to PaymentMethod
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "payment_method_id")
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private PaymentMethod paymentMethod;
 
 	// bi-directional many-to-one association to Payroll
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Payroll payroll;
 
 	// bi-directional many-to-one association to Registration
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Registration registration;
 
 	// bi-directional many-to-one association to StudentFeeRecord
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_fee_record_id")
+	@JsonIgnore
+//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private StudentFeeRecord studentFeeRecord;
 
 	// bi-directional many-to-one association to Transaction
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "transaction_group_id")
+	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Transaction transaction;
 
 	// bi-directional many-to-one association to Transaction
 	@OneToMany(mappedBy = "transaction")
+	@JsonIgnoreProperties(value = { "transaction" })
 	private List<Transaction> transactions;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private User user;
 
 }

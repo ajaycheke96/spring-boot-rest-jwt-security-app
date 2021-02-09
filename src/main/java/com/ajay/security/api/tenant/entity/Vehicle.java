@@ -5,10 +5,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,15 +15,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the vehicles database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -40,6 +44,7 @@ public class Vehicle implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(name = "is_active")
@@ -85,38 +90,41 @@ public class Vehicle implements Serializable {
 	private String registrationNumber;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Bill
-	@OneToMany(mappedBy = "vehicle1", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle1")
+	@JsonIgnoreProperties("vehicle1")
 	private List<Bill> bills1;
 
 	// bi-directional many-to-one association to Bill
-	@OneToMany(mappedBy = "vehicle2", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle2")
+	@JsonIgnoreProperties("vehicle2")
 	private List<Bill> bills2;
 
 	// bi-directional many-to-one association to VehicleDocument
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle")
 	private List<VehicleDocument> vehicleDocuments;
 
 	// bi-directional many-to-one association to VehicleFuel
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle")
 	private List<VehicleFuel> vehicleFuels;
 
 	// bi-directional many-to-one association to VehicleIncharge
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle")
 	private List<VehicleIncharge> vehicleIncharges;
 
 	// bi-directional many-to-one association to VehicleLog
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle")
 	private List<VehicleLog> vehicleLogs;
 
 	// bi-directional many-to-one association to VehiclePerformanceCriteria
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle")
 	private List<VehiclePerformanceCriteria> vehiclePerformanceCriterias;
 
 	// bi-directional many-to-one association to VehicleServiceRecord
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vehicle")
 	private List<VehicleServiceRecord> vehicleServiceRecords;
 
 	// bi-directional many-to-one association to VehicleFuelType
