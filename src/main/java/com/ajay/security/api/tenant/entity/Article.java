@@ -4,17 +4,22 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,20 +46,19 @@ public class Article implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_article")
 	private Date dateOfArticle;
 
-	@Lob
 	@Column(length = 50)
 	private String description;
 
 	@Column(name = "is_public")
 	private byte isPublic;
 
-	@Lob
 	@Column(length = 50)
 	private String options;
 
@@ -62,6 +66,7 @@ public class Article implements Serializable {
 	private String title;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token",length = 50)
@@ -71,11 +76,14 @@ public class Article implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to ArticleType
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "article_type_id")
+	@JsonIgnoreProperties(value = {"articles", "hibernateLazyInitializer"})
 	private ArticleType articleType;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JsonIgnoreProperties(value = {"articles", "hibernateLazyInitializer"})
 	private User user;
 }
