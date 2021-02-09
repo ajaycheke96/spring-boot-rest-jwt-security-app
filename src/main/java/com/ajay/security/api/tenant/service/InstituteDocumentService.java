@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,16 @@ public class InstituteDocumentService {
 	}
 
 	public String saveInstituteDocument(InstituteDocument instituteDocument) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		instituteDocument.setCreatedAt(currentTimestamp);
+		instituteDocument.setUpdatedAt(currentTimestamp);
 		return instituteDocumentRepository.save(instituteDocument) != null ? " successfully saved!"
 				: "Failed! Please try again!!";
 	}
 
 	public String updateInstituteDocument(InstituteDocument instituteDocument) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		instituteDocument.setUpdatedAt(currentTimestamp);
 		return instituteDocumentRepository.save(instituteDocument) != null ? " successfully updated!"
 				: "Failed! Please try again!!";
 	}
