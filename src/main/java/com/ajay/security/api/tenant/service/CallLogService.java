@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ajay.security.api.tenant.entity.CallLog;
-import com.ajay.security.api.tenant.entity.User;
 import com.ajay.security.api.tenant.repository.CallLogRepository;
-import com.ajay.security.api.tenant.repository.UserRepository;
 
 @Service
 @Transactional
