@@ -19,8 +19,8 @@ public class CallLogService {
 	@Autowired
 	private CallLogRepository callLogRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+//	@Autowired
+//	private UserRepository userRepository;
 
 	public List<CallLog> getAllCallLogs() {
 		return callLogRepository.findAll();
@@ -38,12 +38,11 @@ public class CallLogService {
 		callLog.getCallingPurpos().setCreatedAt(currentTimestamp);
 		callLog.getCallingPurpos().setUpdatedAt(currentTimestamp);
 
-		User user = callLog.getUser();
-		if (user.getId() != null) {
-			User existedUser = userRepository.findById(user.getId()).orElseThrow();
-			existedUser.setCallLogs(List.of(callLog));
-			callLog.setUser(existedUser);
-		}
+		/*
+		 * User user = callLog.getUser(); if (user.getId() != null) { User existedUser =
+		 * userRepository.findById(user.getId()).orElseThrow();
+		 * existedUser.setCallLogs(List.of(callLog)); callLog.setUser(existedUser); }
+		 */
 
 		return callLogRepository.save(callLog) != null ? " successfully saved!" : "Failed! Please try again!!";
 	}

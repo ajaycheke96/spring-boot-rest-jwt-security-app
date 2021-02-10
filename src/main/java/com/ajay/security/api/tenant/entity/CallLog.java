@@ -86,7 +86,7 @@ public class CallLog implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to CallingPurpos
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "calling_purpose_id")
 	@JsonIgnoreProperties({ "callLogs", "hibernateLazyInitializer" })
 	private CallingPurpos callingPurpos;
