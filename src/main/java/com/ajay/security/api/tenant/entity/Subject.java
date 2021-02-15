@@ -2,7 +2,6 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,12 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,8 +31,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "subjects")
-
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Subject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -47,6 +43,7 @@ public class Subject implements Serializable {
 	private String code;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 50)
@@ -74,46 +71,49 @@ public class Subject implements Serializable {
 	private String shortcode;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to Assignment
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY,orphanRemoval = true)
-	private List<Assignment> assignments;
+//	// bi-directional many-to-one association to Assignment
+//	@OneToMany(mappedBy = "subject")
+//	private List<Assignment> assignments;
 
-	// bi-directional many-to-one association to ExamRecord
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<ExamRecord> examRecords;
+//	// bi-directional many-to-one association to ExamRecord
+//	@OneToMany(mappedBy = "subject")
+//	private List<ExamRecord> examRecords;
 
-	// bi-directional many-to-one association to LessonPlan
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<LessonPlan> lessonPlans;
+//	// bi-directional many-to-one association to LessonPlan
+//	@OneToMany(mappedBy = "subject")
+//	private List<LessonPlan> lessonPlans;
 
-	// bi-directional many-to-one association to Note
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<Note> notes;
+//	// bi-directional many-to-one association to Note
+//	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+//	private List<Note> notes;
 
-	// bi-directional many-to-one association to OnlineExam
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<OnlineExam> onlineExams;
+//	// bi-directional many-to-one association to OnlineExam
+//	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+//	private List<OnlineExam> onlineExams;
 
-	// bi-directional many-to-one association to StudentAttendance
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<StudentAttendance> studentAttendances;
+//	// bi-directional many-to-one association to StudentAttendance
+//	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+//	private List<StudentAttendance> studentAttendances;
 
-	// bi-directional many-to-one association to SubjectTeacher
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<SubjectTeacher> subjectTeachers;
+//	// bi-directional many-to-one association to SubjectTeacher
+//	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+//	private List<SubjectTeacher> subjectTeachers;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
-	// bi-directional many-to-one association to Syllabus
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<Syllabus> syllabuses;
+//	// bi-directional many-to-one association to Syllabus
+//	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+//	private List<Syllabus> syllabuses;
 
-	// bi-directional many-to-one association to TimetableAllocationDetail
-	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	private List<TimetableAllocationDetail> timetableAllocationDetails;
+//	// bi-directional many-to-one association to TimetableAllocationDetail
+//	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+//	@JsonIgnoreProperties("subject")
+//	private List<TimetableAllocationDetail> timetableAllocationDetails;
 
 }

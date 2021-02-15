@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,19 +47,19 @@ public class Communication implements Serializable {
 	private Timestamp createdAt;
 
 	@Lob
-	@Column(name = "excluded_emails",length = 30)
+	@Column(name = "excluded_emails", length = 30)
 	private String excludedEmails;
 
 	@Lob
-	@Column(name = "excluded_numbers",length = 20)
+	@Column(name = "excluded_numbers", length = 20)
 	private String excludedNumbers;
 
 	@Lob
-	@Column(name = "included_emails",length = 30)
+	@Column(name = "included_emails", length = 30)
 	private String includedEmails;
 
 	@Lob
-	@Column(name = "included_numbers",length = 20)
+	@Column(name = "included_numbers", length = 20)
 	private String includedNumbers;
 
 	@Lob
@@ -72,11 +70,11 @@ public class Communication implements Serializable {
 	private int recipientCount;
 
 	@Lob
-	@Column(name = "recipient_emails",length = 30)
+	@Column(name = "recipient_emails", length = 30)
 	private String recipientEmails;
 
 	@Lob
-	@Column(name = "recipient_numbers",length = 20)
+	@Column(name = "recipient_numbers", length = 20)
 	private String recipientNumbers;
 
 	@Column(length = 20)
@@ -92,27 +90,27 @@ public class Communication implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to CommunicationBatch
-	@OneToMany(mappedBy = "communication",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "communication")
 	private List<CommunicationBatch> communicationBatches;
 
 	// bi-directional many-to-one association to CommunicationCourse
-	@OneToMany(mappedBy = "communication",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "communication")
 	private List<CommunicationCourse> communicationCourses;
 
 	// bi-directional many-to-one association to CommunicationDepartment
-	@OneToMany(mappedBy = "communication",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "communication")
 	private List<CommunicationDepartment> communicationDepartments;
 
 	// bi-directional many-to-one association to CommunicationEmployee
-	@OneToMany(mappedBy = "communication",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "communication")
 	private List<CommunicationEmployee> communicationEmployees;
 
 	// bi-directional many-to-one association to CommunicationEmployeeCategory
-	@OneToMany(mappedBy = "communication",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "communication")
 	private List<CommunicationEmployeeCategory> communicationEmployeeCategories;
 
 	// bi-directional many-to-one association to CommunicationStudentRecord
-	@OneToMany(mappedBy = "communication",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "communication")
 	private List<CommunicationStudentRecord> communicationStudentRecords;
 
 	// bi-directional many-to-one association to User

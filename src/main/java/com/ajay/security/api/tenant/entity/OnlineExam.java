@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,15 +20,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the online_exams database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -44,6 +48,7 @@ public class OnlineExam implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -86,30 +91,33 @@ public class OnlineExam implements Serializable {
 	private Time startTime;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to OnlineExamQuestion
-	@OneToMany(mappedBy = "onlineExam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "onlineExam")
 	private List<OnlineExamQuestion> onlineExamQuestions;
 
 	// bi-directional many-to-one association to OnlineExamRecord
-	@OneToMany(mappedBy = "onlineExam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "onlineExam")
 	private List<OnlineExamRecord> onlineExamRecords;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@JoinColumn(name = "subject_id")
 	private Subject subject;
 
 }

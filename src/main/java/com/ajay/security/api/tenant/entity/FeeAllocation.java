@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,15 +15,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the fee_allocations database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -39,23 +43,26 @@ public class FeeAllocation implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 50)
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to FeeAllocationGroup
-	@OneToMany(mappedBy = "feeAllocation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "feeAllocation")
 	private List<FeeAllocationGroup> feeAllocationGroups;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to Cours
@@ -64,7 +71,7 @@ public class FeeAllocation implements Serializable {
 	private Course cours;
 
 	// bi-directional many-to-one association to StudentRecord
-	@OneToMany(mappedBy = "feeAllocation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "feeAllocation")
 	private List<StudentRecord> studentRecords;
 
 }

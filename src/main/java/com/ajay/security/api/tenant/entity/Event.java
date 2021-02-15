@@ -7,10 +7,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,15 +20,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the events database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -47,22 +50,23 @@ public class Event implements Serializable {
 	@Column(length = 50)
 	private String audience;
 
-	@Column(name = "CHARACTER_SET_CLIENT",length = 50)
+	@Column(name = "CHARACTER_SET_CLIENT", length = 50)
 	private String characterSetClient;
 
-	@Column(name = "COLLATION_CONNECTION",length = 50)
+	@Column(name = "COLLATION_CONNECTION", length = 50)
 	private String collationConnection;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Column(name = "DATABASE_COLLATION",length = 50)
+	@Column(name = "DATABASE_COLLATION", length = 50)
 	private String databaseCollation;
 
-	@Column(name = "`DEFINER`",length = 50)
+	@Column(name = "`DEFINER`", length = 50)
 	private String definer;
 
 	@Column(length = 50)
@@ -78,36 +82,36 @@ public class Event implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date ends;
 
-	@Column(name = "EVENT_BODY",length = 50)
+	@Column(name = "EVENT_BODY", length = 50)
 	private String eventBody;
 
-	@Column(name = "EVENT_CATALOG",length = 50)
+	@Column(name = "EVENT_CATALOG", length = 50)
 	private String eventCatalog;
 
-	@Column(name = "EVENT_COMMENT",length = 50)
+	@Column(name = "EVENT_COMMENT", length = 50)
 	private String eventComment;
 
 	@Lob
-	@Column(name = "EVENT_DEFINITION",length = 50)
+	@Column(name = "EVENT_DEFINITION", length = 50)
 	private String eventDefinition;
 
-	@Column(name = "EVENT_NAME",length = 50)
+	@Column(name = "EVENT_NAME", length = 50)
 	private String eventName;
 
-	@Column(name = "EVENT_SCHEMA",length = 50)
+	@Column(name = "EVENT_SCHEMA", length = 50)
 	private String eventSchema;
 
-	@Column(name = "EVENT_TYPE",length = 50)
+	@Column(name = "EVENT_TYPE", length = 50)
 	private String eventType;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "EXECUTE_AT")
 	private Date executeAt;
 
-	@Column(name = "INTERVAL_FIELD",length = 50)
+	@Column(name = "INTERVAL_FIELD", length = 50)
 	private String intervalField;
 
-	@Column(name = "INTERVAL_VALUE",length = 50)
+	@Column(name = "INTERVAL_VALUE", length = 50)
 	private String intervalValue;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -118,7 +122,7 @@ public class Event implements Serializable {
 	@Column(name = "LAST_EXECUTED")
 	private Date lastExecuted;
 
-	@Column(name = "ON_COMPLETION",length = 50)
+	@Column(name = "ON_COMPLETION", length = 50)
 	private String onCompletion;
 
 	@Column(length = 50)
@@ -126,7 +130,7 @@ public class Event implements Serializable {
 
 	private BigInteger originator;
 
-	@Column(name = "SQL_MODE",length = 50)
+	@Column(name = "SQL_MODE", length = 50)
 	private String sqlMode;
 
 	@Temporal(TemporalType.DATE)
@@ -142,13 +146,14 @@ public class Event implements Serializable {
 	@Column(length = 20)
 	private String status;
 
-	@Column(name = "TIME_ZONE",length = 50)
+	@Column(name = "TIME_ZONE", length = 50)
 	private String timeZone;
 
 	@Column(length = 50)
 	private String title;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -160,20 +165,20 @@ public class Event implements Serializable {
 	@Column(length = 50)
 	private String venue;
 
-	// bi-directional many-to-one association to EventBatch
-	@OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<EventBatch> eventBatches;
+//	// bi-directional many-to-one association to EventBatch
+//	@OneToMany(mappedBy = "event")
+//	private List<EventBatch> eventBatches;
 
 	// bi-directional many-to-one association to EventCourse
-	@OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "event")
 	private List<EventCourse> eventCourses;
 
 	// bi-directional many-to-one association to EventDepartment
-	@OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "event")
 	private List<EventDepartment> eventDepartments;
 
 	// bi-directional many-to-one association to EventEmployeeCategory
-	@OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "event")
 	private List<EventEmployeeCategory> eventEmployeeCategories;
 
 	// bi-directional many-to-one association to EventType

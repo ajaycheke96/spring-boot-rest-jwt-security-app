@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,23 @@ public class ClassTimingService {
 		return classTimingRepository.findById(id).get();
 	}
 
-	public String saveClassTiming(ClassTiming classTiming) {
-		return classTimingRepository.save(classTiming) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public ClassTiming saveClassTiming(ClassTiming classTiming) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (classTiming.getCreatedAt() == null) {
+			classTiming.setCreatedAt(currentTimestamp);
+		}
+		classTiming.setUpdatedAt(currentTimestamp);
+
+//		classTiming.getClassTimingSessions().forEach(cts -> {
+//			cts.setCreatedAt(currentTimestamp);
+//			cts.setUpdatedAt(currentTimestamp);
+//		});
+
+		return classTimingRepository.save(classTiming);
 	}
 
-	public String updateClassTiming(ClassTiming classTiming) {
-		return classTimingRepository.save(classTiming) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneClassTiming(Integer id) {
-		classTimingRepository.deleteById(id);
+	public String deleteOneClassTiming(ClassTiming classTiming) {
+		classTimingRepository.delete(classTiming);
 		return " successfully deleted!";
 	}
 }

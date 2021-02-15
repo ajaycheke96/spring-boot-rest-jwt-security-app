@@ -5,28 +5,33 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the lesson_plans database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -41,6 +46,7 @@ public class LessonPlan implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -64,6 +70,7 @@ public class LessonPlan implements Serializable {
 	private String topic;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -73,15 +80,17 @@ public class LessonPlan implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to LessonPlanDetail
-	@OneToMany(mappedBy = "lessonPlan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "lessonPlan")
 	private List<LessonPlanDetail> lessonPlanDetails;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@JoinColumn(name = "subject_id")
 	private Subject subject;
 
 }

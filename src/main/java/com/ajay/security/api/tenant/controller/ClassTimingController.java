@@ -1,49 +1,81 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.ClassTiming;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.ClassTimingService;
 
 @RestController
 @RequestMapping("/classTiming")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ClassTimingController {
 
 	@Autowired
 	private ClassTimingService classTimingService;
 
-	@GetMapping("/all")
-	public List<ClassTiming> getAllClassTiming() {
-		return classTimingService.getAllClassTimings();
+	@RequestMapping("/listAllClassTiming")
+	public ApiResponse getAllClassTiming() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of ClassTiming",
+					classTimingService.getAllClassTimings());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ClassTiming Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public ClassTiming getOneClassTiming(@PathVariable Integer id) {
-		return classTimingService.getOneClassTiming(id);
+	@RequestMapping("/{id}")
+	public ApiResponse getOneClassTiming(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ClassTiming",
+					classTimingService.getOneClassTiming(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ClassTiming Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveClassTiming(@RequestBody ClassTiming classTiming) {
-		return classTimingService.saveClassTiming(classTiming);
+	@RequestMapping(value = "/saveClassTiming", method = RequestMethod.POST)
+	public ApiResponse saveClassTiming(@RequestBody ClassTiming classTiming) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ClassTiming saved!",
+					classTimingService.saveClassTiming(classTiming));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ClassTiming Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateClassTiming(@RequestBody ClassTiming classTiming) {
-		return classTimingService.updateClassTiming(classTiming);
+	@RequestMapping(value = "/updateClassTiming", method = RequestMethod.POST)
+	public ApiResponse updateClassTiming(@RequestBody ClassTiming classTiming) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ClassTiming updated!",
+					classTimingService.saveClassTiming(classTiming));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ClassTiming Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneClassTiming(@PathVariable Integer id) {
-		return classTimingService.deleteOneClassTiming(id);
+	@RequestMapping("/deleteClassTiming")
+	public ApiResponse deleteOneClassTiming(@RequestBody ClassTiming classTiming) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ClassTiming deleted!",
+					classTimingService.deleteOneClassTiming(classTiming));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ClassTiming Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

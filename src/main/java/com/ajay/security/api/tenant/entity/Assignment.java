@@ -6,17 +6,17 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,7 +34,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "assignments")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Assignment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -44,13 +43,13 @@ public class Assignment implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_assignment")
 	private Date dateOfAssignment;
 
-	@Lob
 	@Column(length = 50)
 	private String description;
 
@@ -58,15 +57,14 @@ public class Assignment implements Serializable {
 	@Column(name = "due_date")
 	private Date dueDate;
 
-	@Lob
 	@Column(length = 50)
 	private String options;
 
-	@Lob
 	@Column(length = 20)
 	private String title;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token", length = 50)
@@ -76,11 +74,13 @@ public class Assignment implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@JoinColumn(name = "subject_id")
 	private Subject subject;
 
 }

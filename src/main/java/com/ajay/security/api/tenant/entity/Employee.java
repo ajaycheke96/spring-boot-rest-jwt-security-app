@@ -161,9 +161,9 @@ public class Employee implements Serializable {
 
 	private String uuid;
 
-	// bi-directional many-to-one association to Assignment
-	@OneToMany(mappedBy = "employee")
-	private List<Assignment> assignments;
+//	// bi-directional many-to-one association to Assignment
+//	@OneToMany(mappedBy = "employee")
+//	private List<Assignment> assignments;
 
 	// bi-directional many-to-one association to Bill
 	@OneToMany(mappedBy = "employee")
@@ -178,9 +178,9 @@ public class Employee implements Serializable {
 	@OneToMany(mappedBy = "employee")
 	private List<Certificate> certificates;
 
-	// bi-directional many-to-one association to ClassTeacher
-	@OneToMany(mappedBy = "employee")
-	private List<ClassTeacher> classTeachers;
+//	// bi-directional many-to-one association to ClassTeacher
+//	@OneToMany(mappedBy = "employee")
+//	private List<ClassTeacher> classTeachers;
 
 	// bi-directional many-to-one association to CommunicationEmployee
 	@OneToMany(mappedBy = "employee")
@@ -263,17 +263,17 @@ public class Employee implements Serializable {
 	@OneToMany(mappedBy = "employee")
 	private List<Income> incomes;
 
-	// bi-directional many-to-one association to LessonPlan
-	@OneToMany(mappedBy = "employee")
-	private List<LessonPlan> lessonPlans;
+//	// bi-directional many-to-one association to LessonPlan
+//	@OneToMany(mappedBy = "employee")
+//	private List<LessonPlan> lessonPlans;
 
 	// bi-directional many-to-one association to MeetingEmployee
 	@OneToMany(mappedBy = "employee")
 	private List<MeetingEmployee> meetingEmployees;
 
-	// bi-directional many-to-one association to Note
-	@OneToMany(mappedBy = "employee")
-	private List<Note> notes;
+//	// bi-directional many-to-one association to Note
+//	@OneToMany(mappedBy = "employee")
+//	private List<Note> notes;
 
 	// bi-directional many-to-one association to Payroll
 	@OneToMany(mappedBy = "employee")
@@ -284,13 +284,13 @@ public class Employee implements Serializable {
 	@JsonIgnoreProperties("employee")
 	private List<StockTransfer> stockTransfers;
 
-	// bi-directional many-to-one association to SubjectTeacher
-	@OneToMany(mappedBy = "employee")
-	private List<SubjectTeacher> subjectTeachers;
+//	// bi-directional many-to-one association to SubjectTeacher
+//	@OneToMany(mappedBy = "employee")
+//	private List<SubjectTeacher> subjectTeachers;
 
-	// bi-directional many-to-one association to Syllabus
-	@OneToMany(mappedBy = "employee")
-	private List<Syllabus> syllabuses;
+//	// bi-directional many-to-one association to Syllabus
+//	@OneToMany(mappedBy = "employee")
+//	private List<Syllabus> syllabuses;
 
 	// bi-directional many-to-one association to Transaction
 	@OneToMany(mappedBy = "employee")
@@ -298,10 +298,12 @@ public class Employee implements Serializable {
 
 	// bi-directional many-to-one association to VehicleIncharge
 	@OneToMany(mappedBy = "employee")
+	@JsonIgnoreProperties("employee")
 	private List<VehicleIncharge> vehicleIncharges;
 
 	// bi-directional many-to-one association to VehicleServiceRecord
 	@OneToMany(mappedBy = "employee")
+	@JsonIgnoreProperties("employee")
 	private List<VehicleServiceRecord> vehicleServiceRecords;
 
 	// bi-directional many-to-one association to VisitorLog

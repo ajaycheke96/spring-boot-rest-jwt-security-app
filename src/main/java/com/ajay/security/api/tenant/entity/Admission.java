@@ -5,19 +5,21 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,10 +46,11 @@ public class Admission implements Serializable {
 	private Integer id;
 
 	@Lob
-	@Column(name = "admission_remarks",length = 20)
+	@Column(name = "admission_remarks", length = 20)
 	private String admissionRemarks;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -64,10 +67,12 @@ public class Admission implements Serializable {
 	private String prefix;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to Registration
@@ -75,6 +80,6 @@ public class Admission implements Serializable {
 	private Registration registration;
 
 	// bi-directional many-to-one association to StudentRecord
-	@OneToMany(mappedBy = "admission",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "admission", fetch = FetchType.LAZY)
 	private List<StudentRecord> studentRecords;
 }

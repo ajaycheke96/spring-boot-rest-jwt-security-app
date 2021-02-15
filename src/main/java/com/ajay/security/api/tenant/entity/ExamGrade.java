@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,15 +15,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the exam_grades database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -39,6 +43,7 @@ public class ExamGrade implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 50)
@@ -51,23 +56,24 @@ public class ExamGrade implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to Batch
-	@OneToMany(mappedBy = "examGrade", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Batch> batches;
+//	// bi-directional many-to-one association to Batch
+//	@OneToMany(mappedBy = "examGrade")
+//	private List<Batch> batches;
 
 	// bi-directional many-to-one association to ExamGradeDetail
-	@OneToMany(mappedBy = "examGrade", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "examGrade")
 	private List<ExamGradeDetail> examGradeDetails;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
 	// bi-directional many-to-one association to ExamSchedule
-	@OneToMany(mappedBy = "examGrade", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "examGrade")
 	private List<ExamSchedule> examSchedules;
 
 }

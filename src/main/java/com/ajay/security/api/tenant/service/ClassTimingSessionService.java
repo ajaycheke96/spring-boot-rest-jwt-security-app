@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,20 @@ public class ClassTimingSessionService {
 		return classTimingSessionRepository.findById(id).get();
 	}
 
-	public String saveClassTimingSession(ClassTimingSession classTimingSession) {
-		return classTimingSessionRepository.save(classTimingSession) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public ClassTimingSession saveClassTimingSession(ClassTimingSession classTimingSession) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (classTimingSession.getCreatedAt() == null)
+			classTimingSession.setCreatedAt(currentTimestamp);
+		classTimingSession.setUpdatedAt(currentTimestamp);
+
+		if (classTimingSession.getClassTiming().getId() == null)
+			classTimingSession.getClassTiming().setCreatedAt(currentTimestamp);
+		classTimingSession.getClassTiming().setUpdatedAt(currentTimestamp);
+		return classTimingSessionRepository.save(classTimingSession);
 	}
 
-	public String updateClassTimingSession(ClassTimingSession classTimingSession) {
-		return classTimingSessionRepository.save(classTimingSession) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneClassTimingSession(Integer id) {
-		classTimingSessionRepository.deleteById(id);
+	public String deleteOneClassTimingSession(ClassTimingSession classTimingSession) {
+		classTimingSessionRepository.delete(classTimingSession);
 		return " successfully deleted!";
 	}
 }

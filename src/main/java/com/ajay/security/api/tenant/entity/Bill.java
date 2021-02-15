@@ -119,14 +119,14 @@ public class Bill implements Serializable {
 	// bi-directional many-to-one association to Vehicle
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vehicle_id")
-	@JsonIgnore
+//	@JsonIgnore
 	@JsonIgnoreProperties(value = { "bills1", "hibernateLazyInitializer" })
 	private Vehicle vehicle1;
 
 	// bi-directional many-to-one association to Vehicle
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendor_id")
-	@JsonIgnore
+//	@JsonIgnore
 	@JsonIgnoreProperties(value = { "bills2", "hibernateLazyInitializer" })
 	private Vehicle vehicle2;
 

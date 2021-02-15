@@ -2,9 +2,7 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,8 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,6 +41,7 @@ public class Batch implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Lob
@@ -58,69 +58,71 @@ public class Batch implements Serializable {
 	private int position;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to Admission
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<Admission> admissions;
+//	// bi-directional many-to-one association to Admission
+//	@OneToMany(mappedBy = "batch")
+//	private List<Admission> admissions;
 
 	// bi-directional many-to-one association to Cours
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Course.class)
 	@JoinColumn(name = "course_id")
 	private Course course;
 
 	// bi-directional many-to-one association to ExamGrade
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = ExamGrade.class)
 	@JoinColumn(name = "exam_grade_id")
 	private ExamGrade examGrade;
 
 	// bi-directional many-to-one association to ExamObservation
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY,targetEntity = ExamObservation.class)
 	@JoinColumn(name = "exam_observation_id")
 	private ExamObservation examObservation;
 
-	// bi-directional many-to-one association to ClassTeacher
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<ClassTeacher> classTeachers;
+//	// bi-directional many-to-one association to ClassTeacher
+//	@OneToMany(mappedBy = "batch")
+//	private List<ClassTeacher> classTeachers;
 
-	// bi-directional many-to-one association to CommunicationBatch
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<CommunicationBatch> communicationBatches;
+//	// bi-directional many-to-one association to CommunicationBatch
+//	@OneToMany(mappedBy = "batch")
+//	private List<CommunicationBatch> communicationBatches;
 
-	// bi-directional many-to-one association to EventBatch
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<EventBatch> eventBatches;
+//	// bi-directional many-to-one association to EventBatch
+//	@OneToMany(mappedBy = "batch")
+//	private List<EventBatch> eventBatches;
 
-	// bi-directional many-to-one association to ExamSchedule
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<ExamSchedule> examSchedules;
+//	// bi-directional many-to-one association to ExamSchedule
+//	@OneToMany(mappedBy = "batch")
+//	private List<ExamSchedule> examSchedules;
 
-	// bi-directional many-to-one association to FeeAllocation
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<FeeAllocation> feeAllocations;
+//	// bi-directional many-to-one association to FeeAllocation
+//	@OneToMany(mappedBy = "batch")
+//	private List<FeeAllocation> feeAllocations;
 
-	// bi-directional many-to-one association to MeetingBatch
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<MeetingBatch> meetingBatches;
+//	// bi-directional many-to-one association to MeetingBatch
+//	@OneToMany(mappedBy = "batch")
+//	private List<MeetingBatch> meetingBatches;
 
-	// bi-directional many-to-one association to OnlineExam
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<OnlineExam> onlineExams;
+//	// bi-directional many-to-one association to OnlineExam
+//	@OneToMany(mappedBy = "batch")
+//	private List<OnlineExam> onlineExams;
 
-	// bi-directional many-to-one association to StudentAttendance
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<StudentAttendance> studentAttendances;
+//	// bi-directional many-to-one association to StudentAttendance
+//	@OneToMany(mappedBy = "batch")
+//	private List<StudentAttendance> studentAttendances;
 
-	// bi-directional many-to-one association to StudentRecord
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<StudentRecord> studentRecords;
+//	// bi-directional many-to-one association to StudentRecord
+//	@OneToMany(mappedBy = "batch")
+//	private List<StudentRecord> studentRecords;
 
-	// bi-directional many-to-one association to Subject
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<Subject> subjects;
+//	// bi-directional many-to-one association to Subject
+//	@OneToMany(mappedBy = "batch")
+//	private List<Subject> subjects;
 
-	// bi-directional many-to-one association to Timetable
-	@OneToMany(mappedBy = "batch",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<Timetable> timetables;
+//	// bi-directional many-to-one association to Timetable
+//	@OneToMany(mappedBy = "batch")
+////	@JsonIgnoreProperties("batch")
+//	private List<Timetable> timetables;
 
 }

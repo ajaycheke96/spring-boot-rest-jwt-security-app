@@ -2,7 +2,6 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,11 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,8 +33,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "class_timings")
-
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ClassTiming implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -46,6 +42,7 @@ public class ClassTiming implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Lob
@@ -60,24 +57,28 @@ public class ClassTiming implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
-	// bi-directional many-to-one association to ClassTimingSession
-	@OneToMany(mappedBy = "classTiming", fetch = FetchType.EAGER)
-//	@JsonManagedReference
-	private List<ClassTimingSession> classTimingSessions;
+//	// bi-directional many-to-one association to ClassTimingSession
+//	@OneToMany(mappedBy = "classTiming", cascade = CascadeType.ALL)
+////	@JoinColumn(name = "class_timing_id")
+//	@JsonIgnoreProperties("classTiming")
+//	private List<ClassTimingSession> classTimingSessions;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne
-	@JoinColumn(name = "academic_session_id", insertable = false, updatable = false)
-//	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@JoinColumn(name = "academic_session_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer"})
 	private AcademicSession academicSession;
 
-	// bi-directional many-to-one association to TimetableAllocation
-	@OneToMany(mappedBy = "classTiming", fetch = FetchType.LAZY)
-	private List<TimetableAllocation> timetableAllocations;
+//	// bi-directional many-to-one association to TimetableAllocation
+//	@OneToMany(mappedBy = "classTiming")
+////	@JoinColumn(name = "class_timing_id")
+//	@JsonIgnoreProperties("classTiming")
+//	private List<TimetableAllocation> timetableAllocations;
 
 }

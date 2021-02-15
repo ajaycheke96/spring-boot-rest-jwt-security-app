@@ -3,8 +3,8 @@ package com.ajay.security.api.tenant.entity;
 import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,11 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,8 +35,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "class_timing_sessions")
-
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ClassTimingSession implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -47,6 +44,7 @@ public class ClassTimingSession implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Lob
@@ -68,20 +66,21 @@ public class ClassTimingSession implements Serializable {
 	private Time start;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to ClassTiming
-	@ManyToOne
-	@JoinColumn(name = "class_timing_id", insertable = false, updatable = false)
-//	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = ClassTiming.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "class_timing_id")
+	@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 	private ClassTiming classTiming;
 
-	// bi-directional many-to-one association to TimetableAllocationDetail
-	@OneToMany(mappedBy = "classTimingSession",fetch = FetchType.EAGER)
-//	@JsonManagedReference
-	private List<TimetableAllocationDetail> timetableAllocationDetails;
+//	// bi-directional many-to-one association to TimetableAllocationDetail
+//	@OneToMany(mappedBy = "classTimingSession")
+//	@JsonIgnoreProperties("classTimingSession")
+//	private List<TimetableAllocationDetail> timetableAllocationDetails;
 
 }

@@ -213,11 +213,13 @@ public class Transaction implements Serializable {
 	// bi-directional many-to-one association to Transaction
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "transaction_group_id")
+//	@JsonIgnore
 	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Transaction transaction;
 
 	// bi-directional many-to-one association to Transaction
 	@OneToMany(mappedBy = "transaction")
+//	@JsonIgnore
 	@JsonIgnoreProperties(value = { "transaction" })
 	private List<Transaction> transactions;
 
