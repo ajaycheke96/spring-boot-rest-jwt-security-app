@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,11 +63,13 @@ public class ExamObservation implements Serializable {
 //	private List<Batch> batches;
 
 	// bi-directional many-to-one association to ExamObservationDetail
-	@OneToMany(mappedBy = "examObservation")
+//	@OneToMany(mappedBy = "examObservation")
+	@OneToMany(targetEntity = ExamObservationDetail.class)
+	@JoinColumn(name = "exam_observation_id")
 	private List<ExamObservationDetail> examObservationDetails;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 

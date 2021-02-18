@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,12 +51,13 @@ public class MeetingBatch implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to Meeting
-	@ManyToOne
+	@ManyToOne(targetEntity = Meeting.class)
+	@JoinColumn(name = "meeting_id")
 	private Meeting meeting;
 
 }

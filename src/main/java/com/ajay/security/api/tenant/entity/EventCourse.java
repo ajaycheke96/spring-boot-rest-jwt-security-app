@@ -11,15 +11,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the event_course database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -34,12 +39,14 @@ public class EventCourse implements Serializable {
 	private Integer id;
 
 	// bi-directional many-to-one association to Cours
-	@ManyToOne
+	@ManyToOne(targetEntity = Course.class)
 	@JoinColumn(name = "course_id")
+//	@JsonIgnoreProperties("eventCourses")
 	private Course cours;
 
 	// bi-directional many-to-one association to Event
 	@ManyToOne
+//	@JsonIgnoreProperties("eventCourses")
 	private Event event;
 
 }

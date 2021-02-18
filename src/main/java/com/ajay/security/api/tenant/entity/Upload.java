@@ -11,15 +11,21 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the uploads database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -34,6 +40,7 @@ public class Upload implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	private String filename;
@@ -52,6 +59,7 @@ public class Upload implements Serializable {
 	private byte status;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -64,7 +72,10 @@ public class Upload implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to User
+//	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+//	@JoinColumn(name = "user_id")
 	@ManyToOne
+	@JsonIgnoreProperties(value = {"uploads"})
 	private User user;
 
 }

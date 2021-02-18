@@ -6,13 +6,12 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,14 +19,17 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the meetings database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -77,32 +79,35 @@ public class Meeting implements Serializable {
 	@Column(length = 50)
 	private String uuid;
 
-	// bi-directional many-to-one association to MeetingBatch
-	@OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<MeetingBatch> meetingBatches;
+//	// bi-directional many-to-one association to MeetingBatch
+//	@OneToMany(mappedBy = "meeting")
+//	private List<MeetingBatch> meetingBatches;
 
 	// bi-directional many-to-one association to MeetingCourse
-	@OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "meeting")
 	private List<MeetingCourse> meetingCourses;
 
 	// bi-directional many-to-one association to MeetingDepartment
-	@OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "meeting")
+	@OneToMany(targetEntity = MeetingDepartment.class)
+	@JoinColumn(name = "meeting_id")
 	private List<MeetingDepartment> meetingDepartments;
 
 	// bi-directional many-to-one association to MeetingEmployee
-	@OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "meeting")
 	private List<MeetingEmployee> meetingEmployees;
 
 	// bi-directional many-to-one association to MeetingEmployeeCategory
-	@OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "meeting")
 	private List<MeetingEmployeeCategory> meetingEmployeeCategories;
 
 	// bi-directional many-to-one association to MeetingStudentRecord
-	@OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "meeting")
 	private List<MeetingStudentRecord> meetingStudentRecords;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_id")
 	private User user;
 
 }

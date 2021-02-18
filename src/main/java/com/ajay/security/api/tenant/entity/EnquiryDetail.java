@@ -15,15 +15,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the enquiry_details database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -38,6 +43,7 @@ public class EnquiryDetail implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -56,26 +62,28 @@ public class EnquiryDetail implements Serializable {
 	@Column(length = 50)
 	private String remarks;
 
-	@Column(name = "student_name",length = 50)
+	@Column(name = "student_name", length = 50)
 	private String studentName;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to Cours
-	@ManyToOne
+	@ManyToOne(targetEntity = Course.class)
 	@JoinColumn(name = "course_id")
 	private Course cours;
 
-	// bi-directional many-to-one association to Enquiry
-	@ManyToOne
-	private Enquiry enquiry;
+//	// bi-directional many-to-one association to Enquiry
+//	@ManyToOne
+//	private Enquiry enquiry;
 
 	// bi-directional many-to-one association to Institute
-	@ManyToOne
+	@ManyToOne(targetEntity = Institute.class)
+	@JoinColumn(name = "institute_id")
 	private Institute institute;
 
 }

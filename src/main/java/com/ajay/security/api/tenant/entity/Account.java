@@ -7,13 +7,15 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,6 +54,7 @@ public class Account implements Serializable {
 	private String branchName;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(name = "is_active")
@@ -74,18 +77,21 @@ public class Account implements Serializable {
 	private String type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to AccountTransfer
-	@OneToMany(mappedBy = "account1", fetch = FetchType.LAZY)
-	private List<AccountTransfer> accountTransfers1;
+//	// bi-directional many-to-one association to AccountTransfer
+//	@OneToMany(mappedBy = "account1", fetch = FetchType.LAZY)
+//	private List<AccountTransfer> accountTransfers1;
 
-	// bi-directional many-to-one association to AccountTransfer
-	@OneToMany(mappedBy = "account2", fetch = FetchType.LAZY)
-	private List<AccountTransfer> accountTransfers2;
+//	// bi-directional many-to-one association to AccountTransfer
+//	@OneToMany(mappedBy = "account2", fetch = FetchType.LAZY)
+//	private List<AccountTransfer> accountTransfers2;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "account")
+	@OneToMany(targetEntity = Transaction.class)
+	@JoinColumn(name = "account_id")
 	private List<Transaction> transactions;
 
 }

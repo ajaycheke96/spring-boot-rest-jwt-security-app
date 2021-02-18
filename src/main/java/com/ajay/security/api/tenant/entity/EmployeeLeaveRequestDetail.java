@@ -10,21 +10,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_leave_request_details database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -38,36 +42,37 @@ public class EmployeeLeaveRequestDetail implements Serializable {
 	@Column(length = 20)
 	private Integer id;
 
-	@Lob
 	private String comment;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_action")
 	private Date dateOfAction;
 
-	@Lob
 	private String options;
 
 	private String status;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "approver_user_id")
 	private User user;
 
 	// bi-directional many-to-one association to Designation
-	@ManyToOne
+	@ManyToOne(targetEntity = Designation.class)
+	@JoinColumn(name = "designation_id")
 	private Designation designation;
 
-	// bi-directional many-to-one association to EmployeeLeaveRequest
-	@ManyToOne
-	@JoinColumn(name = "employee_leave_request_id")
-	private EmployeeLeaveRequest employeeLeaveRequest;
+//	// bi-directional many-to-one association to EmployeeLeaveRequest
+//	@ManyToOne
+//	@JoinColumn(name = "employee_leave_request_id")
+//	private EmployeeLeaveRequest employeeLeaveRequest;
 
 }

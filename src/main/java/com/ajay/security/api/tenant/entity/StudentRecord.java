@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -82,9 +81,9 @@ public class StudentRecord implements Serializable {
 	@Column(name = "upload_token")
 	private String uploadToken;
 
-	// bi-directional many-to-one association to BookLog
-	@OneToMany(mappedBy = "studentRecord")
-	private List<BookLog> bookLogs;
+//	// bi-directional many-to-one association to BookLog
+//	@OneToMany(mappedBy = "studentRecord")
+//	private List<BookLog> bookLogs;
 
 	// bi-directional many-to-one association to Certificate
 	@OneToMany(mappedBy = "studentRecord")
@@ -94,12 +93,14 @@ public class StudentRecord implements Serializable {
 	@OneToMany(mappedBy = "studentRecord")
 	private List<CommunicationStudentRecord> communicationStudentRecords;
 
-	// bi-directional many-to-one association to Expens
-	@OneToMany(mappedBy = "studentRecord")
-	private List<Expense> expenses;
+//	// bi-directional many-to-one association to Expens
+//	@OneToMany(mappedBy = "studentRecord")
+//	private List<Expense> expenses;
 
 	// bi-directional many-to-one association to Income
-	@OneToMany(mappedBy = "studentRecord")
+//	@OneToMany(mappedBy = "studentRecord")
+	@OneToMany(targetEntity = Income.class)
+	@JoinColumn(name = "student_record_id")
 	private List<Income> incomes;
 
 	// bi-directional many-to-one association to MeetingStudentRecord
@@ -115,16 +116,17 @@ public class StudentRecord implements Serializable {
 	private List<StudentFeeRecord> studentFeeRecords;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
 	// bi-directional many-to-one association to Admission
-	@ManyToOne
+	@ManyToOne(targetEntity = Admission.class)
+	@JoinColumn(name = "admission_id")
 	private Admission admission;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
 	private Batch batch;
 

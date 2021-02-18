@@ -2,30 +2,31 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the designations database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -40,6 +41,7 @@ public class Designation implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Lob
@@ -54,6 +56,7 @@ public class Designation implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to EmployeeCategory
@@ -62,20 +65,16 @@ public class Designation implements Serializable {
 	private EmployeeCategory employeeCategory;
 
 	// bi-directional many-to-one association to Designation
-	@ManyToOne
+	@ManyToOne(targetEntity = Designation.class)
 	@JoinColumn(name = "top_designation_id")
 	private Designation designation;
 
-	// bi-directional many-to-one association to Designation
-	@OneToMany(mappedBy = "designation",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<Designation> designations;
+//	// bi-directional many-to-one association to EmployeeDesignation
+//	@OneToMany(mappedBy = "designation")
+//	private List<EmployeeDesignation> employeeDesignations;
 
-	// bi-directional many-to-one association to EmployeeDesignation
-	@OneToMany(mappedBy = "designation",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<EmployeeDesignation> employeeDesignations;
-
-	// bi-directional many-to-one association to EmployeeLeaveRequestDetail
-	@OneToMany(mappedBy = "designation",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<EmployeeLeaveRequestDetail> employeeLeaveRequestDetails;
+//	// bi-directional many-to-one association to EmployeeLeaveRequestDetail
+//	@OneToMany(mappedBy = "designation")
+//	private List<EmployeeLeaveRequestDetail> employeeLeaveRequestDetails;
 
 }

@@ -61,12 +61,12 @@ public class FeeAllocation implements Serializable {
 	private List<FeeAllocationGroup> feeAllocationGroups;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to Cours
-	@ManyToOne
+	@ManyToOne(targetEntity = Course.class)
 	@JoinColumn(name = "course_id")
 	private Course cours;
 

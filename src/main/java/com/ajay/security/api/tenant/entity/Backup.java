@@ -12,6 +12,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +40,7 @@ public class Backup implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	private String file;
@@ -46,10 +50,12 @@ public class Backup implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonIgnoreProperties(value = { "backups", "password", "activationToken" })
 	private User user;
 
 }

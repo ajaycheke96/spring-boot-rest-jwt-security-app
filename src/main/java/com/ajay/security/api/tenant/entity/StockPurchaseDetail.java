@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,15 +60,14 @@ public class StockPurchaseDetail implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to StockItem
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = StockItem.class)
 	@JoinColumn(name = "stock_item_id")
-	@JsonIgnoreProperties(value = { "stockPurchaseDetails", "hibernateLazyInitializer" })
 	private StockItem stockItem;
 
-	// bi-directional many-to-one association to StockPurchas
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "stock_purchase_id")
-	@JsonIgnoreProperties(value = { "stockPurchaseDetails", "hibernateLazyInitializer" })
-	private StockPurchase stockPurchas;
+//	// bi-directional many-to-one association to StockPurchas
+//	@ManyToOne
+//	@JoinColumn(name = "stock_purchase_id")
+//	@JsonIgnoreProperties(value = { "stockPurchaseDetails", "hibernateLazyInitializer" })
+//	private StockPurchase stockPurchas;
 
 }

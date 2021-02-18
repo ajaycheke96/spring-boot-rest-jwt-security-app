@@ -7,7 +7,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -69,21 +67,19 @@ public class StockTransferReturn implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to StockItem
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = StockItem.class)
 	@JoinColumn(name = "stock_item_id")
-	@JsonIgnoreProperties(value = { "stockTransferReturns", "hibernateLazyInitializer" })
 	private StockItem stockItem;
 
 	// bi-directional many-to-one association to StockTransfer
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = StockTransfer.class)
 	@JoinColumn(name = "stock_transfer_id")
-	@JsonIgnoreProperties(value = { "stockTransferReturns", "hibernateLazyInitializer" })
 	private StockTransfer stockTransfer;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	@JsonIgnoreProperties(value = { "stockTransferReturns", "hibernateLazyInitializer" })
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "uploads", "userPreferences", "userPushTokens" })
 	private User user;
 
 }

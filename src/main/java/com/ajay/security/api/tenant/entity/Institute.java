@@ -2,18 +2,15 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -72,14 +69,14 @@ public class Institute implements Serializable {
 	@Column(length = 100)
 	private String website;
 
-	// bi-directional many-to-one association to EnquiryDetail
-	@OneToMany(mappedBy = "institute")
-	@JsonIgnoreProperties("institute")
-	private List<EnquiryDetail> enquiryDetails;
+//	// bi-directional many-to-one association to EnquiryDetail
+//	@OneToMany(mappedBy = "institute")
+//	@JsonIgnoreProperties("institute")
+//	private List<EnquiryDetail> enquiryDetails;
 
-	// bi-directional many-to-one association to Registration
-	@OneToMany(mappedBy = "institute")
-	@JsonIgnoreProperties("institute")
-	private List<Registration> registrations;
+//	// bi-directional many-to-one association to Registration
+//	@OneToMany(mappedBy = "institute")
+//	@JsonIgnoreProperties("institute")
+//	private List<Registration> registrations;
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -60,16 +59,18 @@ public class ExamAssessment implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to ExamAssessmentDetail
-	@OneToMany(mappedBy = "examAssessment")
+//	@OneToMany(mappedBy = "examAssessment")
+	@OneToMany(targetEntity = ExamAssessmentDetail.class)
+	@JoinColumn(name = "exam_assessment_id")
 	private List<ExamAssessmentDetail> examAssessmentDetails;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
-	// bi-directional many-to-one association to ExamSchedule
-	@OneToMany(mappedBy = "examAssessment")
-	private List<ExamSchedule> examSchedules;
+//	// bi-directional many-to-one association to ExamSchedule
+//	@OneToMany(mappedBy = "examAssessment")
+//	private List<ExamSchedule> examSchedules;
 
 }

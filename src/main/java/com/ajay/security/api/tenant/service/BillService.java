@@ -46,7 +46,7 @@ public class BillService {
 			bill.getBillItems().forEach(bi -> {
 				bi.setCreatedAt(timestamp);
 				bi.setUpdatedAt(timestamp);
-				bi.setBill(bill);
+//				bi.setBill(bill);
 
 				/**
 				 * TODO: to add for StockItem and more
@@ -93,7 +93,7 @@ public class BillService {
 			bill.getTransactions().forEach(tx -> {
 				tx.setCreatedAt(timestamp);
 				tx.setUpdatedAt(timestamp);
-				tx.setBill(bill);
+//				tx.setBill(bill);
 			});
 
 			/**
@@ -114,7 +114,7 @@ public class BillService {
 //			If BillItems not null & Setting to Bill entity
 			bill.getBillItems().forEach(bi -> {
 				bi.setUpdatedAt(timestamp);
-				bi.setBill(bill);
+//				bi.setBill(bill);
 
 				/**
 				 * TODO: to add for StockItem and more
@@ -160,7 +160,7 @@ public class BillService {
 		if (!bill.getTransactions().isEmpty()) {
 			bill.getTransactions().forEach(tx -> {
 				tx.setUpdatedAt(timestamp);
-				tx.setBill(bill);
+//				tx.setBill(bill);
 			});
 
 			/**

@@ -18,7 +18,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -149,10 +148,10 @@ public class Student implements Serializable {
 	@OneToMany(mappedBy = "student")
 	private List<Registration> registrations;
 
-	// bi-directional many-to-one association to StockTransfer
-	@OneToMany(mappedBy = "student")
-	@JsonIgnoreProperties("student")
-	private List<StockTransfer> stockTransfers;
+//	// bi-directional many-to-one association to StockTransfer
+//	@OneToMany(mappedBy = "student")
+//	@JsonIgnoreProperties("student")
+//	private List<StockTransfer> stockTransfers;
 
 	// bi-directional many-to-one association to StudentAccount
 	@OneToMany(mappedBy = "student")
@@ -183,29 +182,33 @@ public class Student implements Serializable {
 	private List<StudentSibling> studentSiblings2;
 
 	// bi-directional many-to-one association to BloodGroup
-	@ManyToOne
+	@ManyToOne(targetEntity = BloodGroup.class)
 	@JoinColumn(name = "blood_group_id")
 	private BloodGroup bloodGroup;
 
 	// bi-directional many-to-one association to Caste
-	@ManyToOne
+	@ManyToOne(targetEntity = Caste.class)
+	@JoinColumn(name = "caste_id")
 	private Caste caste;
 
 	// bi-directional many-to-one association to Category
-	@ManyToOne
+	@ManyToOne(targetEntity = Category.class)
+	@JoinColumn(name = "category_id")
 	private Category category;
 
 	// bi-directional many-to-one association to Religion
-	@ManyToOne
+	@ManyToOne(targetEntity = Religion.class)
+	@JoinColumn(name = "religion_id")
 	private Religion religion;
 
 	// bi-directional many-to-one association to StudentParent
-	@ManyToOne
+	@ManyToOne(targetEntity = StudentParent.class)
 	@JoinColumn(name = "student_parent_id")
 	private StudentParent studentParent;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	// bi-directional many-to-one association to VisitorLog

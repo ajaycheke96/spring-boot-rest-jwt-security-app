@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,16 @@ public class ExamGradeService {
 		return examGradeRepository.findById(id).get();
 	}
 
-	public String saveExamGrade(ExamGrade examGrade) {
-		return examGradeRepository.save(examGrade) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public ExamGrade saveExamGrade(ExamGrade examGrade) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (examGrade.getCreatedAt() == null)
+			examGrade.setCreatedAt(currentTimestamp);
+		examGrade.setUpdatedAt(currentTimestamp);
+		return examGradeRepository.save(examGrade);
 	}
 
-	public String updateExamGrade(ExamGrade examGrade) {
-		return examGradeRepository.save(examGrade) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneExamGrade(Integer id) {
-		examGradeRepository.deleteById(id);
+	public String deleteOneExamGrade(ExamGrade examGrade) {
+		examGradeRepository.delete(examGrade);
 		return " successfully deleted!";
 	}
 }

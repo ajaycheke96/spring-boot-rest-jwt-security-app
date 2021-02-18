@@ -13,16 +13,21 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_leave_allocation_details database
  * table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -39,23 +44,25 @@ public class EmployeeLeaveAllocationDetail implements Serializable {
 	private int allotted;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Lob
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	private int used;
 
-	// bi-directional many-to-one association to EmployeeLeaveAllocation
-	@ManyToOne
-	@JoinColumn(name = "employee_leave_allocation_id")
-	private EmployeeLeaveAllocation employeeLeaveAllocation;
+//	// bi-directional many-to-one association to EmployeeLeaveAllocation
+//	@ManyToOne
+//	@JoinColumn(name = "employee_leave_allocation_id")
+//	private EmployeeLeaveAllocation employeeLeaveAllocation;
 
 	// bi-directional many-to-one association to EmployeeLeaveType
-	@ManyToOne
+	@ManyToOne(targetEntity = EmployeeLeaveType.class)
 	@JoinColumn(name = "employee_leave_type_id")
 	private EmployeeLeaveType employeeLeaveType;
 

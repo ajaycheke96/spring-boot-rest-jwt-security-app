@@ -9,11 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -93,19 +93,21 @@ public class Vendor implements Serializable {
 	@Column(length = 20)
 	private String zipcode;
 
-	// bi-directional many-to-one association to Expens
-	@OneToMany(mappedBy = "vendor")
-	@JsonIgnoreProperties("vendor")
-	private List<Expense> expenses;
+//	// bi-directional many-to-one association to Expens
+//	@OneToMany(mappedBy = "vendor")
+//	@JsonIgnoreProperties("vendor")
+//	private List<Expense> expenses;
 
-	// bi-directional many-to-one association to StockPurchas
-	@OneToMany(mappedBy = "vendor")
-	@JsonIgnoreProperties("vendor")
-	private List<StockPurchase> stockPurchases;
+//	// bi-directional many-to-one association to StockPurchas
+//	@OneToMany(mappedBy = "vendor")
+//	@JsonIgnoreProperties("vendor")
+//	private List<StockPurchase> stockPurchases;
 
 	// bi-directional many-to-one association to VendorAccount
-	@OneToMany(mappedBy = "vendor")
-	@JsonIgnoreProperties("vendor")
+//	@OneToMany(mappedBy = "vendor")
+	@OneToMany(targetEntity = VendorAccount.class)
+	@JoinColumn(name = "vendor_id")
+//	@JsonIgnoreProperties("vendor")
 	private List<VendorAccount> vendorAccounts;
 
 }

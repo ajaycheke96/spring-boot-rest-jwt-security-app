@@ -5,30 +5,33 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the book_log_details database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -43,6 +46,7 @@ public class BookLogDetail implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -59,37 +63,37 @@ public class BookLogDetail implements Serializable {
 	@Column(name = "non_returnable_at")
 	private Date nonReturnableAt;
 
-	@Lob
 	@Column(name = "non_returnable_charge", length = 20)
 	private String nonReturnableCharge;
 
-	@Lob
 	@Column(name = "non_returnable_remarks", length = 20)
 	private String nonReturnableRemarks;
 
-	@Lob
 	@Column(length = 50)
 	private String options;
 
-	@Lob
 	@Column(name = "return_remarks", length = 20)
 	private String returnRemarks;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to BookLog
-	@ManyToOne
-	@JoinColumn(name = "book_log_id")
-	private BookLog bookLog;
+//	// bi-directional many-to-one association to BookLog
+//	@ManyToOne
+//	@JoinColumn(name = "book_log_id")
+//	private BookLog bookLog;
 
 	// bi-directional many-to-one association to BookPostDetail
 	@ManyToOne
 	@JoinColumn(name = "book_post_detail_id")
+	@JsonIgnoreProperties({ "bookLogDetails", "bookCondition" })
 	private BookPostDetail bookPostDetail;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "bookLogDetail",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "bookLogDetail")
+	@OneToMany(targetEntity = Transaction.class)
+	@JoinColumn(name = "book_log_detail_id")
 	private List<Transaction> transactions;
 
 }

@@ -3,30 +3,32 @@ package com.ajay.security.api.tenant.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the student_parents database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -41,6 +43,7 @@ public class StudentParent implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(name = "first_guardian_annual_income", length = 20)
@@ -121,14 +124,16 @@ public class StudentParent implements Serializable {
 	private String thirdGuardianRelation;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_id")
 	private User user;
 
-	// bi-directional many-to-one association to Student
-	@OneToMany(mappedBy = "studentParent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Student> students;
+//	// bi-directional many-to-one association to Student
+//	@OneToMany(mappedBy = "studentParent")
+//	private List<Student> students;
 
 }

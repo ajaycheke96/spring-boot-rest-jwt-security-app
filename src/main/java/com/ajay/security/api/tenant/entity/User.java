@@ -72,125 +72,125 @@ public class User {
 	@Column(length = 50)
 	private String uuid;
 
-	// bi-directional many-to-one association to AccountTransfer
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<AccountTransfer> accountTransfers;
+//	// bi-directional many-to-one association to AccountTransfer
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<AccountTransfer> accountTransfers;
 
-	// bi-directional many-to-one association to Article
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Article> articles;
+//	// bi-directional many-to-one association to Article
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Article> articles;
 
 	// bi-directional many-to-one association to Backup
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties("user")
 	private List<Backup> backups;
 
-	// bi-directional many-to-one association to CallLog
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<CallLog> callLogs;
+//	// bi-directional many-to-one association to CallLog
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<CallLog> callLogs;
 
-	// bi-directional many-to-one association to Communication
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Communication> communications;
+//	// bi-directional many-to-one association to Communication
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Communication> communications;
 
-	// bi-directional many-to-one association to Complaint
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Complaint> complaints;
+//	// bi-directional many-to-one association to Complaint
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Complaint> complaints;
 
-	// bi-directional many-to-one association to EmployeeLeaveRequestDetail
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<EmployeeLeaveRequestDetail> employeeLeaveRequestDetails;
+//	// bi-directional many-to-one association to EmployeeLeaveRequestDetail
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<EmployeeLeaveRequestDetail> employeeLeaveRequestDetails;
 
-	// bi-directional many-to-one association to EmployeeLeaveRequest
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<EmployeeLeaveRequest> employeeLeaveRequests;
+//	// bi-directional many-to-one association to EmployeeLeaveRequest
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<EmployeeLeaveRequest> employeeLeaveRequests;
 
-	// bi-directional many-to-one association to Employee
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Employee> employees;
+//	// bi-directional many-to-one association to Employee
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Employee> employees;
 
-	// bi-directional many-to-one association to Enquiry
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Enquiry> enquiries;
+//	// bi-directional many-to-one association to Enquiry
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Enquiry> enquiries;
 
-	// bi-directional many-to-one association to EnquiryFollowUp
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<EnquiryFollowUp> enquiryFollowUps;
+//	// bi-directional many-to-one association to EnquiryFollowUp
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<EnquiryFollowUp> enquiryFollowUps;
 
-	// bi-directional many-to-one association to Event
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Event> events;
+//	// bi-directional many-to-one association to Event
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Event> events;
 
-	// bi-directional many-to-one association to Expens
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Expense> expenses;
+//	// bi-directional many-to-one association to Expens
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Expense> expenses;
 
-	// bi-directional many-to-one association to GatePass
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<GatePass> gatePasses;
+//	// bi-directional many-to-one association to GatePass
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<GatePass> gatePasses;
 
-	// bi-directional many-to-one association to Income
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Income> incomes;
+//	// bi-directional many-to-one association to Income
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Income> incomes;
 
-	// bi-directional many-to-one association to Meeting
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Meeting> meetings;
+//	// bi-directional many-to-one association to Meeting
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Meeting> meetings;
 
 	// bi-directional many-to-one association to PostalRecord
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties("user")
 	private List<PostalRecord> postalRecords;
 
-	// bi-directional many-to-one association to StockPurchas
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<StockPurchase> stockPurchases;
+//	// bi-directional many-to-one association to StockPurchas
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<StockPurchase> stockPurchases;
 
-	// bi-directional many-to-one association to StockTransferReturn
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<StockTransferReturn> stockTransferReturns;
+//	// bi-directional many-to-one association to StockTransferReturn
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<StockTransferReturn> stockTransferReturns;
 
-	// bi-directional many-to-one association to StockTransfer
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<StockTransfer> stockTransfers;
+//	// bi-directional many-to-one association to StockTransfer
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<StockTransfer> stockTransfers;
 
-	// bi-directional many-to-one association to StudentParent
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<StudentParent> studentParents;
+//	// bi-directional many-to-one association to StudentParent
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<StudentParent> studentParents;
 
-	// bi-directional many-to-one association to Student
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Student> students;
+//	// bi-directional many-to-one association to Student
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Student> students;
 
 	// bi-directional many-to-one association to Todo
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties("user")
 	private List<Todo> todos;
 
-	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Transaction> transactions;
+//	// bi-directional many-to-one association to Transaction
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Transaction> transactions;
 
 	// bi-directional many-to-one association to Upload
 	@OneToMany(mappedBy = "user")
@@ -199,7 +199,7 @@ public class User {
 
 	// bi-directional many-to-one association to UserPreference
 	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
+	@JsonIgnoreProperties({"user", "academicSession"})
 	private List<UserPreference> userPreferences;
 
 	// bi-directional many-to-one association to UserPushToken

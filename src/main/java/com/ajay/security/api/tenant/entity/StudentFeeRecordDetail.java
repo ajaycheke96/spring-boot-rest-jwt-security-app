@@ -51,13 +51,14 @@ public class StudentFeeRecordDetail implements Serializable {
 	@JoinColumn(name = "fee_head_id")
 	private FeeHead feeHead;
 
-	// bi-directional many-to-one association to StudentFeeRecord
-	@ManyToOne
-	@JoinColumn(name = "student_fee_record_id")
-	private StudentFeeRecord studentFeeRecord;
+//	// bi-directional many-to-one association to StudentFeeRecord
+//	@ManyToOne
+//	@JoinColumn(name = "student_fee_record_id")
+//	private StudentFeeRecord studentFeeRecord;
 
 	// bi-directional many-to-one association to Transaction
-	@ManyToOne
+	@ManyToOne(targetEntity = Transaction.class)
+	@JoinColumn(name = "transaction_id")
 	private Transaction transaction;
 
 }

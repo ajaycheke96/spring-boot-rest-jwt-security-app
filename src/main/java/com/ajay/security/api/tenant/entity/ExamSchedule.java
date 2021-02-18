@@ -2,17 +2,14 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -59,27 +56,28 @@ public class ExamSchedule implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to ExamRecord
-	@OneToMany(mappedBy = "examSchedule")
-	private List<ExamRecord> examRecords;
+//	// bi-directional many-to-one association to ExamRecord
+//	@OneToMany(mappedBy = "examSchedule")
+//	private List<ExamRecord> examRecords;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to ExamAssessment
-	@ManyToOne
+	@ManyToOne(targetEntity = ExamAssessment.class)
 	@JoinColumn(name = "exam_assessment_id")
 	private ExamAssessment examAssessment;
 
 	// bi-directional many-to-one association to ExamGrade
-	@ManyToOne
+	@ManyToOne(targetEntity = ExamGrade.class)
 	@JoinColumn(name = "exam_grade_id")
 	private ExamGrade examGrade;
 
 	// bi-directional many-to-one association to Exam
-	@ManyToOne
+	@ManyToOne(targetEntity = Exam.class)
+	@JoinColumn(name = "exam_id")
 	private Exam exam;
 
 }

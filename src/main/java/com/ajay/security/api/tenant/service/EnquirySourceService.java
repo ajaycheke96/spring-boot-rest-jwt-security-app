@@ -24,18 +24,12 @@ public class EnquirySourceService {
 		return enquirySourceRepository.findById(id).get();
 	}
 
-	public String saveEnquirySource(EnquirySource enquirySource) {
-		return enquirySourceRepository.save(enquirySource) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EnquirySource saveEnquirySource(EnquirySource enquirySource) {
+		return enquirySourceRepository.save(enquirySource);
 	}
 
-	public String updateEnquirySource(EnquirySource enquirySource) {
-		return enquirySourceRepository.save(enquirySource) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEnquirySource(Integer id) {
-		enquirySourceRepository.deleteById(id);
+	public String deleteOneEnquirySource(EnquirySource enquirySource) {
+		enquirySourceRepository.delete(enquirySource);
 		return " successfully deleted!";
 	}
 }

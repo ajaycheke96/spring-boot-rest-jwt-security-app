@@ -8,10 +8,10 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,7 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -71,20 +70,20 @@ public class StockPurchase implements Serializable {
 	private String uploadToken;
 
 	// bi-directional many-to-one association to StockPurchaseDetail
-	@OneToMany(mappedBy = "stockPurchas", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JsonIgnoreProperties("stockPurchas")
+//	@OneToMany(mappedBy = "stockPurchas", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = StockPurchaseDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "stock_purchase_id")
 	private List<StockPurchaseDetail> stockPurchaseDetails;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	@JsonIgnoreProperties(value = { "stockPurchases", "hibernateLazyInitializer" })
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "uploads", "userPreferences", "userPushTokens" })
 	private User user;
 
 	// bi-directional many-to-one association to Vendor
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	@JsonIgnoreProperties(value = { "stockPurchases", "hibernateLazyInitializer" })
+	@ManyToOne(targetEntity = Vendor.class)
+	@JoinColumn(name = "vendor_id")
 	private Vendor vendor;
 
 }

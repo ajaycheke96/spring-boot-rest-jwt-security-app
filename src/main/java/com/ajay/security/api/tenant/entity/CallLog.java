@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -92,10 +91,8 @@ public class CallLog implements Serializable {
 	private CallingPurpos callingPurpos;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
-	@JsonIgnoreProperties({ "callLogs", "hibernateLazyInitializer" })
 	private User user;
 
 }

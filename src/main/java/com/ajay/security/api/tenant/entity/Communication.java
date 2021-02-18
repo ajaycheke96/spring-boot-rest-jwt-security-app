@@ -9,20 +9,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the communications database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -39,41 +44,34 @@ public class Communication implements Serializable {
 	@Column(length = 50)
 	private String audience;
 
-	@Lob
 	@Column(length = 50)
 	private String body;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Lob
 	@Column(name = "excluded_emails", length = 30)
 	private String excludedEmails;
 
-	@Lob
 	@Column(name = "excluded_numbers", length = 20)
 	private String excludedNumbers;
 
-	@Lob
 	@Column(name = "included_emails", length = 30)
 	private String includedEmails;
 
-	@Lob
 	@Column(name = "included_numbers", length = 20)
 	private String includedNumbers;
 
-	@Lob
 	@Column(length = 50)
 	private String options;
 
 	@Column(name = "recipient_count")
 	private int recipientCount;
 
-	@Lob
 	@Column(name = "recipient_emails", length = 30)
 	private String recipientEmails;
 
-	@Lob
 	@Column(name = "recipient_numbers", length = 20)
 	private String recipientNumbers;
 
@@ -84,6 +82,7 @@ public class Communication implements Serializable {
 	private String type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
@@ -98,7 +97,9 @@ public class Communication implements Serializable {
 	private List<CommunicationCourse> communicationCourses;
 
 	// bi-directional many-to-one association to CommunicationDepartment
-	@OneToMany(mappedBy = "communication")
+//	@OneToMany(mappedBy = "communication")
+	@OneToMany(targetEntity = CommunicationDepartment.class)
+	@JoinColumn(name = "communication_id")
 	private List<CommunicationDepartment> communicationDepartments;
 
 	// bi-directional many-to-one association to CommunicationEmployee

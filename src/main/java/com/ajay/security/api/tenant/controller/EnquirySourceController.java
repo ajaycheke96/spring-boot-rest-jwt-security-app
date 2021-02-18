@@ -1,18 +1,18 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.EnquirySource;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.EnquirySourceService;
 
 @RestController
@@ -22,28 +22,58 @@ public class EnquirySourceController {
 	@Autowired
 	private EnquirySourceService enquirySourceService;
 
-	@GetMapping("/all")
-	public List<EnquirySource> getAllEnquirySource() {
-		return enquirySourceService.getAllEnquirySources();
+	@RequestMapping(value = "/listAllEnquirySource")
+	public ApiResponse getAllEnquirySource() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "List of EnquirySource",
+					enquirySourceService.getAllEnquirySources());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquirySource Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public EnquirySource getOneEnquirySource(@PathVariable Integer id) {
-		return enquirySourceService.getOneEnquirySource(id);
+	@RequestMapping(value = "/{id}")
+	public ApiResponse getOneEnquirySource(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquirySource",
+					enquirySourceService.getOneEnquirySource(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquirySource Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveEnquirySource(@RequestBody EnquirySource enquirySource) {
-		return enquirySourceService.saveEnquirySource(enquirySource);
+	@RequestMapping(value = "/saveEnquirySource", method = RequestMethod.POST)
+	public ApiResponse saveEnquirySource(@RequestBody EnquirySource enquirySource) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquirySource saved!",
+					enquirySourceService.saveEnquirySource(enquirySource));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquirySource Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateEnquirySource(@RequestBody EnquirySource enquirySource) {
-		return enquirySourceService.updateEnquirySource(enquirySource);
+	@RequestMapping(value = "/updateEnquirySource", method = RequestMethod.POST)
+	public ApiResponse updateEnquirySource(@RequestBody EnquirySource enquirySource) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquirySource updated!",
+					enquirySourceService.saveEnquirySource(enquirySource));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquirySource Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneEnquirySource(@PathVariable Integer id) {
-		return enquirySourceService.deleteOneEnquirySource(id);
+	@RequestMapping(value = "/deleteEnquirySource", method = RequestMethod.POST)
+	public ApiResponse deleteOneEnquirySource(@RequestBody EnquirySource enquirySource) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquirySource deleted!",
+					enquirySourceService.deleteOneEnquirySource(enquirySource));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquirySource Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

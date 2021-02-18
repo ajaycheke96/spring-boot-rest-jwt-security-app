@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,16 +63,18 @@ public class ExamGrade implements Serializable {
 //	private List<Batch> batches;
 
 	// bi-directional many-to-one association to ExamGradeDetail
-	@OneToMany(mappedBy = "examGrade")
+//	@OneToMany(mappedBy = "examGrade")
+	@OneToMany(targetEntity = ExamGradeDetail.class)
+	@JoinColumn(name = "exam_grade_id")
 	private List<ExamGradeDetail> examGradeDetails;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
-	// bi-directional many-to-one association to ExamSchedule
-	@OneToMany(mappedBy = "examGrade")
-	private List<ExamSchedule> examSchedules;
+//	// bi-directional many-to-one association to ExamSchedule
+//	@OneToMany(mappedBy = "examGrade")
+//	private List<ExamSchedule> examSchedules;
 
 }

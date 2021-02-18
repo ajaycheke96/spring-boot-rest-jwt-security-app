@@ -5,30 +5,32 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the registrations database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -43,6 +45,7 @@ public class Registration implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -64,33 +67,32 @@ public class Registration implements Serializable {
 	@Column(name = "registration_key", length = 20)
 	private String registrationKey;
 
-	@Lob
 	@Column(name = "registration_remarks", length = 20)
 	private String registrationRemarks;
 
-	@Lob
 	@Column(name = "rejection_remarks", length = 20)
 	private String rejectionRemarks;
 
 	private String status;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
 	private String uploadToken;
 
-	// bi-directional many-to-one association to Admission
-	@OneToMany(mappedBy = "registration", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Admission> admissions;
+//	// bi-directional many-to-one association to Admission
+//	@OneToMany(mappedBy = "registration")
+//	private List<Admission> admissions;
 
 	// bi-directional many-to-one association to Cours
-	@ManyToOne
+	@ManyToOne(targetEntity = Course.class)
 	@JoinColumn(name = "course_id")
 	private Course cours;
 
 	// bi-directional many-to-one association to Institute
-	@ManyToOne
+	@ManyToOne(targetEntity = Institute.class)
 	@JoinColumn(name = "previous_institute_id")
 	private Institute institute;
 
@@ -99,7 +101,7 @@ public class Registration implements Serializable {
 	private Student student;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "registration", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "registration")
 	private List<Transaction> transactions;
 
 }

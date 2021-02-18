@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,8 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -106,33 +103,30 @@ public class Bill implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to BillItem
-	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("bill")
+//	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = BillItem.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "bill_id")
 	private List<BillItem> billItems;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	@JsonIgnoreProperties(value = { "bills", "hibernateLazyInitializer" })
+	@ManyToOne(targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
 	// bi-directional many-to-one association to Vehicle
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Vehicle.class)
 	@JoinColumn(name = "vehicle_id")
-//	@JsonIgnore
-	@JsonIgnoreProperties(value = { "bills1", "hibernateLazyInitializer" })
 	private Vehicle vehicle1;
 
 	// bi-directional many-to-one association to Vehicle
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Vehicle.class)
 	@JoinColumn(name = "vendor_id")
-//	@JsonIgnore
-	@JsonIgnoreProperties(value = { "bills2", "hibernateLazyInitializer" })
 	private Vehicle vehicle2;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL) 
-	@JsonIgnoreProperties("bill")
+//	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = Transaction.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "bill_id")
 	private List<Transaction> transactions;
 
 }

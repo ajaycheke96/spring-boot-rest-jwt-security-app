@@ -171,10 +171,13 @@ public class Event implements Serializable {
 
 	// bi-directional many-to-one association to EventCourse
 	@OneToMany(mappedBy = "event")
+//	@JsonIgnoreProperties("event")
 	private List<EventCourse> eventCourses;
 
 	// bi-directional many-to-one association to EventDepartment
-	@OneToMany(mappedBy = "event")
+//	@OneToMany(mappedBy = "event")
+	@OneToMany(targetEntity = EventDepartment.class)
+	@JoinColumn(name = "event_id")
 	private List<EventDepartment> eventDepartments;
 
 	// bi-directional many-to-one association to EventEmployeeCategory

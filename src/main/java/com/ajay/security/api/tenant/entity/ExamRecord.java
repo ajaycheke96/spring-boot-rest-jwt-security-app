@@ -7,7 +7,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -69,13 +69,14 @@ public class ExamRecord implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to ExamSchedule
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ExamSchedule.class)
 	@JoinColumn(name = "exam_schedule_id")
 	private ExamSchedule examSchedule;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@ManyToOne(targetEntity = Subject.class)
 	@JoinColumn(name = "subject_id")
+	@JsonIgnoreProperties("batch")
 	private Subject subject;
 
 }

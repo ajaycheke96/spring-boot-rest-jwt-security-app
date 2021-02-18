@@ -1,18 +1,18 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.ExamSchedule;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.ExamScheduleService;
 
 @RestController
@@ -22,28 +22,58 @@ public class ExamScheduleController {
 	@Autowired
 	private ExamScheduleService examScheduleService;
 
-	@GetMapping("/all")
-	public List<ExamSchedule> getAllExamSchedule() {
-		return examScheduleService.getAllExamSchedules();
+	@RequestMapping(value = "/listAllExamSchedule")
+	public ApiResponse getAllExamSchedule() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of ExamSchedule",
+					examScheduleService.getAllExamSchedules());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ExamSchedule Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public ExamSchedule getOneExamSchedule(@PathVariable Integer id) {
-		return examScheduleService.getOneExamSchedule(id);
+	@RequestMapping(value = "/{id}")
+	public ApiResponse getOneExamSchedule(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ExamSchedule",
+					examScheduleService.getOneExamSchedule(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ExamSchedule Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveExamSchedule(@RequestBody ExamSchedule examSchedule) {
-		return examScheduleService.saveExamSchedule(examSchedule);
+	@RequestMapping(value = "/saveExamSchedule", method = RequestMethod.POST)
+	public ApiResponse saveExamSchedule(@RequestBody ExamSchedule examSchedule) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ExamSchedule saved!",
+					examScheduleService.saveExamSchedule(examSchedule));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ExamSchedule Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateExamSchedule(@RequestBody ExamSchedule examSchedule) {
-		return examScheduleService.updateExamSchedule(examSchedule);
+	@RequestMapping(value = "/updateExamSchedule", method = RequestMethod.POST)
+	public ApiResponse updateExamSchedule(@RequestBody ExamSchedule examSchedule) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ExamSchedule updated!",
+					examScheduleService.saveExamSchedule(examSchedule));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ExamSchedule Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneExamSchedule(@PathVariable Integer id) {
-		return examScheduleService.deleteOneExamSchedule(id);
+	@RequestMapping(value = "/deleteExamSchedule", method = RequestMethod.POST)
+	public ApiResponse deleteOneExamSchedule(@RequestBody ExamSchedule examSchedule) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ExamSchedule deleted!",
+					examScheduleService.deleteOneExamSchedule(examSchedule));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ExamSchedule Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

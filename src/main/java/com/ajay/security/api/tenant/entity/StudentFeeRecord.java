@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,15 +18,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the student_fee_records database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -42,6 +46,7 @@ public class StudentFeeRecord implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -73,13 +78,16 @@ public class StudentFeeRecord implements Serializable {
 	private int transportFee;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
 	private String uploadToken;
 
 	// bi-directional many-to-one association to StudentFeeRecordDetail
-	@OneToMany(mappedBy = "studentFeeRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "studentFeeRecord", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = StudentFeeRecordDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "student_fee_record_id")
 	private List<StudentFeeRecordDetail> studentFeeRecordDetails;
 
 	// bi-directional many-to-one association to FeeConcession
@@ -103,11 +111,13 @@ public class StudentFeeRecord implements Serializable {
 	private TransportCircle transportCircle;
 
 	// bi-directional many-to-one association to StudentOptionalFeeRecord
-	@OneToMany(mappedBy = "studentFeeRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "studentFeeRecord")
 	private List<StudentOptionalFeeRecord> studentOptionalFeeRecords;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "studentFeeRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "studentFeeRecord")
+	@OneToMany(targetEntity = Transaction.class)
+	@JoinColumn(name = "")
 	private List<Transaction> transactions;
 
 }

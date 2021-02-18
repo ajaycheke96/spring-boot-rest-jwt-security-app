@@ -18,7 +18,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -69,21 +68,21 @@ public class Article implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	@Column(name = "upload_token",length = 50)
+	@Column(name = "upload_token", length = 50)
 	private String uploadToken;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to ArticleType
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "article_type_id")
-	@JsonIgnoreProperties(value = {"articles", "hibernateLazyInitializer"})
+	@JsonIgnoreProperties(value = { "articles", "hibernateLazyInitializer" })
 	private ArticleType articleType;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	@JsonIgnoreProperties(value = {"articles", "hibernateLazyInitializer"})
+	@ManyToOne
+//	@JsonIgnoreProperties(value = {"articles"})
+	@JoinColumn(name = "user_id")
 	private User user;
 }

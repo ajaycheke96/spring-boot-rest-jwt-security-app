@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class BookLog implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -72,21 +74,25 @@ public class BookLog implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to BookLogDetail
-	@OneToMany(mappedBy = "bookLog",fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "bookLog")
+	@OneToMany(targetEntity = BookLogDetail.class)
+	@JoinColumn(name = "book_log_id")
 	private List<BookLogDetail> bookLogDetails;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
 	// bi-directional many-to-one association to StudentRecord
-	@ManyToOne
+	@ManyToOne(targetEntity = StudentRecord.class)
 	@JoinColumn(name = "student_record_id")
 	private StudentRecord studentRecord;
 

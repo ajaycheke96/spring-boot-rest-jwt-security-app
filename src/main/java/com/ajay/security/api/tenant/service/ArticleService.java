@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.ajay.security.api.tenant.entity.Article;
 import com.ajay.security.api.tenant.entity.ArticleType;
-import com.ajay.security.api.tenant.entity.User;
 import com.ajay.security.api.tenant.repository.ArticleRepository;
 
 @Service
@@ -17,8 +16,8 @@ public class ArticleService {
 	@Autowired
 	private ArticleRepository articleRepository;
 
-	@Autowired
-	private UserService userService;
+//	@Autowired
+//	private UserService userService;
 
 	public List<Article> getAllArticles() {
 		return articleRepository.findAll();
@@ -42,13 +41,13 @@ public class ArticleService {
 
 		article.setArticleType(articleType);
 
-		if (article.getUser() != null) {
-			User user = userService.getOneUser(article.getUser().getId());
-			if (user != null) {
-				user.setArticles(List.of(article));
-				article.setUser(user);
-			}
-		}
+//		if (article.getUser() != null) {
+//			User user = userService.getOneUser(article.getUser().getId());
+//			if (user != null) {
+//				user.setArticles(List.of(article));
+//				article.setUser(user);
+//			}
+//		}
 
 		return articleRepository.save(article) != null ? " successfully saved!" : "Failed! Please try again!!";
 	}
@@ -67,8 +66,8 @@ public class ArticleService {
 
 		article.setArticleType(articleType);
 
-		if (article.getUser() != null)
-			article.getUser().setArticles(List.of(article));
+//		if (article.getUser() != null)
+//			article.getUser().setArticles(List.of(article));
 
 		return articleRepository.save(article) != null ? " successfully updated!" : "Failed! Please try again!!";
 	}

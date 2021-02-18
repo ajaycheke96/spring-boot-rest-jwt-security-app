@@ -5,10 +5,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,15 +17,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_leave_requests database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -42,6 +45,7 @@ public class EmployeeLeaveRequest implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -62,6 +66,7 @@ public class EmployeeLeaveRequest implements Serializable {
 	private String status;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -71,20 +76,23 @@ public class EmployeeLeaveRequest implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to EmployeeLeaveRequestDetail
-	@OneToMany(mappedBy = "employeeLeaveRequest",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "employeeLeaveRequest")
+	@OneToMany(targetEntity = EmployeeLeaveRequestDetail.class)
+	@JoinColumn(name = "employee_leave_request_id")
 	private List<EmployeeLeaveRequestDetail> employeeLeaveRequestDetails;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
 	// bi-directional many-to-one association to EmployeeLeaveType
-	@ManyToOne
+	@ManyToOne(targetEntity = EmployeeLeaveType.class)
 	@JoinColumn(name = "employee_leave_type_id")
 	private EmployeeLeaveType employeeLeaveType;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "requester_user_id")
 	private User user;
 

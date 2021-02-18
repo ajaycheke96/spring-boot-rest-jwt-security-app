@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -66,17 +65,17 @@ public class Batch implements Serializable {
 //	private List<Admission> admissions;
 
 	// bi-directional many-to-one association to Cours
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Course.class)
+	@ManyToOne( targetEntity = Course.class)
 	@JoinColumn(name = "course_id")
 	private Course course;
 
 	// bi-directional many-to-one association to ExamGrade
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = ExamGrade.class)
+	@ManyToOne( targetEntity = ExamGrade.class)
 	@JoinColumn(name = "exam_grade_id")
 	private ExamGrade examGrade;
 
 	// bi-directional many-to-one association to ExamObservation
-	@ManyToOne(fetch = FetchType.LAZY,targetEntity = ExamObservation.class)
+	@ManyToOne(targetEntity = ExamObservation.class)
 	@JoinColumn(name = "exam_observation_id")
 	private ExamObservation examObservation;
 
