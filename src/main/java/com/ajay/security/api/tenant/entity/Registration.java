@@ -3,7 +3,6 @@ package com.ajay.security.api.tenant.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -97,11 +95,12 @@ public class Registration implements Serializable {
 	private Institute institute;
 
 	// bi-directional many-to-one association to Student
-	@ManyToOne
+	@ManyToOne(targetEntity = Student.class)
+	@JoinColumn(name = "student_id")
 	private Student student;
 
-	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "registration")
-	private List<Transaction> transactions;
+//	// bi-directional many-to-one association to Transaction
+//	@OneToMany(mappedBy = "registration")
+//	private List<Transaction> transactions;
 
 }

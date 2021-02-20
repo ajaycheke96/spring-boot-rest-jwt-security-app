@@ -18,7 +18,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -165,42 +164,38 @@ public class Transaction implements Serializable {
 
 //	// bi-directional many-to-one association to Expens
 //	@ManyToOne
-//	@JsonIgnore
-////	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 //	@JoinColumn(name = "expense_id")
 //	private Expense expens;
 
 	// bi-directional many-to-one association to Income
-	@ManyToOne
-	@JsonIgnore
-//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
-	private Income income;
+//	@ManyToOne(targetEntity = Income.class)
+//	@JoinColumn(name = "income_id")
+//	private Income income;
 
 	// bi-directional many-to-one association to PaymentMethod
-	@ManyToOne
+	@ManyToOne(targetEntity = PaymentMethod.class)
 	@JoinColumn(name = "payment_method_id")
-	@JsonIgnore
 //	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private PaymentMethod paymentMethod;
 
-	// bi-directional many-to-one association to Payroll
-	@ManyToOne
-	@JsonIgnore
-//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
-	private Payroll payroll;
+//	// bi-directional many-to-one association to Payroll
+//	@ManyToOne
+//	@JsonIgnore
+////	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
+//	private Payroll payroll;
 
 	// bi-directional many-to-one association to Registration
-	@ManyToOne
-	@JsonIgnore
+	@ManyToOne(targetEntity = Registration.class)
+	@JoinColumn(name = "registration_id")
 //	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
 	private Registration registration;
 
-	// bi-directional many-to-one association to StudentFeeRecord
-	@ManyToOne
-	@JoinColumn(name = "student_fee_record_id")
-	@JsonIgnore
-//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
-	private StudentFeeRecord studentFeeRecord;
+//	// bi-directional many-to-one association to StudentFeeRecord
+//	@ManyToOne
+//	@JoinColumn(name = "student_fee_record_id")
+////	@JsonIgnore
+////	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
+//	private StudentFeeRecord studentFeeRecord;
 
 	// bi-directional many-to-one association to Transaction
 	@ManyToOne(targetEntity = Transaction.class)

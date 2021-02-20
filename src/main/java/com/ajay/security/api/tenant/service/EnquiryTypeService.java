@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,16 @@ public class EnquiryTypeService {
 		return enquiryTypeRepository.findById(id).get();
 	}
 
-	public String saveEnquiryType(EnquiryType enquiryType) {
-		return enquiryTypeRepository.save(enquiryType) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public EnquiryType saveEnquiryType(EnquiryType enquiryType) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (enquiryType.getCreatedAt() == null)
+			enquiryType.setCreatedAt(currentTimestamp);
+		enquiryType.setUpdatedAt(currentTimestamp);
+		return enquiryTypeRepository.save(enquiryType);
 	}
 
-	public String updateEnquiryType(EnquiryType enquiryType) {
-		return enquiryTypeRepository.save(enquiryType) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEnquiryType(Integer id) {
-		enquiryTypeRepository.deleteById(id);
+	public String deleteOneEnquiryType(EnquiryType enquiryType) {
+		enquiryTypeRepository.delete(enquiryType);
 		return " successfully deleted!";
 	}
 }

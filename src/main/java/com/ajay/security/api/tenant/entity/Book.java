@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -83,30 +84,30 @@ public class Book implements Serializable {
 
 	// bi-directional many-to-one association to BookPost
 //	@OneToMany(mappedBy = "book")
-	@OneToMany(targetEntity = BookPost.class)
+	@OneToMany(targetEntity = BookPost.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "book_id")
 	private List<BookPost> bookPosts;
 
 	// bi-directional many-to-one association to BookAuthor
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "book_author_id")
 	@JsonIgnoreProperties("books")
 	private BookAuthor bookAuthor;
 
 	// bi-directional many-to-one association to BookLanguage
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "book_language_id")
 	@JsonIgnoreProperties("books")
 	private BookLanguage bookLanguage;
 
 	// bi-directional many-to-one association to BookPublisher
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "book_publisher_id")
 	@JsonIgnoreProperties("books")
 	private BookPublisher bookPublisher;
 
 	// bi-directional many-to-one association to BookTopic
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "book_topic_id")
 	@JsonIgnoreProperties("books")
 	private BookTopic bookTopic;

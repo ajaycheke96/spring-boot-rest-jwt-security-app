@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ public class EnquirySourceService {
 	}
 
 	public EnquirySource saveEnquirySource(EnquirySource enquirySource) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (enquirySource.getCreatedAt() == null)
+			enquirySource.setCreatedAt(currentTimestamp);
+		enquirySource.setUpdatedAt(currentTimestamp);
 		return enquirySourceRepository.save(enquirySource);
 	}
 

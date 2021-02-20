@@ -6,29 +6,31 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the payrolls database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -43,6 +45,7 @@ public class Payroll implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -76,6 +79,7 @@ public class Payroll implements Serializable {
 	private BigDecimal total;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "user_defined_days")
@@ -85,20 +89,24 @@ public class Payroll implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to PayrollDetail
-	@OneToMany(mappedBy = "payroll", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "payroll")
+	@OneToMany(targetEntity = PayrollDetail.class)  // , cascade = CascadeType.ALL)
+	@JoinColumn(name = "payroll_id")
 	private List<PayrollDetail> payrollDetails;
 
-	// bi-directional many-to-one association to Employee
-	@ManyToOne
-	private Employee employee;
+//	// bi-directional many-to-one association to Employee
+//	@ManyToOne()
+//	private Employee employee;
 
-	// bi-directional many-to-one association to EmployeeSalary
-	@ManyToOne
-	@JoinColumn(name = "employee_salary_id")
-	private EmployeeSalary employeeSalary;
+//	// bi-directional many-to-one association to EmployeeSalary
+//	@ManyToOne
+//	@JoinColumn(name = "employee_salary_id")
+//	private EmployeeSalary employeeSalary;
 
 	// bi-directional many-to-one association to Transaction
-	@OneToMany(mappedBy = "payroll", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "payroll")
+	@OneToMany(targetEntity = Transaction.class)
+	@JoinColumn(name = "payroll_id")
 	private List<Transaction> transactions;
 
 }

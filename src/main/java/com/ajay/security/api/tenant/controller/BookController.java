@@ -1,18 +1,18 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Book;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.BookService;
 
 @RestController
@@ -22,28 +22,53 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 
-	@GetMapping("/all")
-	public List<Book> getAllBook() {
-		return bookService.getAllBooks();
+	@RequestMapping(value = "/listAllBook")
+	public ApiResponse getAllBook() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Book", bookService.getAllBooks());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Book Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Book getOneBook(@PathVariable Integer id) {
-		return bookService.getOneBook(id);
+	@RequestMapping(value = "/{id}")
+	public ApiResponse getOneBook(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Book", bookService.getOneBook(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Book Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveBook(@RequestBody Book book) {
-		return bookService.saveBook(book);
+	@RequestMapping(value = "/saveBook", method = RequestMethod.POST)
+	public ApiResponse saveBook(@RequestBody Book book) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Book saved!", bookService.saveBook(book));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Book Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateBook(@RequestBody Book book) {
-		return bookService.updateBook(book);
+	@RequestMapping(value = "/updateBook", method = RequestMethod.POST)
+	public ApiResponse updateBook(@RequestBody Book book) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Book updated!", bookService.saveBook(book));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Book Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneBook(@PathVariable Integer id) {
-		return bookService.deleteOneBook(id);
+	@RequestMapping(value = "/deleteBook", method = RequestMethod.POST)
+	public ApiResponse deleteOneBook(@RequestBody Book book) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Book deleted!", bookService.deleteOneBook(book));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Book Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

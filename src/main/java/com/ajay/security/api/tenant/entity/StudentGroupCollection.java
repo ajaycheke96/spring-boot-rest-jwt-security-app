@@ -12,14 +12,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the student_group_collection database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -33,13 +36,14 @@ public class StudentGroupCollection implements Serializable {
 	@Column(length = 20)
 	private Integer id;
 
-	// bi-directional many-to-one association to StudentGroup
-	@ManyToOne
-	@JoinColumn(name = "student_group_id")
-	private StudentGroup studentGroup;
+//	// bi-directional many-to-one association to StudentGroup
+//	@ManyToOne
+//	@JoinColumn(name = "student_group_id")
+//	private StudentGroup studentGroup;
 
 	// bi-directional many-to-one association to Student
-	@ManyToOne
+	@ManyToOne(targetEntity = Student.class)
+	@JoinColumn(name = "student_id")
 	private Student student;
 
 }

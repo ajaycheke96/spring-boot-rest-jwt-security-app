@@ -112,7 +112,9 @@ public class StudentRecord implements Serializable {
 	private List<OnlineExamRecord> onlineExamRecords;
 
 	// bi-directional many-to-one association to StudentFeeRecord
-	@OneToMany(mappedBy = "studentRecord")
+//	@OneToMany(mappedBy = "studentRecord")
+	@OneToMany(targetEntity = StudentFeeRecord.class)
+	@JoinColumn(name = "student_record_id")
 	private List<StudentFeeRecord> studentFeeRecords;
 
 	// bi-directional many-to-one association to AcademicSession
@@ -131,7 +133,7 @@ public class StudentRecord implements Serializable {
 	private Batch batch;
 
 	// bi-directional many-to-one association to FeeAllocation
-	@ManyToOne
+	@ManyToOne(targetEntity = FeeAllocation.class)
 	@JoinColumn(name = "fee_allocation_id")
 	private FeeAllocation feeAllocation;
 

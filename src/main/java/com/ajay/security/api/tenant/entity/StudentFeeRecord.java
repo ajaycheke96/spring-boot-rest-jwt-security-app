@@ -91,33 +91,35 @@ public class StudentFeeRecord implements Serializable {
 	private List<StudentFeeRecordDetail> studentFeeRecordDetails;
 
 	// bi-directional many-to-one association to FeeConcession
-	@ManyToOne
+	@ManyToOne(targetEntity = FeeConcession.class)
 	@JoinColumn(name = "fee_concession_id")
 	private FeeConcession feeConcession;
 
 	// bi-directional many-to-one association to FeeInstallment
-	@ManyToOne
+	@ManyToOne(targetEntity = FeeInstallment.class)
 	@JoinColumn(name = "fee_installment_id")
 	private FeeInstallment feeInstallment;
 
-	// bi-directional many-to-one association to StudentRecord
-	@ManyToOne
-	@JoinColumn(name = "student_record_id")
-	private StudentRecord studentRecord;
+//	// bi-directional many-to-one association to StudentRecord
+//	@ManyToOne
+//	@JoinColumn(name = "student_record_id")
+//	private StudentRecord studentRecord;
 
 	// bi-directional many-to-one association to TransportCircle
-	@ManyToOne
+	@ManyToOne(targetEntity = TransportCircle.class)
 	@JoinColumn(name = "transport_circle_id")
 	private TransportCircle transportCircle;
 
 	// bi-directional many-to-one association to StudentOptionalFeeRecord
-	@OneToMany(mappedBy = "studentFeeRecord")
+//	@OneToMany(mappedBy = "studentFeeRecord")
+	@OneToMany(targetEntity = StudentOptionalFeeRecord.class)
+	@JoinColumn(name = "student_fee_record_id")
 	private List<StudentOptionalFeeRecord> studentOptionalFeeRecords;
 
 	// bi-directional many-to-one association to Transaction
 //	@OneToMany(mappedBy = "studentFeeRecord")
 	@OneToMany(targetEntity = Transaction.class)
-	@JoinColumn(name = "")
+	@JoinColumn(name = "student_fee_record_id")
 	private List<Transaction> transactions;
 
 }

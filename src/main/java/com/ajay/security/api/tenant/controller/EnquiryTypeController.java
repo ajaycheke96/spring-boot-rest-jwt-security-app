@@ -1,18 +1,18 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.EnquiryType;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.EnquiryTypeService;
 
 @RestController
@@ -22,28 +22,58 @@ public class EnquiryTypeController {
 	@Autowired
 	private EnquiryTypeService enquiryTypeService;
 
-	@GetMapping("/all")
-	public List<EnquiryType> getAllEnquiryType() {
-		return enquiryTypeService.getAllEnquiryTypes();
+	@RequestMapping(value = "/listAllEnquiryType")
+	public ApiResponse getAllEnquiryType() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "List of EnquiryType",
+					enquiryTypeService.getAllEnquiryTypes());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquiryType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public EnquiryType getOneEnquiryType(@PathVariable Integer id) {
-		return enquiryTypeService.getOneEnquiryType(id);
+	@RequestMapping(value = "/{id}")
+	public ApiResponse getOneEnquiryType(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquiryType",
+					enquiryTypeService.getOneEnquiryType(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquiryType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveEnquiryType(@RequestBody EnquiryType enquiryType) {
-		return enquiryTypeService.saveEnquiryType(enquiryType);
+	@RequestMapping(value = "/saveEnquiryType", method = RequestMethod.POST)
+	public ApiResponse saveEnquiryType(@RequestBody EnquiryType enquiryType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquiryType saved!",
+					enquiryTypeService.saveEnquiryType(enquiryType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquiryType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateEnquiryType(@RequestBody EnquiryType enquiryType) {
-		return enquiryTypeService.updateEnquiryType(enquiryType);
+	@RequestMapping(value = "/updateEnquiryType", method = RequestMethod.POST)
+	public ApiResponse updateEnquiryType(@RequestBody EnquiryType enquiryType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquiryType updated!",
+					enquiryTypeService.saveEnquiryType(enquiryType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquiryType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneEnquiryType(@PathVariable Integer id) {
-		return enquiryTypeService.deleteOneEnquiryType(id);
+	@RequestMapping(value = "/deleteEnquiryType", method = RequestMethod.POST)
+	public ApiResponse deleteOneEnquiryType(@RequestBody EnquiryType enquiryType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquiryType deleted!",
+					enquiryTypeService.deleteOneEnquiryType(enquiryType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EnquiryType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

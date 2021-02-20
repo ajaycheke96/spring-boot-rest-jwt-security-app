@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,15 +19,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_salaries database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -43,6 +47,7 @@ public class EmployeeSalary implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -59,26 +64,31 @@ public class EmployeeSalary implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 20)
 	private String uuid;
 
-	// bi-directional many-to-one association to Employee
-	@ManyToOne
-	private Employee employee;
+//	// bi-directional many-to-one association to Employee
+//	@ManyToOne
+//	private Employee employee;
 
 	// bi-directional many-to-one association to PayrollTemplate
-	@ManyToOne
+	@ManyToOne(targetEntity = PayrollTemplate.class)
 	@JoinColumn(name = "payroll_template_id")
 	private PayrollTemplate payrollTemplate;
 
 	// bi-directional many-to-one association to EmployeeSalaryDetail
-	@OneToMany(mappedBy = "employeeSalary",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "employeeSalary",cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = EmployeeSalaryDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_salary_id")
 	private List<EmployeeSalaryDetail> employeeSalaryDetails;
 
 	// bi-directional many-to-one association to Payroll
-	@OneToMany(mappedBy = "employeeSalary",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "employeeSalary")
+	@OneToMany(targetEntity = Payroll.class)
+	@JoinColumn(name = "employee_salary_id")
 	private List<Payroll> payrolls;
 
 }

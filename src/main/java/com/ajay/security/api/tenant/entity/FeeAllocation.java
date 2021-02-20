@@ -2,17 +2,14 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -56,9 +53,10 @@ public class FeeAllocation implements Serializable {
 	@Column(length = 50)
 	private String uuid;
 
-	// bi-directional many-to-one association to FeeAllocationGroup
-	@OneToMany(mappedBy = "feeAllocation")
-	private List<FeeAllocationGroup> feeAllocationGroups;
+//	// bi-directional many-to-one association to FeeAllocationGroup
+////	@OneToMany(mappedBy = "feeAllocation")
+//	@OneToMany(targetEntity = FeeAllocationGroup.class)
+//	private List<FeeAllocationGroup> feeAllocationGroups;
 
 	// bi-directional many-to-one association to Batch
 	@ManyToOne(targetEntity = Batch.class)
@@ -70,8 +68,8 @@ public class FeeAllocation implements Serializable {
 	@JoinColumn(name = "course_id")
 	private Course cours;
 
-	// bi-directional many-to-one association to StudentRecord
-	@OneToMany(mappedBy = "feeAllocation")
-	private List<StudentRecord> studentRecords;
+//	// bi-directional many-to-one association to StudentRecord
+//	@OneToMany(mappedBy = "feeAllocation")
+//	private List<StudentRecord> studentRecords;
 
 }

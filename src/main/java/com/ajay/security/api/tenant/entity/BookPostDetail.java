@@ -3,7 +3,6 @@ package com.ajay.security.api.tenant.entity;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,11 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -68,10 +65,10 @@ public class BookPostDetail implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to BookLogDetail
-	@OneToMany(mappedBy = "bookPostDetail")
-	@JsonIgnoreProperties({ "bookPostDetail", "transactions" })
-	private List<BookLogDetail> bookLogDetails;
+//	// bi-directional many-to-one association to BookLogDetail
+//	@OneToMany(mappedBy = "bookPostDetail")
+//	@JsonIgnoreProperties({ "bookPostDetail", "transactions" })
+//	private List<BookLogDetail> bookLogDetails;
 
 	// bi-directional many-to-one association to BookCondition
 	@ManyToOne(targetEntity = BookCondition.class)

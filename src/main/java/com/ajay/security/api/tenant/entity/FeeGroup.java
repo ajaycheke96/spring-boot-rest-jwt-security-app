@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,17 +58,19 @@ public class FeeGroup implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to FeeAllocationGroup
-	@OneToMany(mappedBy = "feeGroup")
-	private List<FeeAllocationGroup> feeAllocationGroups;
+//	// bi-directional many-to-one association to FeeAllocationGroup
+//	@OneToMany(mappedBy = "feeGroup")
+//	private List<FeeAllocationGroup> feeAllocationGroups;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
 	// bi-directional many-to-one association to FeeHead
-	@OneToMany(mappedBy = "feeGroup")
+//	@OneToMany(mappedBy = "feeGroup")
+	@OneToMany(targetEntity = FeeHead.class)
+	@JoinColumn(name = "fee_group_id")
 	private List<FeeHead> feeHeads;
 
 }

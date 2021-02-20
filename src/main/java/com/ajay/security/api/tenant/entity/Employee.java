@@ -222,7 +222,9 @@ public class Employee implements Serializable {
 	private List<EmployeeQualification> employeeQualifications;
 
 	// bi-directional many-to-one association to EmployeeSalary
-	@OneToMany(mappedBy = "employee")
+//	@OneToMany(mappedBy = "employee")
+	@OneToMany(targetEntity = EmployeeSalary.class)
+	@JoinColumn(name = "employee_id")
 	private List<EmployeeSalary> employeeSalaries;
 
 //	// bi-directional many-to-one association to EmployeeTerm
@@ -262,9 +264,9 @@ public class Employee implements Serializable {
 //	@OneToMany(mappedBy = "employee")
 //	private List<Expense> expenses;
 
-	// bi-directional many-to-one association to GatePass
-	@OneToMany(mappedBy = "employee")
-	private List<GatePass> gatePasses;
+//	// bi-directional many-to-one association to GatePass
+//	@OneToMany(mappedBy = "employee")
+//	private List<GatePass> gatePasses;
 
 	// bi-directional many-to-one association to Income
 //	@OneToMany(mappedBy = "employee")
@@ -285,7 +287,9 @@ public class Employee implements Serializable {
 //	private List<Note> notes;
 
 	// bi-directional many-to-one association to Payroll
-	@OneToMany(mappedBy = "employee")
+//	@OneToMany(mappedBy = "employee")
+	@OneToMany(targetEntity = Payroll.class)
+	@JoinColumn(name = "employee_id")
 	private List<Payroll> payrolls;
 
 //	// bi-directional many-to-one association to StockTransfer

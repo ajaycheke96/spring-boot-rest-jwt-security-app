@@ -1,18 +1,18 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Enquiry;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.EnquiryService;
 
 @RestController
@@ -22,28 +22,56 @@ public class EnquiryController {
 	@Autowired
 	private EnquiryService enquiryService;
 
-	@GetMapping("/all")
-	public List<Enquiry> getAllEnquiry() {
-		return enquiryService.getAllEnquirys();
+	@RequestMapping(value = "/listAllEnquiry")
+	public ApiResponse getAllEnquiry() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "List of Enquiry", enquiryService.getAllEnquirys());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Enquiry Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Enquiry getOneEnquiry(@PathVariable Integer id) {
-		return enquiryService.getOneEnquiry(id);
+	@RequestMapping(value = "/{id}")
+	public ApiResponse getOneEnquiry(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Enquiry", enquiryService.getOneEnquiry(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Enquiry Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveEnquiry(@RequestBody Enquiry enquiry) {
-		return enquiryService.saveEnquiry(enquiry);
+	@RequestMapping(value = "/saveEnquiry", method = RequestMethod.POST)
+	public ApiResponse saveEnquiry(@RequestBody Enquiry enquiry) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Enquiry saved!",
+					enquiryService.saveEnquiry(enquiry));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Enquiry Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateEnquiry(@RequestBody Enquiry enquiry) {
-		return enquiryService.updateEnquiry(enquiry);
+	@RequestMapping(value = "/updateEnquiry", method = RequestMethod.POST)
+	public ApiResponse updateEnquiry(@RequestBody Enquiry enquiry) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Enquiry updated!",
+					enquiryService.saveEnquiry(enquiry));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Enquiry Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneEnquiry(@PathVariable Integer id) {
-		return enquiryService.deleteOneEnquiry(id);
+	@RequestMapping(value = "/deleteEnquiry", method = RequestMethod.POST)
+	public ApiResponse deleteOneEnquiry(@RequestBody Enquiry enquiry) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Enquiry deleted!",
+					enquiryService.deleteOneEnquiry(enquiry));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Enquiry Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

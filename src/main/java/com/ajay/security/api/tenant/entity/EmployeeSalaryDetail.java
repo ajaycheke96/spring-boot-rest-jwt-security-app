@@ -15,13 +15,17 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_salary_details database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -46,13 +50,13 @@ public class EmployeeSalaryDetail implements Serializable {
 	@Column(name = "updated_at")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to EmployeeSalary
-	@ManyToOne
-	@JoinColumn(name = "employee_salary_id")
-	private EmployeeSalary employeeSalary;
+//	// bi-directional many-to-one association to EmployeeSalary
+//	@ManyToOne
+//	@JoinColumn(name = "employee_salary_id")
+//	private EmployeeSalary employeeSalary;
 
 	// bi-directional many-to-one association to PayrollTemplateDetail
-	@ManyToOne
+	@ManyToOne(targetEntity = PayrollTemplateDetail.class)
 	@JoinColumn(name = "payroll_template_detail_id")
 	private PayrollTemplateDetail payrollTemplateDetail;
 

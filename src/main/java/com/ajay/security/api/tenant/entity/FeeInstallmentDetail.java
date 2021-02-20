@@ -12,15 +12,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the fee_installment_details database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -38,6 +43,7 @@ public class FeeInstallmentDetail implements Serializable {
 	private int amount;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(name = "is_optional")
@@ -47,16 +53,17 @@ public class FeeInstallmentDetail implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to FeeHead
-	@ManyToOne
+	@ManyToOne(targetEntity = FeeHead.class)
 	@JoinColumn(name = "fee_head_id")
 	private FeeHead feeHead;
 
-	// bi-directional many-to-one association to FeeInstallment
-	@ManyToOne
-	@JoinColumn(name = "fee_installment_id")
-	private FeeInstallment feeInstallment;
+//	// bi-directional many-to-one association to FeeInstallment
+//	@ManyToOne
+//	@JoinColumn(name = "fee_installment_id")
+//	private FeeInstallment feeInstallment;
 
 }

@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -111,7 +112,7 @@ public class Enquiry implements Serializable {
 	private User user;
 
 	// bi-directional many-to-one association to EnquiryDetail
-	@OneToMany(targetEntity = EnquiryDetail.class)
+	@OneToMany(targetEntity = EnquiryDetail.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "enquiry_id")
 	private List<EnquiryDetail> enquiryDetails;
 

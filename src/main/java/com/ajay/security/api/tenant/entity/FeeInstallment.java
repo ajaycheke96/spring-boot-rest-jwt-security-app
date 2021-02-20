@@ -5,10 +5,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,15 +17,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the fee_installments database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -42,6 +45,7 @@ public class FeeInstallment implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -64,27 +68,30 @@ public class FeeInstallment implements Serializable {
 	private String title;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(length = 50)
 	private String uuid;
 
 	// bi-directional many-to-one association to FeeInstallmentDetail
-	@OneToMany(mappedBy = "feeInstallment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "feeInstallment")
+	@OneToMany(targetEntity = FeeInstallmentDetail.class)
+	@JoinColumn(name = "fee_installment_id")
 	private List<FeeInstallmentDetail> feeInstallmentDetails;
 
 	// bi-directional many-to-one association to FeeAllocationGroup
-	@ManyToOne
+	@ManyToOne(targetEntity = FeeAllocationGroup.class)
 	@JoinColumn(name = "fee_allocation_group_id")
 	private FeeAllocationGroup feeAllocationGroup;
 
 	// bi-directional many-to-one association to TransportFee
-	@ManyToOne
+	@ManyToOne(targetEntity = TransportFee.class)
 	@JoinColumn(name = "transport_fee_id")
 	private TransportFee transportFee;
 
-	// bi-directional many-to-one association to StudentFeeRecord
-	@OneToMany(mappedBy = "feeInstallment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<StudentFeeRecord> studentFeeRecords;
+//	// bi-directional many-to-one association to StudentFeeRecord
+//	@OneToMany(mappedBy = "feeInstallment")
+//	private List<StudentFeeRecord> studentFeeRecords;
 
 }

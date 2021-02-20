@@ -140,13 +140,13 @@ public class Student implements Serializable {
 	@Column(length = 50)
 	private String uuid;
 
-	// bi-directional many-to-one association to GatePass
-	@OneToMany(mappedBy = "student")
-	private List<GatePass> gatePasses;
+//	// bi-directional many-to-one association to GatePass
+//	@OneToMany(mappedBy = "student")
+//	private List<GatePass> gatePasses;
 
-	// bi-directional many-to-one association to Registration
-	@OneToMany(mappedBy = "student")
-	private List<Registration> registrations;
+//	// bi-directional many-to-one association to Registration
+//	@OneToMany(mappedBy = "student")
+//	private List<Registration> registrations;
 
 //	// bi-directional many-to-one association to StockTransfer
 //	@OneToMany(mappedBy = "student")

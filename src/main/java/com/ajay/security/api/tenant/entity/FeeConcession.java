@@ -60,7 +60,9 @@ public class FeeConcession implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to FeeConcessionDetail
-	@OneToMany(mappedBy = "feeConcession")
+//	@OneToMany(mappedBy = "feeConcession")
+	@OneToMany(targetEntity = FeeConcessionDetail.class)
+	@JoinColumn(name = "fee_concession_id")
 	private List<FeeConcessionDetail> feeConcessionDetails;
 
 	// bi-directional many-to-one association to AcademicSession
@@ -68,8 +70,8 @@ public class FeeConcession implements Serializable {
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
-	// bi-directional many-to-one association to StudentFeeRecord
-	@OneToMany(mappedBy = "feeConcession")
-	private List<StudentFeeRecord> studentFeeRecords;
+//	// bi-directional many-to-one association to StudentFeeRecord
+//	@OneToMany(mappedBy = "feeConcession")
+//	private List<StudentFeeRecord> studentFeeRecords;
 
 }

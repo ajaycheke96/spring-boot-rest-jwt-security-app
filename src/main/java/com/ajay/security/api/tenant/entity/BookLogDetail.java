@@ -18,7 +18,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -85,9 +84,9 @@ public class BookLogDetail implements Serializable {
 //	private BookLog bookLog;
 
 	// bi-directional many-to-one association to BookPostDetail
-	@ManyToOne
+	@ManyToOne(targetEntity = BookPostDetail.class)
 	@JoinColumn(name = "book_post_detail_id")
-	@JsonIgnoreProperties({ "bookLogDetails", "bookCondition" })
+//	@JsonIgnoreProperties({ "bookLogDetails", "bookCondition" })
 	private BookPostDetail bookPostDetail;
 
 	// bi-directional many-to-one association to Transaction
