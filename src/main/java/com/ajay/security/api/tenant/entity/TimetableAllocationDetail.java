@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,21 +50,18 @@ public class TimetableAllocationDetail implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to ClassTimingSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = ClassTimingSession.class)
+	@ManyToOne(targetEntity = ClassTimingSession.class)
 	@JoinColumn(name = "class_timing_session_id")
-//	@JsonIgnoreProperties({ "timetableAllocationDetails", "hibernateLazyInitializer" })
 	private ClassTimingSession classTimingSession;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@ManyToOne(targetEntity = Subject.class)
 	@JoinColumn(name = "subject_id")
-//	@JsonIgnoreProperties({ "timetableAllocationDetails", "hibernateLazyInitializer" })
 	private Subject subject;
 
-	// bi-directional many-to-one association to TimetableAllocation
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = TimetableAllocation.class)
-	@JoinColumn(name = "timetable_allocation_id")
-//	@JsonIgnoreProperties({ "timetableAllocationDetails", "hibernateLazyInitializer" })
-	private TimetableAllocation timetableAllocation;
+//	// bi-directional many-to-one association to TimetableAllocation
+//	@ManyToOne(targetEntity = TimetableAllocation.class)
+//	@JoinColumn(name = "timetable_allocation_id")
+//	private TimetableAllocation timetableAllocation;
 
 }

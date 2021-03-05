@@ -8,18 +8,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the student_accounts database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -46,6 +50,7 @@ public class StudentAccount implements Serializable {
 	private String branchName;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 50)
@@ -58,10 +63,12 @@ public class StudentAccount implements Serializable {
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to Student
-	@ManyToOne
-	private Student student;
+//	// bi-directional many-to-one association to Student
+//	@ManyToOne
+////	@JsonIgnoreProperties("studentAccounts")
+//	private Student student;
 
 }

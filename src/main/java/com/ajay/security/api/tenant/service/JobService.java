@@ -24,16 +24,18 @@ public class JobService {
 		return jobRepository.findById(id).get();
 	}
 
-	public String saveJob(Job job) {
-		return jobRepository.save(job) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Job saveJob(Job job) {
+		return jobRepository.save(job);
 	}
 
-	public String updateJob(Job job) {
-		return jobRepository.save(job) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneJob(Integer id) {
-		jobRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneJob(Job job) {
+		String result = null;
+		if (jobRepository.existsById(job.getId())) {
+			jobRepository.delete(job);
+			result = " Job deleted!";
+		} else {
+			result = "Job Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

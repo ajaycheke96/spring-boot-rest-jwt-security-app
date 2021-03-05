@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -55,10 +54,8 @@ public class EmployeeDesignation implements Serializable {
 	@Column(name = "date_end")
 	private Date dateEnd;
 
-	@Lob
 	private String options;
 
-	@Lob
 	private String remarks;
 
 	@Column(name = "updated_at")
@@ -78,9 +75,9 @@ public class EmployeeDesignation implements Serializable {
 	@JoinColumn(name = "designation_id")
 	private Designation designation;
 
-	// bi-directional many-to-one association to Employee
-	@ManyToOne
-	private Employee employee;
+//	// bi-directional many-to-one association to Employee
+//	@ManyToOne
+//	private Employee employee;
 
 //	// bi-directional many-to-one association to EmployeeTerm
 //	@ManyToOne

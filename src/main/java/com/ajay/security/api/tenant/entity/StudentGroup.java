@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -59,7 +60,7 @@ public class StudentGroup implements Serializable {
 
 	// bi-directional many-to-one association to StudentGroupCollection
 //	@OneToMany(mappedBy = "studentGroup")
-	@OneToMany(targetEntity = StudentGroupCollection.class)
+	@OneToMany(targetEntity = StudentGroupCollection.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "student_group_id")
 	private List<StudentGroupCollection> studentGroupCollections;
 

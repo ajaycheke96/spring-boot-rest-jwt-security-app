@@ -7,14 +7,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +39,7 @@ public class FrontendMenus implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 30)
@@ -57,24 +58,33 @@ public class FrontendMenus implements Serializable {
 	private String type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to FrontendBlock
-	@OneToMany(mappedBy = "frontendMenus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "frontendMenus", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = FrontendBlock.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "frontend_menu_id")
+//	@JsonIgnoreProperties("frontendMenus")
 	private List<FrontendBlock> frontendBlocks;
 
-	// bi-directional many-to-one association to FrontendPage
-	@ManyToOne
-	@JoinColumn(name = "frontend_page_id")
-	private FrontendPage frontendPage;
+//	// bi-directional many-to-one association to FrontendPage
+//	@ManyToOne
+//	@JoinColumn(name = "frontend_page_id")
+//	@JsonIgnoreProperties("frontendMenuses")
+//	private FrontendPage frontendPage;
+
+//	// bi-directional many-to-one association to FrontendMenus
+//	@ManyToOne
+//	@JoinColumn(name = "parent_id")
+//	@JsonIgnoreProperties("frontendMenuses")
+//	private FrontendMenus frontendMenus;
 
 	// bi-directional many-to-one association to FrontendMenus
-	@ManyToOne
+//	@OneToMany(mappedBy = "frontendMenus", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = FrontendMenus.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "parent_id")
-	private FrontendMenus frontendMenus;
-
-	// bi-directional many-to-one association to FrontendMenus
-	@OneToMany(mappedBy = "frontendMenus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JsonIgnoreProperties("frontendMenus")
 	private List<FrontendMenus> frontendMenuses;
 
 }

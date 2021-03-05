@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,29 @@ public class FeeConcessionService {
 		return feeConcessionRepository.findById(id).get();
 	}
 
-	public String saveFeeConcession(FeeConcession feeConcession) {
-		return feeConcessionRepository.save(feeConcession) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public FeeConcession saveFeeConcession(FeeConcession feeConcession) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (feeConcession.getCreatedAt() == null)
+			feeConcession.setCreatedAt(currentTimestamp);
+		feeConcession.setUpdatedAt(currentTimestamp);
+
+		if (!feeConcession.getFeeConcessionDetails().isEmpty())
+			feeConcession.getFeeConcessionDetails().forEach(feeConcessionDetail -> {
+				if (feeConcessionDetail.getCreatedAt() == null)
+					feeConcessionDetail.setCreatedAt(currentTimestamp);
+				feeConcessionDetail.setUpdatedAt(currentTimestamp);
+			});
+		return feeConcessionRepository.save(feeConcession);
 	}
 
-	public String updateFeeConcession(FeeConcession feeConcession) {
-		return feeConcessionRepository.save(feeConcession) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneFeeConcession(Integer id) {
-		feeConcessionRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneFeeConcession(FeeConcession feeConcession) {
+		String result = null;
+		if (feeConcessionRepository.existsById(feeConcession.getId())) {
+			feeConcessionRepository.delete(feeConcession);
+			result = " FeeConcession deleted!";
+		} else {
+			result = "FeeConcession Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

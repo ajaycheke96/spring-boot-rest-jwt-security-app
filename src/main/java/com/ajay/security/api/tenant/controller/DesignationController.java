@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Designation;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.DesignationService;
 
 @RestController
 @RequestMapping("/designation")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class DesignationController {
 
 	@Autowired
 	private DesignationService designationService;
 
-	@GetMapping("/all")
-	public List<Designation> getAllDesignation() {
-		return designationService.getAllDesignations();
+	@GetMapping("/listAllDesignation")
+	public ApiResponse getAllDesignation() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Designation",
+					designationService.getAllDesignations());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Designation Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Designation getOneDesignation(@PathVariable Integer id) {
-		return designationService.getOneDesignation(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneDesignation(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Designation",
+					designationService.getOneDesignation(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Designation Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveDesignation(@RequestBody Designation designation) {
-		return designationService.saveDesignation(designation);
+	@PostMapping("/saveDesignation")
+	public ApiResponse saveDesignation(@RequestBody Designation designation) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Designation saved!",
+					designationService.saveDesignation(designation));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Designation Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateDesignation(@RequestBody Designation designation) {
-		return designationService.updateDesignation(designation);
+	@PostMapping("/updateDesignation")
+	public ApiResponse updateDesignation(@RequestBody Designation designation) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Designation updated!",
+					designationService.saveDesignation(designation));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Designation Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneDesignation(@PathVariable Integer id) {
-		return designationService.deleteOneDesignation(id);
+	@PostMapping("/deleteDesignation")
+	public ApiResponse deleteOneDesignation(@RequestBody Designation designation) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, designationService.deleteOneDesignation(designation),
+					null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Designation Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

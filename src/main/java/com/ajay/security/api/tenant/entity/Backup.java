@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -45,7 +44,6 @@ public class Backup implements Serializable {
 
 	private String file;
 
-	@Lob
 	@Column(length = 50)
 	private String options;
 
@@ -54,8 +52,10 @@ public class Backup implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
-	@JsonIgnoreProperties(value = { "backups", "password", "activationToken" })
+	@ManyToOne(targetEntity = User.class)
+//	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "backups", "password", "activationToken", "userPushTokens", "userPreferences",
+			"uploads", "postalRecords" })
 	private User user;
 
 }

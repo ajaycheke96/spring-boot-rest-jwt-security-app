@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -86,12 +87,14 @@ public class StudentRecord implements Serializable {
 //	private List<BookLog> bookLogs;
 
 	// bi-directional many-to-one association to Certificate
-	@OneToMany(mappedBy = "studentRecord")
+//	@OneToMany(mappedBy = "studentRecord")
+	@OneToMany(targetEntity = Certificate.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "student_record_id")
 	private List<Certificate> certificates;
 
-	// bi-directional many-to-one association to CommunicationStudentRecord
-	@OneToMany(mappedBy = "studentRecord")
-	private List<CommunicationStudentRecord> communicationStudentRecords;
+//	// bi-directional many-to-one association to CommunicationStudentRecord
+//	@OneToMany(mappedBy = "studentRecord")
+//	private List<CommunicationStudentRecord> communicationStudentRecords;
 
 //	// bi-directional many-to-one association to Expens
 //	@OneToMany(mappedBy = "studentRecord")
@@ -99,21 +102,24 @@ public class StudentRecord implements Serializable {
 
 	// bi-directional many-to-one association to Income
 //	@OneToMany(mappedBy = "studentRecord")
-	@OneToMany(targetEntity = Income.class)
+	@OneToMany(targetEntity = Income.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "student_record_id")
+//	@JsonIgnoreProperties({"transactionCategory", "user", "transactions"})
 	private List<Income> incomes;
 
-	// bi-directional many-to-one association to MeetingStudentRecord
-	@OneToMany(mappedBy = "studentRecord")
-	private List<MeetingStudentRecord> meetingStudentRecords;
+//	// bi-directional many-to-one association to MeetingStudentRecord
+//	@OneToMany(mappedBy = "studentRecord")
+//	private List<MeetingStudentRecord> meetingStudentRecords;
 
 	// bi-directional many-to-one association to OnlineExamRecord
-	@OneToMany(mappedBy = "studentRecord")
+//	@OneToMany(mappedBy = "studentRecord")
+	@OneToMany(targetEntity = OnlineExamRecord.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "student_record_id")
 	private List<OnlineExamRecord> onlineExamRecords;
 
 	// bi-directional many-to-one association to StudentFeeRecord
 //	@OneToMany(mappedBy = "studentRecord")
-	@OneToMany(targetEntity = StudentFeeRecord.class)
+	@OneToMany(targetEntity = StudentFeeRecord.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "student_record_id")
 	private List<StudentFeeRecord> studentFeeRecords;
 
@@ -137,16 +143,20 @@ public class StudentRecord implements Serializable {
 	@JoinColumn(name = "fee_allocation_id")
 	private FeeAllocation feeAllocation;
 
-	// bi-directional many-to-one association to Student
-	@ManyToOne
-	private Student student;
+//	// bi-directional many-to-one association to Student
+//	@ManyToOne
+//	private Student student;
 
 	// bi-directional many-to-one association to TransferCertificate
-	@OneToMany(mappedBy = "studentRecord")
+//	@OneToMany(mappedBy = "studentRecord")
+	@OneToMany(targetEntity = TransferCertificate.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "student_record_id")
 	private List<TransferCertificate> transferCertificates;
 
 	// bi-directional many-to-one association to TransportRouteStudent
-	@OneToMany(mappedBy = "studentRecord")
+//	@OneToMany(mappedBy = "studentRecord")
+	@OneToMany(targetEntity = TransportRouteStudent.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "student_record_id")
 	private List<TransportRouteStudent> transportRouteStudents;
 
 }

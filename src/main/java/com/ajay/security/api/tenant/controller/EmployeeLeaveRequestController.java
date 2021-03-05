@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.EmployeeLeaveRequest;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.EmployeeLeaveRequestService;
 
 @RestController
 @RequestMapping("/employeeLeaveRequest")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class EmployeeLeaveRequestController {
 
 	@Autowired
 	private EmployeeLeaveRequestService employeeLeaveRequestService;
 
-	@GetMapping("/all")
-	public List<EmployeeLeaveRequest> getAllEmployeeLeaveRequest() {
-		return employeeLeaveRequestService.getAllEmployeeLeaveRequests();
+	@GetMapping("/listAllEmployeeLeaveRequest")
+	public ApiResponse getAllEmployeeLeaveRequest() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of EmployeeLeaveRequest",
+					employeeLeaveRequestService.getAllEmployeeLeaveRequests());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeLeaveRequest Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public EmployeeLeaveRequest getOneEmployeeLeaveRequest(@PathVariable Integer id) {
-		return employeeLeaveRequestService.getOneEmployeeLeaveRequest(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneEmployeeLeaveRequest(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EmployeeLeaveRequest",
+					employeeLeaveRequestService.getOneEmployeeLeaveRequest(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeLeaveRequest Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveEmployeeLeaveRequest(@RequestBody EmployeeLeaveRequest employeeLeaveRequest) {
-		return employeeLeaveRequestService.saveEmployeeLeaveRequest(employeeLeaveRequest);
+	@PostMapping("/saveEmployeeLeaveRequest")
+	public ApiResponse saveEmployeeLeaveRequest(@RequestBody EmployeeLeaveRequest employeeLeaveRequest) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EmployeeLeaveRequest saved!",
+					employeeLeaveRequestService.saveEmployeeLeaveRequest(employeeLeaveRequest));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeLeaveRequest Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateEmployeeLeaveRequest(@RequestBody EmployeeLeaveRequest employeeLeaveRequest) {
-		return employeeLeaveRequestService.updateEmployeeLeaveRequest(employeeLeaveRequest);
+	@PostMapping("/updateEmployeeLeaveRequest")
+	public ApiResponse updateEmployeeLeaveRequest(@RequestBody EmployeeLeaveRequest employeeLeaveRequest) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EmployeeLeaveRequest updated!",
+					employeeLeaveRequestService.saveEmployeeLeaveRequest(employeeLeaveRequest));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeLeaveRequest Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneEmployeeLeaveRequest(@PathVariable Integer id) {
-		return employeeLeaveRequestService.deleteOneEmployeeLeaveRequest(id);
+	@PostMapping("/deleteEmployeeLeaveRequest")
+	public ApiResponse deleteOneEmployeeLeaveRequest(@RequestBody EmployeeLeaveRequest employeeLeaveRequest) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					employeeLeaveRequestService.deleteOneEmployeeLeaveRequest(employeeLeaveRequest), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeLeaveRequest Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

@@ -41,12 +41,12 @@ public class EventCourse implements Serializable {
 	// bi-directional many-to-one association to Cours
 	@ManyToOne(targetEntity = Course.class)
 	@JoinColumn(name = "course_id")
-//	@JsonIgnoreProperties("eventCourses")
+	@JsonIgnoreProperties({ "academicSession", "courseGroup" })
 	private Course cours;
 
-	// bi-directional many-to-one association to Event
-	@ManyToOne
-//	@JsonIgnoreProperties("eventCourses")
-	private Event event;
+//	// bi-directional many-to-one association to Event
+//	@ManyToOne
+////	@JsonIgnoreProperties("eventCourses")
+//	private Event event;
 
 }

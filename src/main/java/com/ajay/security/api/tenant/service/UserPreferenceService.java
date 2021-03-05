@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class UserPreferenceService {
 		return userPreferenceRepository.findById(id).get();
 	}
 
-	public String saveUserPreference(UserPreference userPreference) {
-		return userPreferenceRepository.save(userPreference) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public UserPreference saveUserPreference(UserPreference userPreference) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (userPreference.getCreatedAt() == null)
+			userPreference.setCreatedAt(currentTimestamp);
+		userPreference.setUpdatedAt(currentTimestamp);
+		return userPreferenceRepository.save(userPreference);
 	}
 
-	public String updateUserPreference(UserPreference userPreference) {
-		return userPreferenceRepository.save(userPreference) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneUserPreference(Integer id) {
-		userPreferenceRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneUserPreference(UserPreference userPreference) {
+		String result = null;
+		if (userPreferenceRepository.existsById(userPreference.getId())) {
+			userPreferenceRepository.delete(userPreference);
+			result = " UserPreference deleted!";
+		} else {
+			result = "UserPreference Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,22 @@ public class BatchService {
 		return batchRepository.findById(id).get();
 	}
 
-	public String saveBatch(Batch batch) {
-		return batchRepository.save(batch) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Batch saveBatch(Batch batch) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (batch.getCreatedAt() == null)
+			batch.setCreatedAt(currentTimestamp);
+		batch.setUpdatedAt(currentTimestamp);
+		return batchRepository.save(batch);
 	}
 
-	public String updateBatch(Batch batch) {
-		return batchRepository.save(batch) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneBatch(Integer id) {
-		batchRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneBatch(Batch batch) {
+		String result = null;
+		if (batchRepository.existsById(batch.getId())) {
+			batchRepository.delete(batch);
+			result = " Batch deleted!";
+		} else {
+			result = "Batch Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

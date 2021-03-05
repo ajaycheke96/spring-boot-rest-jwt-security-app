@@ -1,61 +1,89 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.User;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.UserService;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@GetMapping("/all")
+	@GetMapping("/listAllUser")
 //	@PreAuthorize("hasRole('USER') or hasRole('EMP') or hasRole('ADMIN')")
-	public List<User> getAllUsers() {
-		return userService.getAllUsers();
+	public ApiResponse getAllUsers() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of User", userService.getAllUsers());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"User Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
+	@GetMapping("/{id}")
 //	@PreAuthorize("hasRole('ADMIN')")
-	public User getOneUser(@PathVariable Integer id) {
-		return userService.getOneUser(id);
+	public ApiResponse getOneUser(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "User", userService.getOneUser(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"User Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/remove/{id}")
+	@PostMapping("/deleteUser")
 //	@PreAuthorize("hasRole('ADMIN')")
-	public String deleteOneUser(@PathVariable Integer id) {
-		return userService.deleteOneUser(id);
+	public ApiResponse deleteOneUser(@RequestBody User user) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, userService.deleteOneUser(user), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"User Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
+	@PostMapping("/saveUser")
 //	@PreAuthorize("hasRole('ADMIN')")
-	public String saveUser(@RequestBody User user) {
+	public ApiResponse saveUser(@RequestBody User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userService.saveOneUser(user);
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "User saved", userService.saveOneUser(user));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"User Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
+	@PostMapping("/updateUser")
 //	@PreAuthorize("hasRole('ADMIN')")
-	public String updateUser(@RequestBody User user) {
+	public ApiResponse updateUser(@RequestBody User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userService.updateOneUser(user);
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "User updated", userService.saveOneUser(user));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"User Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
 }

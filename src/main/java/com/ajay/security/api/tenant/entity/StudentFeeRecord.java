@@ -112,13 +112,13 @@ public class StudentFeeRecord implements Serializable {
 
 	// bi-directional many-to-one association to StudentOptionalFeeRecord
 //	@OneToMany(mappedBy = "studentFeeRecord")
-	@OneToMany(targetEntity = StudentOptionalFeeRecord.class)
+	@OneToMany(targetEntity = StudentOptionalFeeRecord.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "student_fee_record_id")
 	private List<StudentOptionalFeeRecord> studentOptionalFeeRecords;
 
 	// bi-directional many-to-one association to Transaction
 //	@OneToMany(mappedBy = "studentFeeRecord")
-	@OneToMany(targetEntity = Transaction.class)
+	@OneToMany(targetEntity = Transaction.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "student_fee_record_id")
 	private List<Transaction> transactions;
 

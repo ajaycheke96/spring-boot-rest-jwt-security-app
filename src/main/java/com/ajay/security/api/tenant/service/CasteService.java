@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,22 @@ public class CasteService {
 		return casteRepository.findById(id).get();
 	}
 
-	public String saveCaste(Caste caste) {
-		return casteRepository.save(caste) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Caste saveCaste(Caste caste) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (caste.getCreatedAt() == null)
+			caste.setCreatedAt(currentTimestamp);
+		caste.setUpdatedAt(currentTimestamp);
+		return casteRepository.save(caste);
 	}
 
-	public String updateCaste(Caste caste) {
-		return casteRepository.save(caste) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneCaste(Integer id) {
-		casteRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneCaste(Caste caste) {
+		String result = null;
+		if (casteRepository.existsById(caste.getId())) {
+			casteRepository.delete(caste);
+			result = " Caste deleted!";
+		} else {
+			result = "Caste Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

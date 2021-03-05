@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class FeeAllocationGroupService {
 		return feeAllocationGroupRepository.findById(id).get();
 	}
 
-	public String saveFeeAllocationGroup(FeeAllocationGroup feeAllocationGroup) {
-		return feeAllocationGroupRepository.save(feeAllocationGroup) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public FeeAllocationGroup saveFeeAllocationGroup(FeeAllocationGroup feeAllocationGroup) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (feeAllocationGroup.getCreatedAt() == null)
+			feeAllocationGroup.setCreatedAt(currentTimestamp);
+		feeAllocationGroup.setUpdatedAt(currentTimestamp);
+		return feeAllocationGroupRepository.save(feeAllocationGroup);
 	}
 
-	public String updateFeeAllocationGroup(FeeAllocationGroup feeAllocationGroup) {
-		return feeAllocationGroupRepository.save(feeAllocationGroup) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneFeeAllocationGroup(Integer id) {
-		feeAllocationGroupRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneFeeAllocationGroup(FeeAllocationGroup feeAllocationGroup) {
+		String result = null;
+		if (feeAllocationGroupRepository.existsById(feeAllocationGroup.getId())) {
+			feeAllocationGroupRepository.delete(feeAllocationGroup);
+			result = " FeeAllocationGroup deleted!";
+		} else {
+			result = "FeeAllocationGroup Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

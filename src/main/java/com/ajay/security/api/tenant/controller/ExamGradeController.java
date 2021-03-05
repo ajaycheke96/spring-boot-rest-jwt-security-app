@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.ajay.security.api.tenant.service.ExamGradeService;
 
 @RestController
 @RequestMapping("/examGrade")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ExamGradeController {
 
 	@Autowired
@@ -68,8 +70,8 @@ public class ExamGradeController {
 	@RequestMapping(value = "/deleteExamGrade", method = RequestMethod.POST)
 	public ApiResponse deleteOneExamGrade(@RequestBody ExamGrade examGrade) {
 		try {
-			return new ApiResponse(LocalDateTime.now(), 200, null, "ExamGrade deleted!",
-					examGradeService.deleteOneExamGrade(examGrade));
+			return new ApiResponse(LocalDateTime.now(), 200, null, examGradeService.deleteOneExamGrade(examGrade),
+					null);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
 					"ExamGrade Service exception : " + e.getLocalizedMessage());

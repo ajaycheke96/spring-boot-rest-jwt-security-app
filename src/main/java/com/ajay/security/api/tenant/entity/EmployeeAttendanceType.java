@@ -2,15 +2,12 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -46,7 +43,6 @@ public class EmployeeAttendanceType implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Lob
 	private String description;
 
 	@Column(name = "is_active")
@@ -54,7 +50,6 @@ public class EmployeeAttendanceType implements Serializable {
 
 	private String name;
 
-	@Lob
 	private String options;
 
 	private String type;
@@ -65,13 +60,13 @@ public class EmployeeAttendanceType implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to EmployeeAttendanceDetail
-	@OneToMany(mappedBy = "employeeAttendanceType")
-	private List<EmployeeAttendanceDetail> employeeAttendanceDetails;
+//	// bi-directional many-to-one association to EmployeeAttendanceDetail
+//	@OneToMany(mappedBy = "employeeAttendanceType")
+//	private List<EmployeeAttendanceDetail> employeeAttendanceDetails;
 
-	// bi-directional many-to-one association to EmployeeAttendance
-	@OneToMany(mappedBy = "employeeAttendanceType")
-	private List<EmployeeAttendance> employeeAttendances;
+//	// bi-directional many-to-one association to EmployeeAttendance
+//	@OneToMany(mappedBy = "employeeAttendanceType")
+//	private List<EmployeeAttendance> employeeAttendances;
 
 //	// bi-directional many-to-one association to PayrollTemplateDetail
 //	@OneToMany(mappedBy = "employeeAttendanceType")

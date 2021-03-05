@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,30 @@ public class EmployeeAttendanceService {
 		return employeeAttendanceRepository.findById(id).get();
 	}
 
-	public String saveEmployeeAttendance(EmployeeAttendance employeeAttendance) {
-		return employeeAttendanceRepository.save(employeeAttendance) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeAttendance saveEmployeeAttendance(EmployeeAttendance employeeAttendance) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeAttendance.getCreatedAt() == null)
+			employeeAttendance.setCreatedAt(currentTimestamp);
+		employeeAttendance.setUpdatedAt(currentTimestamp);
+
+		// For employeeAttendanceDetails list
+		if (!employeeAttendance.getEmployeeAttendanceDetails().isEmpty())
+			employeeAttendance.getEmployeeAttendanceDetails().forEach(employeeAttendanceDetail -> {
+				if (employeeAttendanceDetail.getCreatedAt() == null)
+					employeeAttendanceDetail.setCreatedAt(currentTimestamp);
+				employeeAttendanceDetail.setUpdatedAt(currentTimestamp);
+			});
+		return employeeAttendanceRepository.save(employeeAttendance);
 	}
 
-	public String updateEmployeeAttendance(EmployeeAttendance employeeAttendance) {
-		return employeeAttendanceRepository.save(employeeAttendance) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeAttendance(Integer id) {
-		employeeAttendanceRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeAttendance(EmployeeAttendance employeeAttendance) {
+		String result = null;
+		if (employeeAttendanceRepository.existsById(employeeAttendance.getId())) {
+			employeeAttendanceRepository.delete(employeeAttendance);
+			result = " EmployeeAttendance deleted!";
+		} else {
+			result = "EmployeeAttendance Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

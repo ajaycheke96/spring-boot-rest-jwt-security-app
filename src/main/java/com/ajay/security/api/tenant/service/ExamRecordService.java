@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class ExamRecordService {
 		return examRecordRepository.findById(id).get();
 	}
 
-	public String saveExamRecord(ExamRecord examRecord) {
-		return examRecordRepository.save(examRecord) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public ExamRecord saveExamRecord(ExamRecord examRecord) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (examRecord.getCreatedAt() == null)
+			examRecord.setCreatedAt(currentTimestamp);
+		examRecord.setUpdatedAt(currentTimestamp);
+		return examRecordRepository.save(examRecord);
 	}
 
-	public String updateExamRecord(ExamRecord examRecord) {
-		return examRecordRepository.save(examRecord) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneExamRecord(Integer id) {
-		examRecordRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneExamRecord(ExamRecord examRecord) {
+		String result = null;
+		if (examRecordRepository.existsById(examRecord.getId())) {
+			examRecordRepository.delete(examRecord);
+			result = " ExamRecord deleted!";
+		} else {
+			result = "ExamRecord Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

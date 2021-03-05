@@ -32,7 +32,13 @@ public class CourseService {
 	}
 
 	public String deleteOneCourse(Course course) {
-		courseRepository.delete(course);
-		return " successfully deleted!";
+		String result = null;
+		if (courseRepository.existsById(course.getId())) {
+			courseRepository.delete(course);
+			result = " Course deleted!";
+		} else {
+			result = "Course Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

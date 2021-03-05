@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -73,9 +72,8 @@ public class StockItem implements Serializable {
 //	private List<BillItem> billItems;
 
 	// bi-directional many-to-one association to StockCategory
-	@ManyToOne
+	@ManyToOne(targetEntity = StockCategory.class)
 	@JoinColumn(name = "stock_category_id")
-	@JsonIgnoreProperties(value = { "stockItems" })
 	private StockCategory stockCategory;
 
 	// bi-directional many-to-one association to StockPurchaseDetail

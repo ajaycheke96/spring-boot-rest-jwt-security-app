@@ -8,27 +8,31 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_attendances database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -43,32 +47,38 @@ public class EmployeeAttendance implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_attendance")
 	private Date dateOfAttendance;
 
-	@Lob
 	private String options;
 
-	@Lob
 	private String remarks;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to EmployeeAttendanceDetail
-	@OneToMany(mappedBy = "employeeAttendance",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "employeeAttendance")
+	@OneToMany(targetEntity = EmployeeAttendanceDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_attendance_id")
 	private List<EmployeeAttendanceDetail> employeeAttendanceDetails;
 
 	// bi-directional many-to-one association to EmployeeAttendanceType
-	@ManyToOne
+	@ManyToOne(targetEntity = EmployeeAttendanceType.class)
 	@JoinColumn(name = "employee_attendance_type_id")
 	private EmployeeAttendanceType employeeAttendanceType;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,30 @@ public class LessonPlanService {
 		return lessonPlanRepository.findById(id).get();
 	}
 
-	public String saveLessonPlan(LessonPlan lessonPlan) {
-		return lessonPlanRepository.save(lessonPlan) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public LessonPlan saveLessonPlan(LessonPlan lessonPlan) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (lessonPlan.getCreatedAt() == null)
+			lessonPlan.setCreatedAt(currentTimestamp);
+		lessonPlan.setUpdatedAt(currentTimestamp);
+
+		// For lessonPlanDetails list
+		if (!lessonPlan.getLessonPlanDetails().isEmpty())
+			lessonPlan.getLessonPlanDetails().forEach(lessonPlanDetail -> {
+				if (lessonPlanDetail.getCreatedAt() == null)
+					lessonPlanDetail.setCreatedAt(currentTimestamp);
+				lessonPlanDetail.setUpdatedAt(currentTimestamp);
+			});
+		return lessonPlanRepository.save(lessonPlan);
 	}
 
-	public String updateLessonPlan(LessonPlan lessonPlan) {
-		return lessonPlanRepository.save(lessonPlan) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneLessonPlan(Integer id) {
-		lessonPlanRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneLessonPlan(LessonPlan lessonPlan) {
+		String result = null;
+		if (lessonPlanRepository.existsById(lessonPlan.getId())) {
+			lessonPlanRepository.delete(lessonPlan);
+			result = "LessonPlan deleted!";
+		} else {
+			result = "LessonPlan not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

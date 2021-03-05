@@ -5,9 +5,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -80,17 +81,23 @@ public class LessonPlan implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to LessonPlanDetail
-	@OneToMany(mappedBy = "lessonPlan")
+//	@OneToMany(mappedBy = "lessonPlan")
+	@OneToMany(targetEntity = LessonPlanDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "lesson_plan_id")
 	private List<LessonPlanDetail> lessonPlanDetails;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Employee.class)
+	@ManyToOne(targetEntity = Employee.class)
 	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@ManyToOne(targetEntity = Subject.class)
 	@JoinColumn(name = "subject_id")
+//	@JsonIgnoreProperties("batch")
 	private Subject subject;
 
 }

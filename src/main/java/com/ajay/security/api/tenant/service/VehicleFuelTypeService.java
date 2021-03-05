@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class VehicleFuelTypeService {
 		return vehicleFuelTypeRepository.findById(id).get();
 	}
 
-	public String saveVehicleFuelType(VehicleFuelType vehicleFuelType) {
-		return vehicleFuelTypeRepository.save(vehicleFuelType) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public VehicleFuelType saveVehicleFuelType(VehicleFuelType vehicleFuelType) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (vehicleFuelType.getCreatedAt() == null)
+			vehicleFuelType.setCreatedAt(currentTimestamp);
+		vehicleFuelType.setUpdatedAt(currentTimestamp);
+		return vehicleFuelTypeRepository.save(vehicleFuelType);
 	}
 
-	public String updateVehicleFuelType(VehicleFuelType vehicleFuelType) {
-		return vehicleFuelTypeRepository.save(vehicleFuelType) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneVehicleFuelType(Integer id) {
-		vehicleFuelTypeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVehicleFuelType(VehicleFuelType vehicleFuelType) {
+		String result = null;
+		if (vehicleFuelTypeRepository.existsById(vehicleFuelType.getId())) {
+			vehicleFuelTypeRepository.delete(vehicleFuelType);
+			result = " VehicleFuelType deleted!";
+		} else {
+			result = "VehicleFuelType Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

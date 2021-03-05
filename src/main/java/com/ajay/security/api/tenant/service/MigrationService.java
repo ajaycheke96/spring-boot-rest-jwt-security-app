@@ -24,16 +24,18 @@ public class MigrationService {
 		return migrationRepository.findById(id).get();
 	}
 
-	public String saveMigration(Migration migration) {
-		return migrationRepository.save(migration) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Migration saveMigration(Migration migration) {
+		return migrationRepository.save(migration);
 	}
 
-	public String updateMigration(Migration migration) {
-		return migrationRepository.save(migration) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneMigration(Integer id) {
-		migrationRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneMigration(Migration migration) {
+		String result = null;
+		if (migrationRepository.existsById(migration.getId())) {
+			migrationRepository.delete(migration);
+			result = " Migration deleted!";
+		} else {
+			result = "Migration Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

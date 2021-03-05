@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class UploadService {
 		return uploadRepository.findById(id).get();
 	}
 
-	public String saveUpload(Upload upload) {
-		return uploadRepository.save(upload) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Upload saveUpload(Upload upload) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (upload.getCreatedAt() == null)
+			upload.setCreatedAt(currentTimestamp);
+		upload.setUpdatedAt(currentTimestamp);
+		return uploadRepository.save(upload);
 	}
 
-	public String updateUpload(Upload upload) {
-		return uploadRepository.save(upload) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneUpload(Integer id) {
-		uploadRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneUpload(Upload upload) {
+		String result = null;
+		if (uploadRepository.existsById(upload.getId())) {
+			uploadRepository.delete(upload);
+			result = " Upload deleted!";
+		} else {
+			result = "Upload Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

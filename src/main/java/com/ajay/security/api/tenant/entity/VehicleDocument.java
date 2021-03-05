@@ -15,15 +15,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the vehicle_documents database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -38,6 +43,7 @@ public class VehicleDocument implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -54,18 +60,19 @@ public class VehicleDocument implements Serializable {
 	private String title;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
 	private String uploadToken;
 
 	// bi-directional many-to-one association to VehicleDocumentType
-	@ManyToOne
+	@ManyToOne(targetEntity = VehicleDocumentType.class)
 	@JoinColumn(name = "vehicle_document_type_id")
 	private VehicleDocumentType vehicleDocumentType;
 
-	// bi-directional many-to-one association to Vehicle
-	@ManyToOne
-	private Vehicle vehicle;
+//	// bi-directional many-to-one association to Vehicle
+//	@ManyToOne
+//	private Vehicle vehicle;
 
 }

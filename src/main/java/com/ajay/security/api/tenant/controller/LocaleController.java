@@ -1,49 +1,77 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Locale;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.LocaleService;
 
 @RestController
 @RequestMapping("/locale")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class LocaleController {
 
 	@Autowired
 	private LocaleService localeService;
 
-	@GetMapping("/all")
-	public List<Locale> getAllLocale() {
-		return localeService.getAllLocales();
+	@GetMapping("/listAllLocale")
+	public ApiResponse getAllLocale() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Locale", localeService.getAllLocales());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Locale Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Locale getOneLocale(@PathVariable Integer id) {
-		return localeService.getOneLocale(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneLocale(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Locale", localeService.getOneLocale(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Locale Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveLocale(@RequestBody Locale locale) {
-		return localeService.saveLocale(locale);
+	@PostMapping("/saveLocale")
+	public ApiResponse saveLocale(@RequestBody Locale locale) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Locale saved!", localeService.saveLocale(locale));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Locale Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateLocale(@RequestBody Locale locale) {
-		return localeService.updateLocale(locale);
+	@PostMapping("/updateLocale")
+	public ApiResponse updateLocale(@RequestBody Locale locale) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Locale updated!", localeService.saveLocale(locale));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Locale Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneLocale(@PathVariable Integer id) {
-		return localeService.deleteOneLocale(id);
+	@PostMapping("/deleteLocale")
+	public ApiResponse deleteOneLocale(@RequestBody Locale locale) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, localeService.deleteOneLocale(locale), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Locale Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

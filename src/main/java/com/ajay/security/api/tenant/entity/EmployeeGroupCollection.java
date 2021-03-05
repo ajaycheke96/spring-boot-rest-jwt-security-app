@@ -11,15 +11,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_group_collection database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -33,13 +38,17 @@ public class EmployeeGroupCollection implements Serializable {
 	@Column(length = 20)
 	private Integer id;
 
-	// bi-directional many-to-one association to EmployeeGroup
-	@ManyToOne
-	@JoinColumn(name = "employee_group_id")
-	private EmployeeGroup employeeGroup;
+//	// bi-directional many-to-one association to EmployeeGroup
+//	@ManyToOne
+//	@JoinColumn(name = "employee_group_id")
+//	private EmployeeGroup employeeGroup;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 }

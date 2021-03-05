@@ -3,15 +3,17 @@ package com.ajay.security.api.tenant.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -64,19 +66,14 @@ public class Timetable implements Serializable {
 	@Column(length = 50)
 	private String uuid;
 
-//	// bi-directional many-to-one association to TimetableAllocation
+	// bi-directional many-to-one association to TimetableAllocation
 //	@OneToMany(mappedBy = "timetable")
-//	@JsonIgnoreProperties("timetable")
-//	private List<TimetableAllocation> timetableAllocations;
+	@OneToMany(targetEntity = TimetableAllocation.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "timetable_id")
+	private List<TimetableAllocation> timetableAllocations;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
 	private Batch batch;
-//	// bi-directional many-to-one association to Batch
-//	@ManyToOne(fetch = FetchType.LAZY) // , targetEntity = Batch.class)
-//	@JoinColumn(name = "batch_id")
-//	@JsonIgnoreProperties({ "timetable", "hibernateLazyInitializer" })
-//	private Batch batch;
-
 }

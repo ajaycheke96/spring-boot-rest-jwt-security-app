@@ -1,49 +1,77 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Room;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.RoomService;
 
 @RestController
 @RequestMapping("/room")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class RoomController {
 
 	@Autowired
 	private RoomService roomService;
 
-	@GetMapping("/all")
-	public List<Room> getAllRoom() {
-		return roomService.getAllRooms();
+	@GetMapping("/listAllRoom")
+	public ApiResponse getAllRoom() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Room", roomService.getAllRooms());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Room Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Room getOneRoom(@PathVariable Integer id) {
-		return roomService.getOneRoom(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneRoom(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Room", roomService.getOneRoom(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Room Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveRoom(@RequestBody Room room) {
-		return roomService.saveRoom(room);
+	@PostMapping("/saveRoom")
+	public ApiResponse saveRoom(@RequestBody Room room) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Room saved!", roomService.saveRoom(room));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Room Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateRoom(@RequestBody Room room) {
-		return roomService.updateRoom(room);
+	@PostMapping("/updateRoom")
+	public ApiResponse updateRoom(@RequestBody Room room) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Room updated!", roomService.saveRoom(room));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Room Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneRoom(@PathVariable Integer id) {
-		return roomService.deleteOneRoom(id);
+	@PostMapping("/deleteRoom")
+	public ApiResponse deleteOneRoom(@RequestBody Room room) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, roomService.deleteOneRoom(room), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Room Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

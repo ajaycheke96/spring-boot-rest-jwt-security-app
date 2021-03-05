@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class VehicleServiceRecordService {
 		return vehicleServiceRecordRepository.findById(id).get();
 	}
 
-	public String saveVehicleServiceRecord(VehicleServiceRecord vehicleServiceRecord) {
-		return vehicleServiceRecordRepository.save(vehicleServiceRecord) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public VehicleServiceRecord saveVehicleServiceRecord(VehicleServiceRecord vehicleServiceRecord) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (vehicleServiceRecord.getCreatedAt() == null)
+			vehicleServiceRecord.setCreatedAt(currentTimestamp);
+		vehicleServiceRecord.setUpdatedAt(currentTimestamp);
+		return vehicleServiceRecordRepository.save(vehicleServiceRecord);
 	}
 
-	public String updateVehicleServiceRecord(VehicleServiceRecord vehicleServiceRecord) {
-		return vehicleServiceRecordRepository.save(vehicleServiceRecord) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneVehicleServiceRecord(Integer id) {
-		vehicleServiceRecordRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVehicleServiceRecord(VehicleServiceRecord vehicleServiceRecord) {
+		String result = null;
+		if (vehicleServiceRecordRepository.existsById(vehicleServiceRecord.getId())) {
+			vehicleServiceRecordRepository.delete(vehicleServiceRecord);
+			result = " VehicleServiceRecord deleted!";
+		} else {
+			result = "VehicleServiceRecord Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

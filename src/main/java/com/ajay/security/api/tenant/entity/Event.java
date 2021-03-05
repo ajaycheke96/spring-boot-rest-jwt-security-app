@@ -7,13 +7,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -91,7 +92,6 @@ public class Event implements Serializable {
 	@Column(name = "EVENT_COMMENT", length = 50)
 	private String eventComment;
 
-	@Lob
 	@Column(name = "EVENT_DEFINITION", length = 50)
 	private String eventDefinition;
 
@@ -165,32 +165,40 @@ public class Event implements Serializable {
 	@Column(length = 50)
 	private String venue;
 
-//	// bi-directional many-to-one association to EventBatch
+	// bi-directional many-to-one association to EventBatch
 //	@OneToMany(mappedBy = "event")
-//	private List<EventBatch> eventBatches;
+	@OneToMany(targetEntity = EventBatch.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "event_id")
+	private List<EventBatch> eventBatches;
 
 	// bi-directional many-to-one association to EventCourse
-	@OneToMany(mappedBy = "event")
-//	@JsonIgnoreProperties("event")
+//	@OneToMany(mappedBy = "event")
+	@OneToMany(targetEntity = EventCourse.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "event_id")
 	private List<EventCourse> eventCourses;
 
 	// bi-directional many-to-one association to EventDepartment
 //	@OneToMany(mappedBy = "event")
-	@OneToMany(targetEntity = EventDepartment.class)
+	@OneToMany(targetEntity = EventDepartment.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "event_id")
 	private List<EventDepartment> eventDepartments;
 
 	// bi-directional many-to-one association to EventEmployeeCategory
-	@OneToMany(mappedBy = "event")
+//	@OneToMany(mappedBy = "event")
+	@OneToMany(targetEntity = EventEmployeeCategory.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "event_id")
 	private List<EventEmployeeCategory> eventEmployeeCategories;
 
 	// bi-directional many-to-one association to EventType
-	@ManyToOne
+	@ManyToOne(targetEntity = EventType.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "event_type_id")
 	private EventType eventTypeBean;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 }

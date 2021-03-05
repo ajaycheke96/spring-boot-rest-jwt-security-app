@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.ajay.security.api.tenant.service.EnquiryFollowUpService;
 
 @RestController
 @RequestMapping("/enquiryFollowUp")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class EnquiryFollowUpController {
 
 	@Autowired
@@ -69,8 +71,8 @@ public class EnquiryFollowUpController {
 	@RequestMapping(value = "/deleteEnquiryFollowUp", method = RequestMethod.POST)
 	public ApiResponse deleteOneEnquiryFollowUp(@RequestBody EnquiryFollowUp enquiryFollowUp) {
 		try {
-			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquiryFollowUp deleted!",
-					enquiryFollowUpService.deleteOneEnquiryFollowUp(enquiryFollowUp));
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					enquiryFollowUpService.deleteOneEnquiryFollowUp(enquiryFollowUp), null);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
 					"EnquiryFollowUp Service exception : " + e.getLocalizedMessage());

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class TransactionCategoryService {
 		return transactionCategoryRepository.findById(id).get();
 	}
 
-	public String saveTransactionCategory(TransactionCategory transactionCategory) {
-		return transactionCategoryRepository.save(transactionCategory) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public TransactionCategory saveTransactionCategory(TransactionCategory transactionCategory) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (transactionCategory.getCreatedAt() == null)
+			transactionCategory.setCreatedAt(currentTimestamp);
+		transactionCategory.setUpdatedAt(currentTimestamp);
+		return transactionCategoryRepository.save(transactionCategory);
 	}
 
-	public String updateTransactionCategory(TransactionCategory transactionCategory) {
-		return transactionCategoryRepository.save(transactionCategory) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneTransactionCategory(Integer id) {
-		transactionCategoryRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTransactionCategory(TransactionCategory transactionCategory) {
+		String result = null;
+		if (transactionCategoryRepository.existsById(transactionCategory.getId())) {
+			transactionCategoryRepository.delete(transactionCategory);
+			result = " TransactionCategory deleted!";
+		} else {
+			result = "TransactionCategory Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

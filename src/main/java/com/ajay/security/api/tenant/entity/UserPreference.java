@@ -69,10 +69,11 @@ public class UserPreference implements Serializable {
 	private AcademicSession academicSession;
 
 //	// bi-directional many-to-one association to User
-//	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+//	@ManyToOne(targetEntity = User.class)
 //	@JoinColumn(name = "user_id")
 	@ManyToOne
-	@JsonIgnoreProperties(value = { "userPreferences" })
+	@JsonIgnoreProperties(value = { "backups", "password", "activationToken", "userPushTokens", "userPreferences",
+			"uploads", "postalRecords" })
 	private User user;
 
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class EmployeeDocumentTypeService {
 		return employeeDocumentTypeRepository.findById(id).get();
 	}
 
-	public String saveEmployeeDocumentType(EmployeeDocumentType employeeDocumentType) {
-		return employeeDocumentTypeRepository.save(employeeDocumentType) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeDocumentType saveEmployeeDocumentType(EmployeeDocumentType employeeDocumentType) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeDocumentType.getCreatedAt() == null)
+			employeeDocumentType.setCreatedAt(currentTimestamp);
+		employeeDocumentType.setUpdatedAt(currentTimestamp);
+		return employeeDocumentTypeRepository.save(employeeDocumentType);
 	}
 
-	public String updateEmployeeDocumentType(EmployeeDocumentType employeeDocumentType) {
-		return employeeDocumentTypeRepository.save(employeeDocumentType) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeDocumentType(Integer id) {
-		employeeDocumentTypeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeDocumentType(EmployeeDocumentType employeeDocumentType) {
+		String result = null;
+		if (employeeDocumentTypeRepository.existsById(employeeDocumentType.getId())) {
+			employeeDocumentTypeRepository.delete(employeeDocumentType);
+			result = " EmployeeDocumentType deleted!";
+		} else {
+			result = "EmployeeDocumentType Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

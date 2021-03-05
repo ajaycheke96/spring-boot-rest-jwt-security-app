@@ -9,15 +9,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the telescope_entries_tags database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -30,9 +35,10 @@ public class TelescopeEntriesTag implements Serializable {
 	@Column(length = 50)
 	private String tag;
 
-	// bi-directional many-to-one association to TelescopeEntry
+//	// bi-directional many-to-one association to TelescopeEntry
 	@ManyToOne
 	@JoinColumn(name = "entry_uuid")
+	@JsonIgnoreProperties("telescopeEntriesTags")
 	private TelescopeEntry telescopeEntry;
 
 }

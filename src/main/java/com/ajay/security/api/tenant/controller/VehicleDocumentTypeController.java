@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.VehicleDocumentType;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.VehicleDocumentTypeService;
 
 @RestController
-@RequestMapping("/vehicleDocumentTypeDocumentType")
+@RequestMapping("/vehicleDocumentType")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class VehicleDocumentTypeController {
 
 	@Autowired
 	private VehicleDocumentTypeService vehicleDocumentTypeService;
 
-	@GetMapping("/all")
-	public List<VehicleDocumentType> getAllVehicleDocumentType() {
-		return vehicleDocumentTypeService.getAllVehicleDocumentTypes();
+	@GetMapping("/listAllVehicleDocumentType")
+	public ApiResponse getAllVehicleDocumentType() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of VehicleDocumentType",
+					vehicleDocumentTypeService.getAllVehicleDocumentTypes());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleDocumentType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public VehicleDocumentType getOneVehicleDocumentType(@PathVariable Integer id) {
-		return vehicleDocumentTypeService.getOneVehicleDocumentType(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneVehicleDocumentType(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleDocumentType",
+					vehicleDocumentTypeService.getOneVehicleDocumentType(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleDocumentType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveVehicleDocumentType(@RequestBody VehicleDocumentType vehicleDocumentType) {
-		return vehicleDocumentTypeService.saveVehicleDocumentType(vehicleDocumentType);
+	@PostMapping("/saveVehicleDocumentType")
+	public ApiResponse saveVehicleDocumentType(@RequestBody VehicleDocumentType vehicleDocumentType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleDocumentType saved!",
+					vehicleDocumentTypeService.saveVehicleDocumentType(vehicleDocumentType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleDocumentType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateVehicleDocumentType(@RequestBody VehicleDocumentType vehicleDocumentType) {
-		return vehicleDocumentTypeService.updateVehicleDocumentType(vehicleDocumentType);
+	@PostMapping("/updateVehicleDocumentType")
+	public ApiResponse updateVehicleDocumentType(@RequestBody VehicleDocumentType vehicleDocumentType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleDocumentType updated!",
+					vehicleDocumentTypeService.saveVehicleDocumentType(vehicleDocumentType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleDocumentType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneVehicleDocumentType(@PathVariable Integer id) {
-		return vehicleDocumentTypeService.deleteOneVehicleDocumentType(id);
+	@PostMapping("/deleteVehicleDocumentType")
+	public ApiResponse deleteOneVehicleDocumentType(@RequestBody VehicleDocumentType vehicleDocumentType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					vehicleDocumentTypeService.deleteOneVehicleDocumentType(vehicleDocumentType), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleDocumentType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

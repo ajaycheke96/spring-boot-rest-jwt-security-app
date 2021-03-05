@@ -34,7 +34,13 @@ public class BookService {
 	}
 
 	public String deleteOneBook(Book book) {
-		bookRepository.delete(book);
-		return " successfully deleted!";
+		String result = null;
+		if (bookRepository.existsById(book.getId())) {
+			bookRepository.delete(book);
+			result = " Book deleted!";
+		} else {
+			result = "Book Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.UserPushToken;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.UserPushTokenService;
 
 @RestController
 @RequestMapping("/userPushToken")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserPushTokenController {
 
 	@Autowired
 	private UserPushTokenService userPushTokenService;
 
-	@GetMapping("/all")
-	public List<UserPushToken> getAllUserPushToken() {
-		return userPushTokenService.getAllUserPushTokens();
+	@GetMapping("/listAllUserPushToken")
+	public ApiResponse getAllUserPushToken() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of UserPushToken",
+					userPushTokenService.getAllUserPushTokens());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"UserPushToken Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public UserPushToken getOneUserPushToken(@PathVariable Integer id) {
-		return userPushTokenService.getOneUserPushToken(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneUserPushToken(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "UserPushToken",
+					userPushTokenService.getOneUserPushToken(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"UserPushToken Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveUserPushToken(@RequestBody UserPushToken userPushToken) {
-		return userPushTokenService.saveUserPushToken(userPushToken);
+	@PostMapping("/saveUserPushToken")
+	public ApiResponse saveUserPushToken(@RequestBody UserPushToken userPushToken) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "UserPushToken saved!",
+					userPushTokenService.saveUserPushToken(userPushToken));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"UserPushToken Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateUserPushToken(@RequestBody UserPushToken userPushToken) {
-		return userPushTokenService.updateUserPushToken(userPushToken);
+	@PostMapping("/updateUserPushToken")
+	public ApiResponse updateUserPushToken(@RequestBody UserPushToken userPushToken) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "UserPushToken updated!",
+					userPushTokenService.saveUserPushToken(userPushToken));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"UserPushToken Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneUserPushToken(@PathVariable Integer id) {
-		return userPushTokenService.deleteOneUserPushToken(id);
+	@PostMapping("/deleteUserPushToken")
+	public ApiResponse deleteOneUserPushToken(@RequestBody UserPushToken userPushToken) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					userPushTokenService.deleteOneUserPushToken(userPushToken), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"UserPushToken Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

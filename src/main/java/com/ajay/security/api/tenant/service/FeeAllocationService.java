@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class FeeAllocationService {
 		return feeAllocationRepository.findById(id).get();
 	}
 
-	public String saveFeeAllocation(FeeAllocation feeAllocation) {
-		return feeAllocationRepository.save(feeAllocation) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public FeeAllocation saveFeeAllocation(FeeAllocation feeAllocation) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (feeAllocation.getCreatedAt() == null)
+			feeAllocation.setCreatedAt(currentTimestamp);
+		feeAllocation.setUpdatedAt(currentTimestamp);
+		return feeAllocationRepository.save(feeAllocation);
 	}
 
-	public String updateFeeAllocation(FeeAllocation feeAllocation) {
-		return feeAllocationRepository.save(feeAllocation) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneFeeAllocation(Integer id) {
-		feeAllocationRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneFeeAllocation(FeeAllocation feeAllocation) {
+		String result = null;
+		if (feeAllocationRepository.existsById(feeAllocation.getId())) {
+			feeAllocationRepository.delete(feeAllocation);
+			result = " FeeAllocation deleted!";
+		} else {
+			result = "FeeAllocation Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

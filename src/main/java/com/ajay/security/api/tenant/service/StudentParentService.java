@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class StudentParentService {
 		return studentParentRepository.findById(id).get();
 	}
 
-	public String saveStudentParent(StudentParent studentParent) {
-		return studentParentRepository.save(studentParent) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public StudentParent saveStudentParent(StudentParent studentParent) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (studentParent.getCreatedAt() == null)
+			studentParent.setCreatedAt(currentTimestamp);
+		studentParent.setUpdatedAt(currentTimestamp);
+		return studentParentRepository.save(studentParent);
 	}
 
-	public String updateStudentParent(StudentParent studentParent) {
-		return studentParentRepository.save(studentParent) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneStudentParent(Integer id) {
-		studentParentRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneStudentParent(StudentParent studentParent) {
+		String result = null;
+		if (studentParentRepository.existsById(studentParent.getId())) {
+			studentParentRepository.delete(studentParent);
+			result = " StudentParent deleted!";
+		} else {
+			result = "StudentParent Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

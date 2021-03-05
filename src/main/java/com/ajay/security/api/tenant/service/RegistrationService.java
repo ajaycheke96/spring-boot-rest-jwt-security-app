@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class RegistrationService {
 		return registrationRepository.findById(id).get();
 	}
 
-	public String saveRegistration(Registration registration) {
-		return registrationRepository.save(registration) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public Registration saveRegistration(Registration registration) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (registration.getCreatedAt() == null)
+			registration.setCreatedAt(currentTimestamp);
+		registration.setUpdatedAt(currentTimestamp);
+		return registrationRepository.save(registration);
 	}
 
-	public String updateRegistration(Registration registration) {
-		return registrationRepository.save(registration) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneRegistration(Integer id) {
-		registrationRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneRegistration(Registration registration) {
+		String result = null;
+		if (registrationRepository.existsById(registration.getId())) {
+			registrationRepository.delete(registration);
+			result = "Registration deleted!";
+		} else {
+			result = "Registration not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

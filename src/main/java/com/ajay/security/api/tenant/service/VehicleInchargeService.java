@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class VehicleInchargeService {
 		return vehicleInchargeRepository.findById(id).get();
 	}
 
-	public String saveVehicleIncharge(VehicleIncharge vehicleIncharge) {
-		return vehicleInchargeRepository.save(vehicleIncharge) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public VehicleIncharge saveVehicleIncharge(VehicleIncharge vehicleIncharge) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (vehicleIncharge.getCreatedAt() == null)
+			vehicleIncharge.setCreatedAt(currentTimestamp);
+		vehicleIncharge.setUpdatedAt(currentTimestamp);
+		return vehicleInchargeRepository.save(vehicleIncharge);
 	}
 
-	public String updateVehicleIncharge(VehicleIncharge vehicleIncharge) {
-		return vehicleInchargeRepository.save(vehicleIncharge) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneVehicleIncharge(Integer id) {
-		vehicleInchargeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVehicleIncharge(VehicleIncharge vehicleIncharge) {
+		String result = null;
+		if (vehicleInchargeRepository.existsById(vehicleIncharge.getId())) {
+			vehicleInchargeRepository.delete(vehicleIncharge);
+			result = " VehicleIncharge deleted!";
+		} else {
+			result = "VehicleIncharge Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

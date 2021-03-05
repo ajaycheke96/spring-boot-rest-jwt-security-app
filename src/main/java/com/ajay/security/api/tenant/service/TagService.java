@@ -29,30 +29,22 @@ public class TagService {
 		return tag;
 	}
 
-	public String saveTag(Tag tag) {
-
+	public Tag saveTag(Tag tag) {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		tag.setCreatedAt(timestamp);
+		if (tag.getCreatedAt() == null)
+			tag.setCreatedAt(timestamp);
 		tag.setUpdatedAt(timestamp);
-
-		tag.getTaggables().forEach(taggable -> taggable.setTag(tag));
-//		tag.getTaggables().forEach(s->System.out.println(s.getTag().getName()));
-
-		return tagRepository.save(tag) != null ? " successfully saved!" : "Failed! Please try again!!";
+		return tagRepository.save(tag);
 	}
 
-	public String updateTag(Tag tag) {
-
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		tag.setUpdatedAt(timestamp);
-
-		tag.getTaggables().forEach(taggable -> taggable.setTag(tag));
-		
-		return tagRepository.save(tag) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneTag(Integer id) {
-		tagRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTag(Tag tag) {
+		String result = null;
+		if (tagRepository.existsById(tag.getId())) {
+			tagRepository.delete(tag);
+			result = " Tag deleted!";
+		} else {
+			result = "Tag Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

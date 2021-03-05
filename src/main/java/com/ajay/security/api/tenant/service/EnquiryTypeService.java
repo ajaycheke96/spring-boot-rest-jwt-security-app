@@ -34,7 +34,13 @@ public class EnquiryTypeService {
 	}
 
 	public String deleteOneEnquiryType(EnquiryType enquiryType) {
-		enquiryTypeRepository.delete(enquiryType);
-		return " successfully deleted!";
+		String result = null;
+		if (enquiryTypeRepository.existsById(enquiryType.getId())) {
+			enquiryTypeRepository.delete(enquiryType);
+			result = " EnquiryType deleted!";
+		} else {
+			result = "EnquiryType Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

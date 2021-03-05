@@ -1,49 +1,77 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Upload;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.UploadService;
 
 @RestController
 @RequestMapping("/upload")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UploadController {
 
 	@Autowired
 	private UploadService uploadService;
 
-	@GetMapping("/all")
-	public List<Upload> getAllUpload() {
-		return uploadService.getAllUploads();
+	@GetMapping("/listAllUpload")
+	public ApiResponse getAllUpload() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Upload", uploadService.getAllUploads());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Upload Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Upload getOneUpload(@PathVariable Integer id) {
-		return uploadService.getOneUpload(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneUpload(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Upload", uploadService.getOneUpload(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Upload Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveUpload(@RequestBody Upload upload) {
-		return uploadService.saveUpload(upload);
+	@PostMapping("/saveUpload")
+	public ApiResponse saveUpload(@RequestBody Upload upload) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Upload saved!", uploadService.saveUpload(upload));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Upload Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateUpload(@RequestBody Upload upload) {
-		return uploadService.updateUpload(upload);
+	@PostMapping("/updateUpload")
+	public ApiResponse updateUpload(@RequestBody Upload upload) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Upload updated!", uploadService.saveUpload(upload));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Upload Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneUpload(@PathVariable Integer id) {
-		return uploadService.deleteOneUpload(id);
+	@PostMapping("/deleteUpload")
+	public ApiResponse deleteOneUpload(@RequestBody Upload upload) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, uploadService.deleteOneUpload(upload), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Upload Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.StudentAttendance;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.StudentAttendanceService;
 
 @RestController
 @RequestMapping("/studentAttendance")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class StudentAttendanceController {
 
 	@Autowired
 	private StudentAttendanceService studentAttendanceService;
 
-	@GetMapping("/all")
-	public List<StudentAttendance> getAllStudentAttendance() {
-		return studentAttendanceService.getAllStudentAttendances();
+	@GetMapping("/listAllStudentAttendance")
+	public ApiResponse getAllStudentAttendance() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of StudentAttendance",
+					studentAttendanceService.getAllStudentAttendances());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StudentAttendance Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public StudentAttendance getOneStudentAttendance(@PathVariable Integer id) {
-		return studentAttendanceService.getOneStudentAttendance(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneStudentAttendance(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "StudentAttendance",
+					studentAttendanceService.getOneStudentAttendance(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StudentAttendance Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveStudentAttendance(@RequestBody StudentAttendance studentAttendance) {
-		return studentAttendanceService.saveStudentAttendance(studentAttendance);
+	@PostMapping("/saveStudentAttendance")
+	public ApiResponse saveStudentAttendance(@RequestBody StudentAttendance studentAttendance) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "StudentAttendance saved!",
+					studentAttendanceService.saveStudentAttendance(studentAttendance));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StudentAttendance Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateStudentAttendance(@RequestBody StudentAttendance studentAttendance) {
-		return studentAttendanceService.updateStudentAttendance(studentAttendance);
+	@PostMapping("/updateStudentAttendance")
+	public ApiResponse updateStudentAttendance(@RequestBody StudentAttendance studentAttendance) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "StudentAttendance updated!",
+					studentAttendanceService.saveStudentAttendance(studentAttendance));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StudentAttendance Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneStudentAttendance(@PathVariable Integer id) {
-		return studentAttendanceService.deleteOneStudentAttendance(id);
+	@PostMapping("/deleteStudentAttendance")
+	public ApiResponse deleteOneStudentAttendance(@RequestBody StudentAttendance studentAttendance) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					studentAttendanceService.deleteOneStudentAttendance(studentAttendance), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StudentAttendance Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

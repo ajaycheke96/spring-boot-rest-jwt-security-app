@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,12 +61,12 @@ public class FeeConcession implements Serializable {
 
 	// bi-directional many-to-one association to FeeConcessionDetail
 //	@OneToMany(mappedBy = "feeConcession")
-	@OneToMany(targetEntity = FeeConcessionDetail.class)
+	@OneToMany(targetEntity = FeeConcessionDetail.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "fee_concession_id")
 	private List<FeeConcessionDetail> feeConcessionDetails;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 

@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -44,7 +43,6 @@ public class Designation implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Lob
 	private String description;
 
 	@Column(name = "is_teaching_employee")
@@ -52,7 +50,6 @@ public class Designation implements Serializable {
 
 	private String name;
 
-	@Lob
 	private String options;
 
 	@Column(name = "updated_at")
@@ -60,14 +57,14 @@ public class Designation implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to EmployeeCategory
-	@ManyToOne
+	@ManyToOne(targetEntity = EmployeeCategory.class)
 	@JoinColumn(name = "employee_category_id")
 	private EmployeeCategory employeeCategory;
 
-	// bi-directional many-to-one association to Designation
-	@ManyToOne(targetEntity = Designation.class)
-	@JoinColumn(name = "top_designation_id")
-	private Designation designation;
+//	// bi-directional many-to-one association to Designation
+//	@ManyToOne(targetEntity = Designation.class)
+//	@JoinColumn(name = "top_designation_id")
+//	private Designation designation;
 
 //	// bi-directional many-to-one association to EmployeeDesignation
 //	@OneToMany(mappedBy = "designation")

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class EmployeeLeaveTypeService {
 		return employeeLeaveTypeRepository.findById(id).get();
 	}
 
-	public String saveEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
-		return employeeLeaveTypeRepository.save(employeeLeaveType) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeLeaveType saveEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeLeaveType.getCreatedAt() == null)
+			employeeLeaveType.setCreatedAt(currentTimestamp);
+		employeeLeaveType.setUpdatedAt(currentTimestamp);
+		return employeeLeaveTypeRepository.save(employeeLeaveType);
 	}
 
-	public String updateEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
-		return employeeLeaveTypeRepository.save(employeeLeaveType) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeLeaveType(Integer id) {
-		employeeLeaveTypeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeLeaveType(EmployeeLeaveType employeeLeaveType) {
+		String result = null;
+		if (employeeLeaveTypeRepository.existsById(employeeLeaveType.getId())) {
+			employeeLeaveTypeRepository.delete(employeeLeaveType);
+			result = " EmployeeLeaveType deleted!";
+		} else {
+			result = "EmployeeLeaveType Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

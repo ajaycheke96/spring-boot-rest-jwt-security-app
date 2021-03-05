@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.InstituteDocument;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.InstituteDocumentService;
 
 @RestController
 @RequestMapping("/instituteDocument")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class InstituteDocumentController {
 
 	@Autowired
 	private InstituteDocumentService instituteDocumentService;
 
-	@GetMapping("/all")
-	public List<InstituteDocument> getAllInstituteDocument() {
-		return instituteDocumentService.getAllInstituteDocuments();
+	@GetMapping("/listAllInstituteDocument")
+	public ApiResponse getAllInstituteDocument() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of InstituteDocument",
+					instituteDocumentService.getAllInstituteDocuments());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"InstituteDocument Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public InstituteDocument getOneInstituteDocument(@PathVariable Integer id) {
-		return instituteDocumentService.getOneInstituteDocument(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneInstituteDocument(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "InstituteDocument",
+					instituteDocumentService.getOneInstituteDocument(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"InstituteDocument Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveInstituteDocument(@RequestBody InstituteDocument instituteDocument) {
-		return instituteDocumentService.saveInstituteDocument(instituteDocument);
+	@PostMapping("/saveInstituteDocument")
+	public ApiResponse saveInstituteDocument(@RequestBody InstituteDocument instituteDocument) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "InstituteDocument saved!",
+					instituteDocumentService.saveInstituteDocument(instituteDocument));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"InstituteDocument Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateInstituteDocument(@RequestBody InstituteDocument instituteDocument) {
-		return instituteDocumentService.updateInstituteDocument(instituteDocument);
+	@PostMapping("/updateInstituteDocument")
+	public ApiResponse updateInstituteDocument(@RequestBody InstituteDocument instituteDocument) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "InstituteDocument updated!",
+					instituteDocumentService.saveInstituteDocument(instituteDocument));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"InstituteDocument Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneInstituteDocument(@PathVariable Integer id) {
-		return instituteDocumentService.deleteOneInstituteDocument(id);
+	@PostMapping("/deleteInstituteDocument")
+	public ApiResponse deleteOneInstituteDocument(@RequestBody InstituteDocument instituteDocument) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					instituteDocumentService.deleteOneInstituteDocument(instituteDocument), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"InstituteDocument Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class StudentGroupService {
 		return studentGroupRepository.findById(id).get();
 	}
 
-	public String saveStudentGroup(StudentGroup studentGroup) {
-		return studentGroupRepository.save(studentGroup) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public StudentGroup saveStudentGroup(StudentGroup studentGroup) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (studentGroup.getCreatedAt() == null)
+			studentGroup.setCreatedAt(currentTimestamp);
+		studentGroup.setUpdatedAt(currentTimestamp);
+		return studentGroupRepository.save(studentGroup);
 	}
 
-	public String updateStudentGroup(StudentGroup studentGroup) {
-		return studentGroupRepository.save(studentGroup) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneStudentGroup(Integer id) {
-		studentGroupRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneStudentGroup(StudentGroup studentGroup) {
+		String result = null;
+		if (studentGroupRepository.existsById(studentGroup.getId())) {
+			studentGroupRepository.delete(studentGroup);
+			result = " StudentGroup deleted!";
+		} else {
+			result = "StudentGroup Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

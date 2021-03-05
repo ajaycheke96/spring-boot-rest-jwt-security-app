@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -89,33 +91,46 @@ public class Communication implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to CommunicationBatch
-	@OneToMany(mappedBy = "communication")
+//	@OneToMany(mappedBy = "communication")
+	@OneToMany(targetEntity = CommunicationBatch.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "communication_id")
 	private List<CommunicationBatch> communicationBatches;
 
 	// bi-directional many-to-one association to CommunicationCourse
-	@OneToMany(mappedBy = "communication")
+//	@OneToMany(mappedBy = "communication")
+	@OneToMany(targetEntity = CommunicationCourse.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "communication_id")
 	private List<CommunicationCourse> communicationCourses;
 
 	// bi-directional many-to-one association to CommunicationDepartment
 //	@OneToMany(mappedBy = "communication")
-	@OneToMany(targetEntity = CommunicationDepartment.class)
+	@OneToMany(targetEntity = CommunicationDepartment.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "communication_id")
 	private List<CommunicationDepartment> communicationDepartments;
 
 	// bi-directional many-to-one association to CommunicationEmployee
-	@OneToMany(mappedBy = "communication")
+//	@OneToMany(mappedBy = "communication")
+	@OneToMany(targetEntity = CommunicationEmployee.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "communication_id")
 	private List<CommunicationEmployee> communicationEmployees;
 
 	// bi-directional many-to-one association to CommunicationEmployeeCategory
-	@OneToMany(mappedBy = "communication")
+//	@OneToMany(mappedBy = "communication")
+	@OneToMany(targetEntity = CommunicationEmployeeCategory.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "communication_id")
 	private List<CommunicationEmployeeCategory> communicationEmployeeCategories;
 
 	// bi-directional many-to-one association to CommunicationStudentRecord
-	@OneToMany(mappedBy = "communication")
+//	@OneToMany(mappedBy = "communication")
+	@OneToMany(targetEntity = CommunicationStudentRecord.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "communication_id")
 	private List<CommunicationStudentRecord> communicationStudentRecords;
 
 	// bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 }

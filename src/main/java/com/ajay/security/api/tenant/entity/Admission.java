@@ -75,6 +75,7 @@ public class Admission implements Serializable {
 	// bi-directional many-to-one association to Registration
 	@ManyToOne(targetEntity = Registration.class)
 	@JoinColumn(name = "registration_id")
+//	@JsonIgnoreProperties({ "student" })
 	private Registration registration;
 
 //	// bi-directional many-to-one association to StudentRecord

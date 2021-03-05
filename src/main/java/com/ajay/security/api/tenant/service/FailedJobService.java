@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,20 @@ public class FailedJobService {
 		return failedJobRepository.findById(id).get();
 	}
 
-	public String saveFailedJob(FailedJob failedJob) {
-		return failedJobRepository.save(failedJob) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public FailedJob saveFailedJob(FailedJob failedJob) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		failedJob.setFailedAt(currentTimestamp);
+		return failedJobRepository.save(failedJob);
 	}
 
-	public String updateFailedJob(FailedJob failedJob) {
-		return failedJobRepository.save(failedJob) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneFailedJob(Integer id) {
-		failedJobRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneFailedJob(FailedJob failedJob) {
+		String result = null;
+		if (failedJobRepository.existsById(failedJob.getId())) {
+			failedJobRepository.delete(failedJob);
+			result = " FailedJob deleted!";
+		} else {
+			result = "FailedJob Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

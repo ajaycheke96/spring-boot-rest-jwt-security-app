@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.VehicleServiceCenter;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.VehicleServiceCenterService;
 
 @RestController
 @RequestMapping("/vehicleServiceCenter")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class VehicleServiceCenterController {
 
 	@Autowired
 	private VehicleServiceCenterService vehicleServiceCenterService;
 
-	@GetMapping("/all")
-	public List<VehicleServiceCenter> getAllVehicleServiceCenter() {
-		return vehicleServiceCenterService.getAllVehicleServiceCenters();
+	@GetMapping("/listAllVehicleServiceCenter")
+	public ApiResponse getAllVehicleServiceCenter() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of VehicleServiceCenter",
+					vehicleServiceCenterService.getAllVehicleServiceCenters());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleServiceCenter Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public VehicleServiceCenter getOneVehicleServiceCenter(@PathVariable Integer id) {
-		return vehicleServiceCenterService.getOneVehicleServiceCenter(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneVehicleServiceCenter(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleServiceCenter",
+					vehicleServiceCenterService.getOneVehicleServiceCenter(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleServiceCenter Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveVehicleServiceCenter(@RequestBody VehicleServiceCenter vehicleServiceCenter) {
-		return vehicleServiceCenterService.saveVehicleServiceCenter(vehicleServiceCenter);
+	@PostMapping("/saveVehicleServiceCenter")
+	public ApiResponse saveVehicleServiceCenter(@RequestBody VehicleServiceCenter vehicleServiceCenter) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleServiceCenter saved!",
+					vehicleServiceCenterService.saveVehicleServiceCenter(vehicleServiceCenter));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleServiceCenter Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateVehicleServiceCenter(@RequestBody VehicleServiceCenter vehicleServiceCenter) {
-		return vehicleServiceCenterService.updateVehicleServiceCenter(vehicleServiceCenter);
+	@PostMapping("/updateVehicleServiceCenter")
+	public ApiResponse updateVehicleServiceCenter(@RequestBody VehicleServiceCenter vehicleServiceCenter) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleServiceCenter updated!",
+					vehicleServiceCenterService.saveVehicleServiceCenter(vehicleServiceCenter));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleServiceCenter Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneVehicleServiceCenter(@PathVariable Integer id) {
-		return vehicleServiceCenterService.deleteOneVehicleServiceCenter(id);
+	@PostMapping("/deleteVehicleServiceCenter")
+	public ApiResponse deleteOneVehicleServiceCenter(@RequestBody VehicleServiceCenter vehicleServiceCenter) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					vehicleServiceCenterService.deleteOneVehicleServiceCenter(vehicleServiceCenter), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleServiceCenter Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

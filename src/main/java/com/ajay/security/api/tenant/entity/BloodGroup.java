@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -41,12 +40,10 @@ public class BloodGroup implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Lob
 	private String description;
 
 	private String name;
 
-	@Lob
 	private String options;
 
 	@Column(name = "updated_at")

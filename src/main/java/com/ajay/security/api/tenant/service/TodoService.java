@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class TodoService {
 		return todoRepository.findById(id).get();
 	}
 
-	public String saveTodo(Todo todo) {
-		return todoRepository.save(todo) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Todo saveTodo(Todo todo) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (todo.getCreatedAt() == null)
+			todo.setCreatedAt(currentTimestamp);
+		todo.setUpdatedAt(currentTimestamp);
+		return todoRepository.save(todo);
 	}
 
-	public String updateTodo(Todo todo) {
-		return todoRepository.save(todo) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneTodo(Integer id) {
-		todoRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTodo(Todo todo) {
+		String result = null;
+		if (todoRepository.existsById(todo.getId())) {
+			todoRepository.delete(todo);
+			result = " Todo deleted!";
+		} else {
+			result = "Todo Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

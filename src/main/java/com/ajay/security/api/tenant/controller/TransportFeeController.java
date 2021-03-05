@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.TransportFee;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.TransportFeeService;
 
 @RestController
 @RequestMapping("/transportFee")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class TransportFeeController {
 
 	@Autowired
 	private TransportFeeService transportFeeService;
 
-	@GetMapping("/all")
-	public List<TransportFee> getAllTransportFee() {
-		return transportFeeService.getAllTransportFees();
+	@GetMapping("/listAllTransportFee")
+	public ApiResponse getAllTransportFee() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of TransportFee",
+					transportFeeService.getAllTransportFees());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportFee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public TransportFee getOneTransportFee(@PathVariable Integer id) {
-		return transportFeeService.getOneTransportFee(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneTransportFee(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "TransportFee",
+					transportFeeService.getOneTransportFee(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportFee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveTransportFee(@RequestBody TransportFee transportFee) {
-		return transportFeeService.saveTransportFee(transportFee);
+	@PostMapping("/saveTransportFee")
+	public ApiResponse saveTransportFee(@RequestBody TransportFee transportFee) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "TransportFee saved!",
+					transportFeeService.saveTransportFee(transportFee));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportFee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateTransportFee(@RequestBody TransportFee transportFee) {
-		return transportFeeService.updateTransportFee(transportFee);
+	@PostMapping("/updateTransportFee")
+	public ApiResponse updateTransportFee(@RequestBody TransportFee transportFee) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "TransportFee updated!",
+					transportFeeService.saveTransportFee(transportFee));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportFee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneTransportFee(@PathVariable Integer id) {
-		return transportFeeService.deleteOneTransportFee(id);
+	@PostMapping("/deleteTransportFee")
+	public ApiResponse deleteOneTransportFee(@RequestBody TransportFee transportFee) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					transportFeeService.deleteOneTransportFee(transportFee), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportFee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

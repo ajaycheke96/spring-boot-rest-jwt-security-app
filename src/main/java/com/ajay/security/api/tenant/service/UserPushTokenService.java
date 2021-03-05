@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class UserPushTokenService {
 		return userPushTokenRepository.findById(id).get();
 	}
 
-	public String saveUserPushToken(UserPushToken userPushToken) {
-		return userPushTokenRepository.save(userPushToken) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public UserPushToken saveUserPushToken(UserPushToken userPushToken) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (userPushToken.getCreatedAt() == null)
+			userPushToken.setCreatedAt(currentTimestamp);
+		userPushToken.setUpdatedAt(currentTimestamp);
+		return userPushTokenRepository.save(userPushToken);
 	}
 
-	public String updateUserPushToken(UserPushToken userPushToken) {
-		return userPushTokenRepository.save(userPushToken) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneUserPushToken(Integer id) {
-		userPushTokenRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneUserPushToken(UserPushToken userPushToken) {
+		String result = null;
+		if (userPushTokenRepository.existsById(userPushToken.getId())) {
+			userPushTokenRepository.delete(userPushToken);
+			result = " UserPushToken deleted!";
+		} else {
+			result = "UserPushToken Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

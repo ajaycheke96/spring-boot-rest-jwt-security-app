@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.TransportStoppage;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.TransportStoppageService;
 
 @RestController
 @RequestMapping("/transportStoppage")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class TransportStoppageController {
 
 	@Autowired
 	private TransportStoppageService transportStoppageService;
 
-	@GetMapping("/all")
-	public List<TransportStoppage> getAllTransportStoppage() {
-		return transportStoppageService.getAllTransportStoppages();
+	@GetMapping("/listAllTransportStoppage")
+	public ApiResponse getAllTransportStoppage() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of TransportStoppage",
+					transportStoppageService.getAllTransportStoppages());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportStoppage Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public TransportStoppage getOneTransportStoppage(@PathVariable Integer id) {
-		return transportStoppageService.getOneTransportStoppage(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneTransportStoppage(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "TransportStoppage",
+					transportStoppageService.getOneTransportStoppage(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportStoppage Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveTransportStoppage(@RequestBody TransportStoppage transportStoppage) {
-		return transportStoppageService.saveTransportStoppage(transportStoppage);
+	@PostMapping("/saveTransportStoppage")
+	public ApiResponse saveTransportStoppage(@RequestBody TransportStoppage transportStoppage) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "TransportStoppage saved!",
+					transportStoppageService.saveTransportStoppage(transportStoppage));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportStoppage Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateTransportStoppage(@RequestBody TransportStoppage transportStoppage) {
-		return transportStoppageService.updateTransportStoppage(transportStoppage);
+	@PostMapping("/updateTransportStoppage")
+	public ApiResponse updateTransportStoppage(@RequestBody TransportStoppage transportStoppage) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "TransportStoppage updated!",
+					transportStoppageService.saveTransportStoppage(transportStoppage));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportStoppage Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneTransportStoppage(@PathVariable Integer id) {
-		return transportStoppageService.deleteOneTransportStoppage(id);
+	@PostMapping("/deleteTransportStoppage")
+	public ApiResponse deleteOneTransportStoppage(@RequestBody TransportStoppage transportStoppage) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					transportStoppageService.deleteOneTransportStoppage(transportStoppage), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"TransportStoppage Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

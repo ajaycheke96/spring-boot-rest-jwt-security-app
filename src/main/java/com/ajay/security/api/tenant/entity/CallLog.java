@@ -8,7 +8,6 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -85,14 +84,16 @@ public class CallLog implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to CallingPurpos
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(targetEntity = CallingPurpos.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "calling_purpose_id")
-	@JsonIgnoreProperties({ "callLogs", "hibernateLazyInitializer" })
+//	@JsonIgnoreProperties({ "callLogs" })
 	private CallingPurpos callingPurpos;
 
 	// bi-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 }

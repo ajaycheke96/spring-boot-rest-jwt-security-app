@@ -12,15 +12,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the student_siblings database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -35,22 +41,25 @@ public class StudentSibling implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 50)
 	private String options;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Student
-	@ManyToOne
+	@ManyToOne(targetEntity = Student.class)
 	@JoinColumn(name = "sibling_student_id")
+	@JsonIgnoreProperties({ "studentAccounts", "studentDocuments", "studentRecords", "studentParent", "user" })
 	private Student student1;
 
-	// bi-directional many-to-one association to Student
-	@ManyToOne
-	@JoinColumn(name = "student_id")
-	private Student student2;
+//	// bi-directional many-to-one association to Student
+//	@ManyToOne
+//	@JoinColumn(name = "student_id")
+//	private Student student2;
 
 }

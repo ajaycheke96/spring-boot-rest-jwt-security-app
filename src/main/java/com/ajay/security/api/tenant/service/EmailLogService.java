@@ -23,21 +23,22 @@ public class EmailLogService {
 		return emailLogRepository.findById(id).get();
 	}
 
-	public String saveEmailLog(EmailLog emailLog) {
+	public EmailLog saveEmailLog(EmailLog emailLog) {
 		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
-		emailLog.setCreatedAt(curTimestamp);
+		if (emailLog.getCreatedAt() == null)
+			emailLog.setCreatedAt(curTimestamp);
 		emailLog.setUpdatedAt(curTimestamp);
-		return emailLogRepository.save(emailLog) != null ? " successfully saved!" : "Failed! Please try again!!";
+		return emailLogRepository.save(emailLog);
 	}
 
-	public String updateEmailLog(EmailLog emailLog) {
-		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
-		emailLog.setUpdatedAt(curTimestamp);
-		return emailLogRepository.save(emailLog) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmailLog(Integer id) {
-		emailLogRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmailLog(EmailLog emailLog) {
+		String result = null;
+		if (emailLogRepository.existsById(emailLog.getId())) {
+			emailLogRepository.delete(emailLog);
+			result = " EmailLog deleted!";
+		} else {
+			result = "EmailLog Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

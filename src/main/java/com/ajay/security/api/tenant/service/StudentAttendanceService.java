@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class StudentAttendanceService {
 		return studentAttendanceRepository.findById(id).get();
 	}
 
-	public String saveStudentAttendance(StudentAttendance studentAttendance) {
-		return studentAttendanceRepository.save(studentAttendance) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public StudentAttendance saveStudentAttendance(StudentAttendance studentAttendance) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (studentAttendance.getCreatedAt() == null)
+			studentAttendance.setCreatedAt(currentTimestamp);
+		studentAttendance.setUpdatedAt(currentTimestamp);
+		return studentAttendanceRepository.save(studentAttendance);
 	}
 
-	public String updateStudentAttendance(StudentAttendance studentAttendance) {
-		return studentAttendanceRepository.save(studentAttendance) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneStudentAttendance(Integer id) {
-		studentAttendanceRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneStudentAttendance(StudentAttendance studentAttendance) {
+		String result = null;
+		if (studentAttendanceRepository.existsById(studentAttendance.getId())) {
+			studentAttendanceRepository.delete(studentAttendance);
+			result = " StudentAttendance deleted!";
+		} else {
+			result = "StudentAttendance Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

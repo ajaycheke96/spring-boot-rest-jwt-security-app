@@ -34,7 +34,13 @@ public class EnquirySourceService {
 	}
 
 	public String deleteOneEnquirySource(EnquirySource enquirySource) {
-		enquirySourceRepository.delete(enquirySource);
-		return " successfully deleted!";
+		String result = null;
+		if (enquirySourceRepository.existsById(enquirySource.getId())) {
+			enquirySourceRepository.delete(enquirySource);
+			result = " EnquirySource deleted!";
+		} else {
+			result = "EnquirySource Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

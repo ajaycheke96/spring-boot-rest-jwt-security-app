@@ -1,49 +1,80 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Religion;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.ReligionService;
 
 @RestController
 @RequestMapping("/religion")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ReligionController {
 
 	@Autowired
 	private ReligionService religionService;
 
-	@GetMapping("/all")
-	public List<Religion> getAllReligion() {
-		return religionService.getAllReligions();
+	@GetMapping("/listAllReligion")
+	public ApiResponse getAllReligion() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Religion",
+					religionService.getAllReligions());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Religion Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Religion getOneReligion(@PathVariable Integer id) {
-		return religionService.getOneReligion(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneReligion(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Religion", religionService.getOneReligion(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Religion Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveReligion(@RequestBody Religion religion) {
-		return religionService.saveReligion(religion);
+	@PostMapping("/saveReligion")
+	public ApiResponse saveReligion(@RequestBody Religion religion) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Religion saved!",
+					religionService.saveReligion(religion));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Religion Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateReligion(@RequestBody Religion religion) {
-		return religionService.updateReligion(religion);
+	@PostMapping("/updateReligion")
+	public ApiResponse updateReligion(@RequestBody Religion religion) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Religion updated!",
+					religionService.saveReligion(religion));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Religion Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneReligion(@PathVariable Integer id) {
-		return religionService.deleteOneReligion(id);
+	@PostMapping("/deleteReligion")
+	public ApiResponse deleteOneReligion(@RequestBody Religion religion) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, religionService.deleteOneReligion(religion), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Religion Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

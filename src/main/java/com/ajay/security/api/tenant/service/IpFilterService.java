@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class IpFilterService {
 		return ipFilterRepository.findById(id).get();
 	}
 
-	public String saveIpFilter(IpFilter ipFilter) {
-		return ipFilterRepository.save(ipFilter) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public IpFilter saveIpFilter(IpFilter ipFilter) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (ipFilter.getCreatedAt() == null)
+			ipFilter.setCreatedAt(currentTimestamp);
+		ipFilter.setUpdatedAt(currentTimestamp);
+		return ipFilterRepository.save(ipFilter);
 	}
 
-	public String updateIpFilter(IpFilter ipFilter) {
-		return ipFilterRepository.save(ipFilter) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneIpFilter(Integer id) {
-		ipFilterRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneIpFilter(IpFilter ipFilter) {
+		String result = null;
+		if (ipFilterRepository.existsById(ipFilter.getId())) {
+			ipFilterRepository.delete(ipFilter);
+			result = " IpFilter deleted!";
+		} else {
+			result = "IpFilter Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

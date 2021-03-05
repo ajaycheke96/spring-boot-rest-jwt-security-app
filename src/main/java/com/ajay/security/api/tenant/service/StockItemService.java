@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class StockItemService {
 		return stockItemRepository.findById(id).get();
 	}
 
-	public String saveStockItem(StockItem stockItem) {
-		return stockItemRepository.save(stockItem) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public StockItem saveStockItem(StockItem stockItem) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (stockItem.getCreatedAt() == null)
+			stockItem.setCreatedAt(currentTimestamp);
+		stockItem.setUpdatedAt(currentTimestamp);
+		return stockItemRepository.save(stockItem);
 	}
 
-	public String updateStockItem(StockItem stockItem) {
-		return stockItemRepository.save(stockItem) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneStockItem(Integer id) {
-		stockItemRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneStockItem(StockItem stockItem) {
+		String result = null;
+		if (stockItemRepository.existsById(stockItem.getId())) {
+			stockItemRepository.delete(stockItem);
+			result = " StockItem deleted!";
+		} else {
+			result = "StockItem Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -1,18 +1,18 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Employee;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.EmployeeService;
 
 @RestController
@@ -22,28 +22,58 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	@GetMapping("/all")
-	public List<Employee> getAllEmployee() {
-		return employeeService.getAllEmployees();
+	@RequestMapping(value = "/listAllEmployee")
+	public ApiResponse getAllEmployee() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Employee",
+					employeeService.getAllEmployees());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Employee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Employee getOneEmployee(@PathVariable Integer id) {
-		return employeeService.getOneEmployee(id);
+	@RequestMapping(value = "/{id}")
+	public ApiResponse getOneEmployee(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Employee", employeeService.getOneEmployee(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Employee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveEmployee(@RequestBody Employee employee) {
-		return employeeService.saveEmployee(employee);
+	@RequestMapping(value = "/saveEmployee", method = RequestMethod.POST)
+	public ApiResponse saveEmployee(@RequestBody Employee employee) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Employee saved!",
+					employeeService.saveEmployee(employee));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Employee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateEmployee(@RequestBody Employee employee) {
-		return employeeService.updateEmployee(employee);
+	@RequestMapping(value = "/updateEmployee", method = RequestMethod.POST)
+	public ApiResponse updateEmployee(@RequestBody Employee employee) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Employee updated!",
+					employeeService.saveEmployee(employee));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Employee Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneEmployee(@PathVariable Integer id) {
-		return employeeService.deleteOneEmployee(id);
+	@RequestMapping(value = "/deleteEmployee", method = RequestMethod.POST)
+	public ApiResponse deleteOneEmployee(@RequestBody Employee employee) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					employeeService.deleteOneEmployee(employee), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Employee Service exception : " + e.getLocalizedMessage());
+		}
+
 	}
 }

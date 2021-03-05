@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,31 @@ public class StockTransferService {
 		return stockTransferRepository.findById(id).get();
 	}
 
-	public String saveStockTransfer(StockTransfer stockTransfer) {
-		return stockTransferRepository.save(stockTransfer) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public StockTransfer saveStockTransfer(StockTransfer stockTransfer) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (stockTransfer.getCreatedAt() == null)
+			stockTransfer.setCreatedAt(currentTimestamp);
+		stockTransfer.setUpdatedAt(currentTimestamp);
+
+		// For stockTransferDetails list
+		if (!stockTransfer.getStockTransferDetails().isEmpty())
+			stockTransfer.getStockTransferDetails().forEach(stockTransferDetail -> {
+				if (stockTransferDetail.getCreatedAt() == null)
+					stockTransferDetail.setCreatedAt(currentTimestamp);
+				stockTransferDetail.setUpdatedAt(currentTimestamp);
+			});
+
+		return stockTransferRepository.save(stockTransfer);
 	}
 
-	public String updateStockTransfer(StockTransfer stockTransfer) {
-		return stockTransferRepository.save(stockTransfer) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneStockTransfer(Integer id) {
-		stockTransferRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneStockTransfer(StockTransfer stockTransfer) {
+		String result = null;
+		if (stockTransferRepository.existsById(stockTransfer.getId())) {
+			stockTransferRepository.delete(stockTransfer);
+			result = " StockTransfer deleted!";
+		} else {
+			result = "StockTransfer Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

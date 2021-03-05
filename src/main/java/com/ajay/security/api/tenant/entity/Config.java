@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,8 +39,7 @@ public class Config implements Serializable {
 	@Column(name = "numeric_value")
 	private BigInteger numericValue;
 
-	@Lob
-	@Column(name = "text_value",length = 50)
+	@Column(name = "text_value", length = 50)
 	private String textValue;
 
 }

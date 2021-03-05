@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,71 @@ public class MeetingService {
 		return meetingRepository.findById(id).get();
 	}
 
-	public String saveMeeting(Meeting meeting) {
-		return meetingRepository.save(meeting) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Meeting saveMeeting(Meeting meeting) {
+		Timestamp cuurentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (meeting.getCreatedAt() == null)
+			meeting.setCreatedAt(cuurentTimestamp);
+		meeting.setUpdatedAt(cuurentTimestamp);
+
+		// For MeetingBatches list
+		if (!meeting.getMeetingBatches().isEmpty())
+			meeting.getMeetingBatches().forEach(meetingBatch -> {
+				if (meetingBatch.getCreatedAt() == null)
+					meetingBatch.setCreatedAt(cuurentTimestamp);
+				meetingBatch.setUpdatedAt(cuurentTimestamp);
+			});
+
+		// For MeetingCourses list
+		if (!meeting.getMeetingCourses().isEmpty())
+			meeting.getMeetingCourses().forEach(meetingCourse -> {
+				if (meetingCourse.getCreatedAt() == null)
+					meetingCourse.setCreatedAt(cuurentTimestamp);
+				meetingCourse.setUpdatedAt(cuurentTimestamp);
+			});
+
+		// For MeetingDepartments list
+		if (!meeting.getMeetingDepartments().isEmpty())
+			meeting.getMeetingDepartments().forEach(meetingDepartment -> {
+				if (meetingDepartment.getCreatedAt() == null)
+					meetingDepartment.setCreatedAt(cuurentTimestamp);
+				meetingDepartment.setUpdatedAt(cuurentTimestamp);
+			});
+
+		// For MeetingEmployeeCategories list
+		if (!meeting.getMeetingEmployeeCategories().isEmpty())
+			meeting.getMeetingEmployeeCategories().forEach(meetingEmployeeCategory -> {
+				if (meetingEmployeeCategory.getCreatedAt() == null)
+					meetingEmployeeCategory.setCreatedAt(cuurentTimestamp);
+				meetingEmployeeCategory.setUpdatedAt(cuurentTimestamp);
+			});
+
+		// For MeetingEmployees list
+		if (!meeting.getMeetingEmployees().isEmpty())
+			meeting.getMeetingEmployees().forEach(meetingEmployee -> {
+				if (meetingEmployee.getCreatedAt() == null)
+					meetingEmployee.setCreatedAt(cuurentTimestamp);
+				meetingEmployee.setUpdatedAt(cuurentTimestamp);
+			});
+
+		// For MeetingStudentRecords list
+		if (!meeting.getMeetingStudentRecords().isEmpty())
+			meeting.getMeetingStudentRecords().forEach(meetingStudentRecord -> {
+				if (meetingStudentRecord.getCreatedAt() == null)
+					meetingStudentRecord.setCreatedAt(cuurentTimestamp);
+				meetingStudentRecord.setUpdatedAt(cuurentTimestamp);
+			});
+
+		return meetingRepository.save(meeting);
 	}
 
-	public String updateMeeting(Meeting meeting) {
-		return meetingRepository.save(meeting) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneMeeting(Integer id) {
-		meetingRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneMeeting(Meeting meeting) {
+		String result = null;
+		if (meetingRepository.existsById(meeting.getId())) {
+			meetingRepository.delete(meeting);
+			result = "Meeting deleted!";
+		} else {
+			result = "Meeting not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.ajay.security.api.tenant.service.ExamService;
 
 @RestController
 @RequestMapping("/exam")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ExamController {
 
 	@Autowired
@@ -65,7 +67,7 @@ public class ExamController {
 	@RequestMapping(value = "/deleteExam", method = RequestMethod.POST)
 	public ApiResponse deleteOneExam(@RequestBody Exam exam) {
 		try {
-			return new ApiResponse(LocalDateTime.now(), 200, null, "Exam deleted!", examService.deleteOneExam(exam));
+			return new ApiResponse(LocalDateTime.now(), 200, null, examService.deleteOneExam(exam), null);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
 					"Exam Service exception : " + e.getLocalizedMessage());

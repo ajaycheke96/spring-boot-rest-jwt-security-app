@@ -6,18 +6,17 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,11 +51,9 @@ public class ClassTeacher implements Serializable {
 	@Column(name = "date_effective")
 	private Date dateEffective;
 
-	@Lob
 	@Column(length = 50)
 	private String description;
 
-	@Lob
 	@Column(length = 50)
 	private String options;
 
@@ -65,13 +62,17 @@ public class ClassTeacher implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
+	@JsonIgnoreProperties({ "course", "examGrade", "examObservation" })
 	private Batch batch;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Employee.class)
+	@ManyToOne(targetEntity = Employee.class)
 	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 }

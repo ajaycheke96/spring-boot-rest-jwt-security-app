@@ -9,21 +9,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the postal_records database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -38,6 +43,7 @@ public class PostalRecord implements Serializable {
 	private Integer id;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -52,7 +58,6 @@ public class PostalRecord implements Serializable {
 	@Column(length = 50)
 	private String options;
 
-	@Lob
 	@Column(name = "receiver_address", length = 100)
 	private String receiverAddress;
 
@@ -62,7 +67,6 @@ public class PostalRecord implements Serializable {
 	@Column(name = "reference_number", length = 50)
 	private String referenceNumber;
 
-	@Lob
 	@Column(name = "sender_address", length = 100)
 	private String senderAddress;
 
@@ -73,6 +77,7 @@ public class PostalRecord implements Serializable {
 	private String type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -83,6 +88,7 @@ public class PostalRecord implements Serializable {
 
 	// bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonIgnoreProperties("postalRecords")
 	private User user;
 
 }

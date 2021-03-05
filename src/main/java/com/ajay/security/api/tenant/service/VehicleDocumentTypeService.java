@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class VehicleDocumentTypeService {
 		return vehicleDocumentTypeRepository.findById(id).get();
 	}
 
-	public String saveVehicleDocumentType(VehicleDocumentType vehicleDocumentType) {
-		return vehicleDocumentTypeRepository.save(vehicleDocumentType) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public VehicleDocumentType saveVehicleDocumentType(VehicleDocumentType vehicleDocumentType) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (vehicleDocumentType.getCreatedAt() == null)
+			vehicleDocumentType.setCreatedAt(currentTimestamp);
+		vehicleDocumentType.setUpdatedAt(currentTimestamp);
+		return vehicleDocumentTypeRepository.save(vehicleDocumentType);
 	}
 
-	public String updateVehicleDocumentType(VehicleDocumentType vehicleDocumentType) {
-		return vehicleDocumentTypeRepository.save(vehicleDocumentType) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneVehicleDocumentType(Integer id) {
-		vehicleDocumentTypeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVehicleDocumentType(VehicleDocumentType vehicleDocumentType) {
+		String result = null;
+		if (vehicleDocumentTypeRepository.existsById(vehicleDocumentType.getId())) {
+			vehicleDocumentTypeRepository.delete(vehicleDocumentType);
+			result = " VehicleDocumentType deleted!";
+		} else {
+			result = "VehicleDocumentType Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

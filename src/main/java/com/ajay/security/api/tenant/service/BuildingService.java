@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,34 @@ public class BuildingService {
 		return buildingRepository.findById(id).get();
 	}
 
-	public String saveBuilding(Building building) {
-		return buildingRepository.save(building) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Building saveBuilding(Building building) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (building.getCreatedAt() == null)
+			building.setCreatedAt(currentTimestamp);
+		building.setUpdatedAt(currentTimestamp);
+
+		// For Rooms list
+		if (!building.getRooms().isEmpty())
+			building.getRooms().forEach(room -> {
+				if (room.getCreatedAt() == null)
+					room.setCreatedAt(currentTimestamp);
+				room.setUpdatedAt(currentTimestamp);
+
+				room.setBuilding(building);
+
+			});
+
+		return buildingRepository.save(building);
 	}
 
-	public String updateBuilding(Building building) {
-		return buildingRepository.save(building) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneBuilding(Integer id) {
-		buildingRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneBuilding(Building building) {
+		String result = null;
+		if (buildingRepository.existsById(building.getId())) {
+			buildingRepository.delete(building);
+			result = "Building deleted!";
+		} else {
+			result = "Building not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

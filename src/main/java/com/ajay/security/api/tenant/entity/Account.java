@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -90,7 +91,7 @@ public class Account implements Serializable {
 
 	// bi-directional many-to-one association to Transaction
 //	@OneToMany(mappedBy = "account")
-	@OneToMany(targetEntity = Transaction.class)
+	@OneToMany(targetEntity = Transaction.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id")
 	private List<Transaction> transactions;
 

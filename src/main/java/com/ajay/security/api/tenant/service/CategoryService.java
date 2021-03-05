@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,22 @@ public class CategoryService {
 		return categoryRepository.findById(id).get();
 	}
 
-	public String saveCategory(Category category) {
-		return categoryRepository.save(category) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Category saveCategory(Category category) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (category.getCreatedAt() == null)
+			category.setCreatedAt(currentTimestamp);
+		category.setUpdatedAt(currentTimestamp);
+		return categoryRepository.save(category);
 	}
 
-	public String updateCategory(Category category) {
-		return categoryRepository.save(category) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneCategory(Integer id) {
-		categoryRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneCategory(Category category) {
+		String result = null;
+		if (categoryRepository.existsById(category.getId())) {
+			categoryRepository.delete(category);
+			result = " Category deleted!";
+		} else {
+			result = "Category Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,22 @@ public class BloodGroupService {
 		return bloodGroupRepository.findById(id).get();
 	}
 
-	public String saveBloodGroup(BloodGroup bloodGroup) {
-		return bloodGroupRepository.save(bloodGroup) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public BloodGroup saveBloodGroup(BloodGroup bloodGroup) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (bloodGroup.getCreatedAt() == null)
+			bloodGroup.setCreatedAt(currentTimestamp);
+		bloodGroup.setUpdatedAt(currentTimestamp);
+		return bloodGroupRepository.save(bloodGroup);
 	}
 
-	public String updateBloodGroup(BloodGroup bloodGroup) {
-		return bloodGroupRepository.save(bloodGroup) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneBloodGroup(Integer id) {
-		bloodGroupRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneBloodGroup(BloodGroup bloodGroup) {
+		String result = null;
+		if (bloodGroupRepository.existsById(bloodGroup.getId())) {
+			bloodGroupRepository.delete(bloodGroup);
+			result = " BloodGroup deleted!";
+		} else {
+			result = "BloodGroup Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

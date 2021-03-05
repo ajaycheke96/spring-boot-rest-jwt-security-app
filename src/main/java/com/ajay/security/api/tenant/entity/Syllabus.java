@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -72,20 +73,27 @@ public class Syllabus implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to SyllabusDetail
-	@OneToMany(mappedBy = "syllabus")
+//	@OneToMany(mappedBy = "syllabus", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = SyllabusDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "syllabus_id")
 	private List<SyllabusDetail> syllabusDetails;
 
 	// bi-directional many-to-one association to SyllabusTopic
-	@OneToMany(mappedBy = "syllabus")
+//	@OneToMany(mappedBy = "syllabus")
+	@OneToMany(targetEntity = SyllabusTopic.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "syllabus_id")
 	private List<SyllabusTopic> syllabusTopics;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Employee.class)
+	@ManyToOne(targetEntity = Employee.class)
 	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@ManyToOne(targetEntity = Subject.class)
 	@JoinColumn(name = "subject_id")
 	private Subject subject;
 

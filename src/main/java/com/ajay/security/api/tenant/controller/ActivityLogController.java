@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.ActivityLog;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.ActivityLogService;
 
 @RestController
 @RequestMapping("/activityLog")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ActivityLogController {
 
 	@Autowired
 	private ActivityLogService activityLogService;
 
-	@GetMapping("/all")
-	public List<ActivityLog> getAllActivityLog() {
-		return activityLogService.getAllActivityLogs();
+	@GetMapping("/listAllActivityLog")
+	public ApiResponse getAllActivityLog() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of ActivityLog",
+					activityLogService.getAllActivityLogs());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ActivityLog Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public ActivityLog getOneActivityLog(@PathVariable Integer id) {
-		return activityLogService.getOneActivityLog(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneActivityLog(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ActivityLog",
+					activityLogService.getOneActivityLog(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ActivityLog Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveActivityLog(@RequestBody ActivityLog activityLog) {
-		return activityLogService.saveActivityLog(activityLog);
+	@PostMapping("/saveActivityLog")
+	public ApiResponse saveActivityLog(@RequestBody ActivityLog activityLog) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ActivityLog saved!",
+					activityLogService.saveActivityLog(activityLog));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ActivityLog Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateActivityLog(@RequestBody ActivityLog activityLog) {
-		return activityLogService.updateActivityLog(activityLog);
+	@PostMapping("/updateActivityLog")
+	public ApiResponse updateActivityLog(@RequestBody ActivityLog activityLog) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ActivityLog updated!",
+					activityLogService.saveActivityLog(activityLog));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ActivityLog Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneActivityLog(@PathVariable Integer id) {
-		return activityLogService.deleteOneActivityLog(id);
+	@PostMapping("/deleteActivityLog")
+	public ApiResponse deleteOneActivityLog(@RequestBody ActivityLog activityLog) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, activityLogService.deleteOneActivityLog(activityLog),
+					null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ActivityLog Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

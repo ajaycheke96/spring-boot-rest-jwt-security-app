@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -43,14 +42,12 @@ public class Batch implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Lob
 	@Column(length = 50)
 	private String description;
 
 	@Column(length = 20)
 	private String name;
 
-	@Lob
 	@Column(length = 30)
 	private String options;
 

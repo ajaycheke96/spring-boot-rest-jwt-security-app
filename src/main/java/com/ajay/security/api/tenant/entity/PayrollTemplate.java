@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,7 +70,7 @@ public class PayrollTemplate implements Serializable {
 
 	// bi-directional many-to-one association to PayrollTemplateDetail
 //	@OneToMany(mappedBy = "payrollTemplate", cascade = CascadeType.ALL)
-	@OneToMany(targetEntity = PayrollTemplateDetail.class)
+	@OneToMany(targetEntity = PayrollTemplateDetail.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "payroll_template_id")
 	private List<PayrollTemplateDetail> payrollTemplateDetails;
 

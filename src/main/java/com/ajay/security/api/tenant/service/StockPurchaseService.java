@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,30 @@ public class StockPurchaseService {
 		return stockPurchaseRepository.findById(id).get();
 	}
 
-	public String saveStockPurchase(StockPurchase stockPurchase) {
-		return stockPurchaseRepository.save(stockPurchase) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public StockPurchase saveStockPurchase(StockPurchase stockPurchase) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (stockPurchase.getCreatedAt() == null)
+			stockPurchase.setCreatedAt(currentTimestamp);
+		stockPurchase.setUpdatedAt(currentTimestamp);
+
+		// For StockPurchaseDetails list
+		if (!stockPurchase.getStockPurchaseDetails().isEmpty())
+			stockPurchase.getStockPurchaseDetails().forEach(stockPurchaseDetail -> {
+				if (stockPurchaseDetail.getCreatedAt() == null)
+					stockPurchaseDetail.setCreatedAt(currentTimestamp);
+				stockPurchaseDetail.setUpdatedAt(currentTimestamp);
+			});
+		return stockPurchaseRepository.save(stockPurchase);
 	}
 
-	public String updateStockPurchase(StockPurchase stockPurchase) {
-		return stockPurchaseRepository.save(stockPurchase) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneStockPurchase(Integer id) {
-		stockPurchaseRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneStockPurchase(StockPurchase stockPurchase) {
+		String result = null;
+		if (stockPurchaseRepository.existsById(stockPurchase.getId())) {
+			stockPurchaseRepository.delete(stockPurchase);
+			result = " StockPurchase deleted!";
+		} else {
+			result = "StockPurchase Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

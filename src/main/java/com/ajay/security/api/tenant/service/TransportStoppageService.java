@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class TransportStoppageService {
 		return transportStoppageRepository.findById(id).get();
 	}
 
-	public String saveTransportStoppage(TransportStoppage transportStoppage) {
-		return transportStoppageRepository.save(transportStoppage) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public TransportStoppage saveTransportStoppage(TransportStoppage transportStoppage) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (transportStoppage.getCreatedAt() == null)
+			transportStoppage.setCreatedAt(currentTimestamp);
+		transportStoppage.setUpdatedAt(currentTimestamp);
+		return transportStoppageRepository.save(transportStoppage);
 	}
 
-	public String updateTransportStoppage(TransportStoppage transportStoppage) {
-		return transportStoppageRepository.save(transportStoppage) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneTransportStoppage(Integer id) {
-		transportStoppageRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTransportStoppage(TransportStoppage transportStoppage) {
+		String result = null;
+		if (transportStoppageRepository.existsById(transportStoppage.getId())) {
+			transportStoppageRepository.delete(transportStoppage);
+			result = " TransportStoppage deleted!";
+		} else {
+			result = "TransportStoppage Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

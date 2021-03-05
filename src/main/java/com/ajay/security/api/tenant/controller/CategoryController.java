@@ -1,49 +1,80 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Category;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.CategoryService;
 
 @RestController
 @RequestMapping("/category")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
 
-	@GetMapping("/all")
-	public List<Category> getAllCategory() {
-		return categoryService.getAllCategorys();
+	@GetMapping("/listAllCategory")
+	public ApiResponse getAllCategory() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Category",
+					categoryService.getAllCategorys());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Category Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Category getOneCategory(@PathVariable Integer id) {
-		return categoryService.getOneCategory(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneCategory(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Category", categoryService.getOneCategory(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Category Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveCategory(@RequestBody Category category) {
-		return categoryService.saveCategory(category);
+	@PostMapping("/saveCategory")
+	public ApiResponse saveCategory(@RequestBody Category category) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Category saved!",
+					categoryService.saveCategory(category));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Category Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateCategory(@RequestBody Category category) {
-		return categoryService.updateCategory(category);
+	@PostMapping("/updateCategory")
+	public ApiResponse updateCategory(@RequestBody Category category) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Category updated!",
+					categoryService.saveCategory(category));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Category Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneCategory(@PathVariable Integer id) {
-		return categoryService.deleteOneCategory(id);
+	@PostMapping("/deleteCategory")
+	public ApiResponse deleteOneCategory(@RequestBody Category category) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, categoryService.deleteOneCategory(category), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Category Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

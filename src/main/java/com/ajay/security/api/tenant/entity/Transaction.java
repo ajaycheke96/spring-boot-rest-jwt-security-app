@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -159,7 +161,9 @@ public class Transaction implements Serializable {
 	// bi-directional many-to-one association to Employee
 	@ManyToOne(targetEntity = Employee.class)
 	@JoinColumn(name = "employee_id")
-//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 //	// bi-directional many-to-one association to Expens
@@ -187,7 +191,7 @@ public class Transaction implements Serializable {
 	// bi-directional many-to-one association to Registration
 	@ManyToOne(targetEntity = Registration.class)
 	@JoinColumn(name = "registration_id")
-//	@JsonIgnoreProperties(value = { "transactions", "hibernateLazyInitializer" })
+	@JsonIgnoreProperties(value = { "cours", "institute", "student" })
 	private Registration registration;
 
 //	// bi-directional many-to-one association to StudentFeeRecord
@@ -198,7 +202,7 @@ public class Transaction implements Serializable {
 //	private StudentFeeRecord studentFeeRecord;
 
 	// bi-directional many-to-one association to Transaction
-	@ManyToOne(targetEntity = Transaction.class)
+	@ManyToOne(targetEntity = Transaction.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "transaction_group_id")
 	private Transaction transaction;
 
@@ -210,6 +214,8 @@ public class Transaction implements Serializable {
 	// bi-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 }

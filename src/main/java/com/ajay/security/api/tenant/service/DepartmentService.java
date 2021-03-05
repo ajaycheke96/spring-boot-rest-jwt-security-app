@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,22 @@ public class DepartmentService {
 		return departmentRepository.findById(id).get();
 	}
 
-	public String saveDepartment(Department department) {
-		return departmentRepository.save(department) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Department saveDepartment(Department department) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (department.getCreatedAt() == null)
+			department.setCreatedAt(currentTimestamp);
+		department.setUpdatedAt(currentTimestamp);
+		return departmentRepository.save(department);
 	}
 
-	public String updateDepartment(Department department) {
-		return departmentRepository.save(department) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneDepartment(Integer id) {
-		departmentRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneDepartment(Department department) {
+		String result = null;
+		if (departmentRepository.existsById(department.getId())) {
+			departmentRepository.delete(department);
+			result = " Department deleted!";
+		} else {
+			result = "Department Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

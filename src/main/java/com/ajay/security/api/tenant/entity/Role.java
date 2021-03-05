@@ -9,11 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -25,21 +30,23 @@ public class Role {
 	private Integer id;
 
 	private String name;
-	
-	@Column(name="created_at")
+
+	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Column(name="guard_name")
+	@Column(name = "guard_name")
 	private String guardName;
 
-	@Column(name="updated_at")
+	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	//bi-directional many-to-one association to ModelHasRole
+	// bi-directional many-to-one association to ModelHasRole
 //	@OneToMany(mappedBy="role")
 //	private List<ModelHasRole> modelHasRoles;
 
-	//bi-directional many-to-many association to Permission
+	// bi-directional many-to-many association to Permission
 //	@ManyToMany
 //	@JoinTable(
 //		name="role_has_permissions"

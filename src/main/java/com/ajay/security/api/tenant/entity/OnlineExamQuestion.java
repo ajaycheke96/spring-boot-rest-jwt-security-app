@@ -9,19 +9,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the online_exam_questions database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -39,6 +42,7 @@ public class OnlineExamQuestion implements Serializable {
 	private String answers;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	private String image;
@@ -57,14 +61,15 @@ public class OnlineExamQuestion implements Serializable {
 	private String questionType;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
 	private String uploadToken;
 
-	// bi-directional many-to-one association to OnlineExam
-	@ManyToOne
-	@JoinColumn(name = "online_exam_id")
-	private OnlineExam onlineExam;
+//	// bi-directional many-to-one association to OnlineExam
+//	@ManyToOne
+//	@JoinColumn(name = "online_exam_id")
+//	private OnlineExam onlineExam;
 
 }

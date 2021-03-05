@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,51 @@ public class VehicleService {
 		return vehicleRepository.findById(id).get();
 	}
 
-	public String saveVehicle(Vehicle vehicle) {
-		return vehicleRepository.save(vehicle) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Vehicle saveVehicle(Vehicle vehicle) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (vehicle.getCreatedAt() == null)
+			vehicle.setCreatedAt(currentTimestamp);
+		vehicle.setUpdatedAt(currentTimestamp);
+
+		// set VehicleDocuments
+		if (!vehicle.getVehicleDocuments().isEmpty())
+			vehicle.getVehicleDocuments().forEach(vehicleDocument -> {
+				if (vehicleDocument.getCreatedAt() == null)
+					vehicleDocument.setCreatedAt(currentTimestamp);
+				vehicleDocument.setUpdatedAt(currentTimestamp);
+			});
+
+		// set VehicleFuels
+		if (!vehicle.getVehicleFuels().isEmpty())
+			vehicle.getVehicleFuels().forEach(vehicleFuel -> {
+				if (vehicleFuel.getCreatedAt() == null)
+					vehicleFuel.setCreatedAt(currentTimestamp);
+				vehicleFuel.setUpdatedAt(currentTimestamp);
+			});
+
+//		// set VehicleIncharges
+//		if (!vehicle.getVehicleIncharges().isEmpty())
+//			vehicle.getVehicleIncharges().forEach(vehicleIncharge -> {
+//				if (vehicleIncharge.getCreatedAt() == null)
+//					vehicleIncharge.setCreatedAt(currentTimestamp);
+//				vehicleIncharge.setUpdatedAt(currentTimestamp);
+//			});
+
+		// set VehicleLogs here
+
+		// set VehiclePerformanceCriterias here
+
+		return vehicleRepository.save(vehicle);
 	}
 
-	public String updateVehicle(Vehicle vehicle) {
-		return vehicleRepository.save(vehicle) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneVehicle(Integer id) {
-		vehicleRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVehicle(Vehicle vehicle) {
+		String result = null;
+		if (vehicleRepository.existsById(vehicle.getId())) {
+			vehicleRepository.delete(vehicle);
+			result = " Vehicle deleted!";
+		} else {
+			result = "Vehicle Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

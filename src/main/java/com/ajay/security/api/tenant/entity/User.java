@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -153,7 +154,7 @@ public class User {
 //	private List<Meeting> meetings;
 
 	// bi-directional many-to-one association to PostalRecord
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("user")
 	private List<PostalRecord> postalRecords;
 
@@ -182,10 +183,10 @@ public class User {
 //	@JsonIgnoreProperties("user")
 //	private List<Student> students;
 
-	// bi-directional many-to-one association to Todo
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties("user")
-	private List<Todo> todos;
+//	// bi-directional many-to-one association to Todo
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<Todo> todos;
 
 //	// bi-directional many-to-one association to Transaction
 //	@OneToMany(mappedBy = "user")
@@ -193,13 +194,13 @@ public class User {
 //	private List<Transaction> transactions;
 
 	// bi-directional many-to-one association to Upload
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("user")
 	private List<Upload> uploads;
 
 	// bi-directional many-to-one association to UserPreference
 	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties({"user", "academicSession"})
+	@JsonIgnoreProperties({ "user", "academicSession" })
 	private List<UserPreference> userPreferences;
 
 	// bi-directional many-to-one association to UserPushToken

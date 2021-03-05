@@ -6,15 +6,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -50,8 +47,8 @@ public class StudentAttendance implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_attendance")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfAttendance;
 
 	@Column(name = "is_default", length = 20)
@@ -68,12 +65,12 @@ public class StudentAttendance implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@ManyToOne(targetEntity = Subject.class)
 	@JoinColumn(name = "subject_id")
 	private Subject subject;
 }

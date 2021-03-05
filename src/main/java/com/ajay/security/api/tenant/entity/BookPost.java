@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,7 +70,7 @@ public class BookPost implements Serializable {
 
 	// bi-directional many-to-one association to BookPostDetail
 //	@OneToMany(mappedBy = "bookPost")
-	@OneToMany(targetEntity = BookPostDetail.class)
+	@OneToMany(targetEntity = BookPostDetail.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "book_post_id")
 	private List<BookPostDetail> bookPostDetails;
 

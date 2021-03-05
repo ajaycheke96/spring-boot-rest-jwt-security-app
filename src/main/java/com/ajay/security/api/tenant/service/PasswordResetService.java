@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,21 @@ public class PasswordResetService {
 		return passwordResetRepository.findByEmail(email);
 	}
 
-	public String savePasswordReset(PasswordReset passwordReset) {
-		return passwordResetRepository.save(passwordReset) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
-	}
-
-	public String updatePasswordReset(PasswordReset passwordReset) {
-		return passwordResetRepository.save(passwordReset) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
+	public PasswordReset savePasswordReset(PasswordReset passwordReset) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (passwordReset.getCreatedAt() == null)
+			passwordReset.setCreatedAt(currentTimestamp);
+		return passwordResetRepository.save(passwordReset);
 	}
 
 	public String deleteOnePasswordReset(PasswordReset passwordReset) {
-		passwordResetRepository.delete(passwordReset);
-		return " successfully deleted!";
+		String result = null;
+		if (passwordResetRepository.existsById(passwordReset.getEmail())) {
+			passwordResetRepository.delete(passwordReset);
+			result = " PasswordReset deleted!";
+		} else {
+			result = "PasswordReset Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

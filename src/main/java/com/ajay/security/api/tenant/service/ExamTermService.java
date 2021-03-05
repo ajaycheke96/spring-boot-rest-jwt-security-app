@@ -34,7 +34,13 @@ public class ExamTermService {
 	}
 
 	public String deleteOneExamTerm(ExamTerm examTerm) {
-		examTermRepository.delete(examTerm);
-		return " successfully deleted!";
+		String result = null;
+		if (examTermRepository.existsById(examTerm.getId())) {
+			examTermRepository.delete(examTerm);
+			result = " ExamTerm deleted!";
+		} else {
+			result = "ExamTerm Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class StockCategoryService {
 		return stockCategoryRepository.findById(id).get();
 	}
 
-	public String saveStockCategory(StockCategory stockCategory) {
-		return stockCategoryRepository.save(stockCategory) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public StockCategory saveStockCategory(StockCategory stockCategory) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (stockCategory.getCreatedAt() == null)
+			stockCategory.setCreatedAt(currentTimestamp);
+		stockCategory.setUpdatedAt(currentTimestamp);
+		return stockCategoryRepository.save(stockCategory);
 	}
 
-	public String updateStockCategory(StockCategory stockCategory) {
-		return stockCategoryRepository.save(stockCategory) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneStockCategory(Integer id) {
-		stockCategoryRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneStockCategory(StockCategory stockCategory) {
+		String result = null;
+		if (stockCategoryRepository.existsById(stockCategory.getId())) {
+			stockCategoryRepository.delete(stockCategory);
+			result = " StockCategory deleted!";
+		} else {
+			result = "StockCategory Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,30 @@ public class EmployeeLeaveAllocationService {
 		return employeeLeaveAllocationRepository.findById(id).get();
 	}
 
-	public String saveEmployeeLeaveAllocation(EmployeeLeaveAllocation employeeLeaveAllocation) {
-		return employeeLeaveAllocationRepository.save(employeeLeaveAllocation) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeLeaveAllocation saveEmployeeLeaveAllocation(EmployeeLeaveAllocation employeeLeaveAllocation) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeLeaveAllocation.getCreatedAt() == null)
+			employeeLeaveAllocation.setCreatedAt(currentTimestamp);
+		employeeLeaveAllocation.setUpdatedAt(currentTimestamp);
+
+		// For employeeLeaveAllocationDetails list
+		if (!employeeLeaveAllocation.getEmployeeLeaveAllocationDetails().isEmpty())
+			employeeLeaveAllocation.getEmployeeLeaveAllocationDetails().forEach(employeeLeaveAllocationDetail -> {
+				if (employeeLeaveAllocationDetail.getCreatedAt() == null)
+					employeeLeaveAllocationDetail.setCreatedAt(currentTimestamp);
+				employeeLeaveAllocationDetail.setUpdatedAt(currentTimestamp);
+			});
+		return employeeLeaveAllocationRepository.save(employeeLeaveAllocation);
 	}
 
-	public String updateEmployeeLeaveAllocation(EmployeeLeaveAllocation employeeLeaveAllocation) {
-		return employeeLeaveAllocationRepository.save(employeeLeaveAllocation) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeLeaveAllocation(Integer id) {
-		employeeLeaveAllocationRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeLeaveAllocation(EmployeeLeaveAllocation employeeLeaveAllocation) {
+		String result = null;
+		if (employeeLeaveAllocationRepository.existsById(employeeLeaveAllocation.getId())) {
+			employeeLeaveAllocationRepository.delete(employeeLeaveAllocation);
+			result = " EmployeeLeaveAllocation deleted!";
+		} else {
+			result = "EmployeeLeaveAllocation Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

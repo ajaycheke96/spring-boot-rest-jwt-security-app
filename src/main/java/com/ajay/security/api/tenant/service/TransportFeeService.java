@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,30 @@ public class TransportFeeService {
 		return transportFeeRepository.findById(id).get();
 	}
 
-	public String saveTransportFee(TransportFee transportFee) {
-		return transportFeeRepository.save(transportFee) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public TransportFee saveTransportFee(TransportFee transportFee) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (transportFee.getCreatedAt() == null)
+			transportFee.setCreatedAt(currentTimestamp);
+		transportFee.setUpdatedAt(currentTimestamp);
+
+		// For transportFeeDetails list
+		if (!transportFee.getTransportFeeDetails().isEmpty())
+			transportFee.getTransportFeeDetails().forEach(transportFeeDetail -> {
+				if (transportFeeDetail.getCreatedAt() == null)
+					transportFeeDetail.setCreatedAt(currentTimestamp);
+				transportFeeDetail.setUpdatedAt(currentTimestamp);
+			});
+		return transportFeeRepository.save(transportFee);
 	}
 
-	public String updateTransportFee(TransportFee transportFee) {
-		return transportFeeRepository.save(transportFee) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneTransportFee(Integer id) {
-		transportFeeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTransportFee(TransportFee transportFee) {
+		String result = null;
+		if (transportFeeRepository.existsById(transportFee.getId())) {
+			transportFeeRepository.delete(transportFee);
+			result = " TransportFee deleted!";
+		} else {
+			result = "TransportFee Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

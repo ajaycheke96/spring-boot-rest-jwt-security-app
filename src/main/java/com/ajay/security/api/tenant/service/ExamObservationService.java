@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,30 @@ public class ExamObservationService {
 		return examObservationRepository.findById(id).get();
 	}
 
-	public String saveExamObservation(ExamObservation examObservation) {
-		return examObservationRepository.save(examObservation) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public ExamObservation saveExamObservation(ExamObservation examObservation) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (examObservation.getCreatedAt() == null)
+			examObservation.setCreatedAt(currentTimestamp);
+		examObservation.setUpdatedAt(currentTimestamp);
+
+		// For examObservationDetails list
+		if (!examObservation.getExamObservationDetails().isEmpty())
+			examObservation.getExamObservationDetails().forEach(examObservationDetail -> {
+				if (examObservationDetail.getCreatedAt() == null)
+					examObservationDetail.setCreatedAt(currentTimestamp);
+				examObservationDetail.setUpdatedAt(currentTimestamp);
+			});
+		return examObservationRepository.save(examObservation);
 	}
 
-	public String updateExamObservation(ExamObservation examObservation) {
-		return examObservationRepository.save(examObservation) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneExamObservation(Integer id) {
-		examObservationRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneExamObservation(ExamObservation examObservation) {
+		String result = null;
+		if (examObservationRepository.existsById(examObservation.getId())) {
+			examObservationRepository.delete(examObservation);
+			result = " ExamObservation deleted!";
+		} else {
+			result = "ExamObservation Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

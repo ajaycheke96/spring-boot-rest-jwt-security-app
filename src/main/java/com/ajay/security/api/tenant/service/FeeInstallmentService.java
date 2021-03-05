@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,29 @@ public class FeeInstallmentService {
 		return feeInstallmentRepository.findById(id).get();
 	}
 
-	public String saveFeeInstallment(FeeInstallment feeInstallment) {
-		return feeInstallmentRepository.save(feeInstallment) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public FeeInstallment saveFeeInstallment(FeeInstallment feeInstallment) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (feeInstallment.getCreatedAt() == null)
+			feeInstallment.setCreatedAt(currentTimestamp);
+		feeInstallment.setUpdatedAt(currentTimestamp);
+
+		if (!feeInstallment.getFeeInstallmentDetails().isEmpty())
+			feeInstallment.getFeeInstallmentDetails().forEach(feeInstallmentDetail -> {
+				if (feeInstallmentDetail.getCreatedAt() == null)
+					feeInstallmentDetail.setCreatedAt(currentTimestamp);
+				feeInstallmentDetail.setUpdatedAt(currentTimestamp);
+			});
+		return feeInstallmentRepository.save(feeInstallment);
 	}
 
-	public String updateFeeInstallment(FeeInstallment feeInstallment) {
-		return feeInstallmentRepository.save(feeInstallment) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneFeeInstallment(Integer id) {
-		feeInstallmentRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneFeeInstallment(FeeInstallment feeInstallment) {
+		String result = null;
+		if (feeInstallmentRepository.existsById(feeInstallment.getId())) {
+			feeInstallmentRepository.delete(feeInstallment);
+			result = " FeeInstallment deleted!";
+		} else {
+			result = "FeeInstallment Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

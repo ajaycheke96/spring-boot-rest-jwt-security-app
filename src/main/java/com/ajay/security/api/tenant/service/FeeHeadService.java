@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class FeeHeadService {
 		return feeHeadRepository.findById(id).get();
 	}
 
-	public String saveFeeHead(FeeHead feeHead) {
-		return feeHeadRepository.save(feeHead) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public FeeHead saveFeeHead(FeeHead feeHead) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (feeHead.getCreatedAt() == null)
+			feeHead.setCreatedAt(currentTimestamp);
+		feeHead.setUpdatedAt(currentTimestamp);
+		return feeHeadRepository.save(feeHead);
 	}
 
-	public String updateFeeHead(FeeHead feeHead) {
-		return feeHeadRepository.save(feeHead) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneFeeHead(Integer id) {
-		feeHeadRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneFeeHead(FeeHead feeHead) {
+		String result = null;
+		if (feeHeadRepository.existsById(feeHead.getId())) {
+			feeHeadRepository.delete(feeHead);
+			result = " FeeHead deleted!";
+		} else {
+			result = "FeeHead Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

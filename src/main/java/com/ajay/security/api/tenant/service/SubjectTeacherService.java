@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class SubjectTeacherService {
 		return subjectTeacherRepository.findById(id).get();
 	}
 
-	public String saveSubjectTeacher(SubjectTeacher subjectTeacher) {
-		return subjectTeacherRepository.save(subjectTeacher) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public SubjectTeacher saveSubjectTeacher(SubjectTeacher subjectTeacher) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (subjectTeacher.getCreatedAt() == null)
+			subjectTeacher.setCreatedAt(currentTimestamp);
+		subjectTeacher.setUpdatedAt(currentTimestamp);
+		return subjectTeacherRepository.save(subjectTeacher);
 	}
 
-	public String updateSubjectTeacher(SubjectTeacher subjectTeacher) {
-		return subjectTeacherRepository.save(subjectTeacher) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneSubjectTeacher(Integer id) {
-		subjectTeacherRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneSubjectTeacher(SubjectTeacher subjectTeacher) {
+		String result = null;
+		if (subjectTeacherRepository.existsById(subjectTeacher.getId())) {
+			subjectTeacherRepository.delete(subjectTeacher);
+			result = " SubjectTeacher deleted!";
+		} else {
+			result = "SubjectTeacher Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -60,11 +60,14 @@ public class TransportRoute implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to TransportRouteDetail
-	@OneToMany(mappedBy = "transportRoute")
+//	@OneToMany(mappedBy = "transportRoute")
+	@OneToMany(targetEntity = TransportRouteDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "transport_route_id")
+//	@JsonIgnoreProperties("transportRoute")
 	private List<TransportRouteDetail> transportRouteDetails;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 }

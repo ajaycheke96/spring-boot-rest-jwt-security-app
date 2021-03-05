@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,22 @@ public class AdmissionService {
 		return admissionRepository.findById(id).get();
 	}
 
-	public String saveAdmission(Admission admission) {
-		return admissionRepository.save(admission) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Admission saveAdmission(Admission admission) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (admission.getCreatedAt() == null)
+			admission.setCreatedAt(currentTimestamp);
+		admission.setUpdatedAt(currentTimestamp);
+		return admissionRepository.save(admission);
 	}
 
-	public String updateAdmission(Admission admission) {
-		return admissionRepository.save(admission) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneAdmission(Integer id) {
-		admissionRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneAdmission(Admission admission) {
+		String result = null;
+		if (admissionRepository.existsById(admission.getId())) {
+			admissionRepository.delete(admission);
+			result = " Admission deleted!";
+		} else {
+			result = "Admission Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

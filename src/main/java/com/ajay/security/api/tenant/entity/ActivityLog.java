@@ -11,9 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -29,9 +26,6 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-
-@DynamicUpdate
-@DynamicInsert
 
 @Entity
 @Table(name = "activity_log")
@@ -51,7 +45,7 @@ public class ActivityLog implements Serializable {
 	private String causerType;
 
 	@Column(name = "created_at")
-	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss a", timezone = "IST")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Lob
@@ -76,7 +70,7 @@ public class ActivityLog implements Serializable {
 	private String subjectType;
 
 	@Column(name = "updated_at")
-	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss a", timezone = "IST")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 }

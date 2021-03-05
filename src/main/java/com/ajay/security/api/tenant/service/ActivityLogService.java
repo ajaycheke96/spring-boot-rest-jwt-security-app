@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.ajay.security.api.tenant.entity.ActivityLog;
 import com.ajay.security.api.tenant.repository.ActivityLogRepository;
 
-
 @Service
 public class ActivityLogService {
 
@@ -26,25 +25,26 @@ public class ActivityLogService {
 
 	/**
 	 * Save Activity Log
+	 * 
 	 * @param activityLog {@link ActivityLog}
 	 * @return message {@link String}
 	 */
-	public String saveActivityLog(ActivityLog activityLog) {		
+	public ActivityLog saveActivityLog(ActivityLog activityLog) {
 		Timestamp currDate = new Timestamp(System.currentTimeMillis());
-		activityLog.setCreatedAt(currDate);
+		if (activityLog.getCreatedAt() == null)
+			activityLog.setCreatedAt(currDate);
 		activityLog.setUpdatedAt(currDate);
-		return activityLogRepository.save(activityLog) != null ? " successfully saved!" : "Failed! Please try again!!";
+		return activityLogRepository.save(activityLog);
 	}
 
-	public String updateActivityLog(ActivityLog activityLog) {
-		Timestamp currDate = new Timestamp(System.currentTimeMillis());
-		activityLog.setUpdatedAt(currDate);
-		return activityLogRepository.save(activityLog) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneActivityLog(Integer id) {
-		activityLogRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneActivityLog(ActivityLog activityLog) {
+		String result = null;
+		if (activityLogRepository.existsById(activityLog.getId())) {
+			activityLogRepository.delete(activityLog);
+			result = " ActivityLog deleted!";
+		} else {
+			result = "ActivityLog Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

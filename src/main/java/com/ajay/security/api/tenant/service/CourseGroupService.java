@@ -32,7 +32,13 @@ public class CourseGroupService {
 	}
 
 	public String deleteOneCourseGroup(CourseGroup courseGroup) {
-		courseGroupRepository.delete(courseGroup);
-		return " successfully deleted!";
+		String result = null;
+		if (courseGroupRepository.existsById(courseGroup.getId())) {
+			courseGroupRepository.delete(courseGroup);
+			result = " CourseGroup deleted!";
+		} else {
+			result = "CourseGroup Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

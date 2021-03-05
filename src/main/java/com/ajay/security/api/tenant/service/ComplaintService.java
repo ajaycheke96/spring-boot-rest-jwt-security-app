@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,22 @@ public class ComplaintService {
 		return complaintRepository.findById(id).get();
 	}
 
-	public String saveComplaint(Complaint complaint) {
-		return complaintRepository.save(complaint) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Complaint saveComplaint(Complaint complaint) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (complaint.getCreatedAt() == null)
+			complaint.setCreatedAt(currentTimestamp);
+		complaint.setUpdatedAt(currentTimestamp);
+		return complaintRepository.save(complaint);
 	}
 
-	public String updateComplaint(Complaint complaint) {
-		return complaintRepository.save(complaint) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneComplaint(Integer id) {
-		complaintRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneComplaint(Complaint complaint) {
+		String result = null;
+		if (complaintRepository.existsById(complaint.getId())) {
+			complaintRepository.delete(complaint);
+			result = "Complaint updated!";
+		} else {
+			result = "Complaint not found! or Already deleted!";
+		}
+		return result;
 	}
 }

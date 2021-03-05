@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,22 @@ public class DesignationService {
 		return designationRepository.findById(id).get();
 	}
 
-	public String saveDesignation(Designation designation) {
-		return designationRepository.save(designation) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Designation saveDesignation(Designation designation) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (designation.getCreatedAt() == null)
+			designation.setCreatedAt(currentTimestamp);
+		designation.setUpdatedAt(currentTimestamp);
+		return designationRepository.save(designation);
 	}
 
-	public String updateDesignation(Designation designation) {
-		return designationRepository.save(designation) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneDesignation(Integer id) {
-		designationRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneDesignation(Designation designation) {
+		String result = null;
+		if (designationRepository.existsById(designation.getId())) {
+			designationRepository.delete(designation);
+			result = " Designation deleted!";
+		} else {
+			result = "Designation Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

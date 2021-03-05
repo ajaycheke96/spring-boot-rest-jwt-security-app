@@ -1,14 +1,17 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ajay.security.api.tenant.entity.Backup;
 import com.ajay.security.api.tenant.repository.BackupRepository;
 
 @Service
+@Transactional
 public class BackupService {
 
 	@Autowired
@@ -22,17 +25,24 @@ public class BackupService {
 		return backupRepository.findById(id).get();
 	}
 
-	public String saveBackup(Backup backup) {
-		return backupRepository.save(backup) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Backup saveBackup(Backup backup) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (backup.getCreatedAt() == null)
+			backup.setCreatedAt(currentTimestamp);
+		backup.setUpdatedAt(currentTimestamp);
+
+		return backupRepository.save(backup);
 	}
 
-	public String updateBackup(Backup backup) {
-		return backupRepository.save(backup) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneBackup(Integer id) {
-		backupRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneBackup(Backup backup) {
+		String result = null;
+		if (backupRepository.existsById(backup.getId())) {
+			backupRepository.delete(backup);
+			result = "Backup deleted!";
+		} else {
+			result = "Backup not found! Or Already deleted!";
+		}
+		return result;
 	}
 
 }

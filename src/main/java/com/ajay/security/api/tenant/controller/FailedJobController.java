@@ -1,49 +1,81 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.FailedJob;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.FailedJobService;
 
 @RestController
 @RequestMapping("/failedJob")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class FailedJobController {
 
 	@Autowired
 	private FailedJobService failedJobService;
 
-	@GetMapping("/all")
-	public List<FailedJob> getAllFailedJob() {
-		return failedJobService.getAllFailedJobs();
+	@GetMapping("/listAllFailedJob")
+	public ApiResponse getAllFailedJob() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of FailedJob",
+					failedJobService.getAllFailedJobs());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"FailedJob Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public FailedJob getOneFailedJob(@PathVariable Integer id) {
-		return failedJobService.getOneFailedJob(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneFailedJob(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "FailedJob", failedJobService.getOneFailedJob(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"FailedJob Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveFailedJob(@RequestBody FailedJob failedJob) {
-		return failedJobService.saveFailedJob(failedJob);
+	@PostMapping("/saveFailedJob")
+	public ApiResponse saveFailedJob(@RequestBody FailedJob failedJob) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "FailedJob saved!",
+					failedJobService.saveFailedJob(failedJob));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"FailedJob Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateFailedJob(@RequestBody FailedJob failedJob) {
-		return failedJobService.updateFailedJob(failedJob);
+	@PostMapping("/updateFailedJob")
+	public ApiResponse updateFailedJob(@RequestBody FailedJob failedJob) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "FailedJob updated!",
+					failedJobService.saveFailedJob(failedJob));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"FailedJob Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneFailedJob(@PathVariable Integer id) {
-		return failedJobService.deleteOneFailedJob(id);
+	@PostMapping("/deleteFailedJob")
+	public ApiResponse deleteOneFailedJob(@RequestBody FailedJob failedJob) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, failedJobService.deleteOneFailedJob(failedJob),
+					null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"FailedJob Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

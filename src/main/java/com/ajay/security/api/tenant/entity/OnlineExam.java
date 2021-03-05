@@ -7,9 +7,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -98,25 +98,27 @@ public class OnlineExam implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to OnlineExamQuestion
-	@OneToMany(mappedBy = "onlineExam")
+//	@OneToMany(mappedBy = "onlineExam")
+	@OneToMany(targetEntity = OnlineExamQuestion.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "online_exam_id")
 	private List<OnlineExamQuestion> onlineExamQuestions;
 
-	// bi-directional many-to-one association to OnlineExamRecord
-	@OneToMany(mappedBy = "onlineExam")
-	private List<OnlineExamRecord> onlineExamRecords;
+//	// bi-directional many-to-one association to OnlineExamRecord
+//	@OneToMany(mappedBy = "onlineExam")
+//	private List<OnlineExamRecord> onlineExamRecords;
 
 	// bi-directional many-to-one association to AcademicSession
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = AcademicSession.class)
+	@ManyToOne(targetEntity = AcademicSession.class)
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
 	private Batch batch;
 
 	// bi-directional many-to-one association to Subject
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Subject.class)
+	@ManyToOne(targetEntity = Subject.class)
 	@JoinColumn(name = "subject_id")
 	private Subject subject;
 

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class VehicleLogService {
 		return vehicleLogRepository.findById(id).get();
 	}
 
-	public String saveVehicleLog(VehicleLog vehicleLog) {
-		return vehicleLogRepository.save(vehicleLog) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public VehicleLog saveVehicleLog(VehicleLog vehicleLog) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (vehicleLog.getCreatedAt() == null)
+			vehicleLog.setCreatedAt(currentTimestamp);
+		vehicleLog.setUpdatedAt(currentTimestamp);
+		return vehicleLogRepository.save(vehicleLog);
 	}
 
-	public String updateVehicleLog(VehicleLog vehicleLog) {
-		return vehicleLogRepository.save(vehicleLog) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneVehicleLog(Integer id) {
-		vehicleLogRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVehicleLog(VehicleLog vehicleLog) {
+		String result = null;
+		if (vehicleLogRepository.existsById(vehicleLog.getId())) {
+			vehicleLogRepository.delete(vehicleLog);
+			result = " VehicleLog deleted!";
+		} else {
+			result = "VehicleLog Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

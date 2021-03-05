@@ -7,7 +7,6 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -75,14 +74,15 @@ public class Article implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to ArticleType
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "article_type_id")
-	@JsonIgnoreProperties(value = { "articles", "hibernateLazyInitializer" })
+	@JsonIgnoreProperties(value = { "articles" })
 	private ArticleType articleType;
 
 	// bi-directional many-to-one association to User
 	@ManyToOne
-//	@JsonIgnoreProperties(value = {"articles"})
 	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 }

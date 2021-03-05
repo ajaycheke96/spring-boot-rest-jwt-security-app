@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,7 +59,7 @@ public class BookLog implements Serializable {
 	private Date dueDate;
 
 	@Lob
-	@Column(name = "issue_remarks",length = 50)
+	@Column(name = "issue_remarks", length = 50)
 	private String issueRemarks;
 
 	@Column(name = "late_fee_applicable")
@@ -66,7 +68,7 @@ public class BookLog implements Serializable {
 	@Column(name = "late_fee_charge")
 	private int lateFeeCharge;
 
-	@Column(name = "late_fee_frequency",length = 50)
+	@Column(name = "late_fee_frequency", length = 50)
 	private String lateFeeFrequency;
 
 	@Lob
@@ -82,18 +84,23 @@ public class BookLog implements Serializable {
 
 	// bi-directional many-to-one association to BookLogDetail
 //	@OneToMany(mappedBy = "bookLog")
-	@OneToMany(targetEntity = BookLogDetail.class)
+	@OneToMany(targetEntity = BookLogDetail.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "book_log_id")
 	private List<BookLogDetail> bookLogDetails;
 
 	// bi-directional many-to-one association to Employee
 	@ManyToOne(targetEntity = Employee.class)
 	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 	// bi-directional many-to-one association to StudentRecord
 	@ManyToOne(targetEntity = StudentRecord.class)
 	@JoinColumn(name = "student_record_id")
+	@JsonIgnoreProperties({ "certificates", "incomes", "onlineExamRecords", "studentFeeRecords", "feeAllocation",
+			"admission", "transferCertificates", "transportRouteStudents" })
 	private StudentRecord studentRecord;
 
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,27 @@ public class VisitorLogService {
 		return visitorLogRepository.findById(id).get();
 	}
 
-	public String saveVisitorLog(VisitorLog visitorLog) {
-		return visitorLogRepository.save(visitorLog) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public VisitorLog saveVisitorLog(VisitorLog visitorLog) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (visitorLog.getCreatedAt() == null)
+			visitorLog.setCreatedAt(currentTimestamp);
+		visitorLog.setUpdatedAt(currentTimestamp);
+
+		if (visitorLog.getVisitingPurpos() != null)
+			if (visitorLog.getVisitingPurpos().getCreatedAt() == null)
+				visitorLog.getVisitingPurpos().setCreatedAt(currentTimestamp);
+		visitorLog.getVisitingPurpos().setUpdatedAt(currentTimestamp);
+		return visitorLogRepository.save(visitorLog);
 	}
 
-	public String updateVisitorLog(VisitorLog visitorLog) {
-		return visitorLogRepository.save(visitorLog) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneVisitorLog(Integer id) {
-		visitorLogRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVisitorLog(VisitorLog visitorLog) {
+		String result = null;
+		if (visitorLogRepository.existsById(visitorLog.getId())) {
+			visitorLogRepository.delete(visitorLog);
+			result = " VisitorLog deleted!";
+		} else {
+			result = "VisitorLog Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

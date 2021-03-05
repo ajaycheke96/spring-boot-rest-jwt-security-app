@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.StockCategory;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.StockCategoryService;
 
 @RestController
 @RequestMapping("/stockCategory")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class StockCategoryController {
 
 	@Autowired
 	private StockCategoryService stockCategoryService;
 
-	@GetMapping("/all")
-	public List<StockCategory> getAllStockCategory() {
-		return stockCategoryService.getAllStockCategorys();
+	@GetMapping("/listAllStockCategory")
+	public ApiResponse getAllStockCategory() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of StockCategory",
+					stockCategoryService.getAllStockCategorys());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StockCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public StockCategory getOneStockCategory(@PathVariable Integer id) {
-		return stockCategoryService.getOneStockCategory(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneStockCategory(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "StockCategory",
+					stockCategoryService.getOneStockCategory(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StockCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveStockCategory(@RequestBody StockCategory stockCategory) {
-		return stockCategoryService.saveStockCategory(stockCategory);
+	@PostMapping("/saveStockCategory")
+	public ApiResponse saveStockCategory(@RequestBody StockCategory stockCategory) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "StockCategory saved!",
+					stockCategoryService.saveStockCategory(stockCategory));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StockCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateStockCategory(@RequestBody StockCategory stockCategory) {
-		return stockCategoryService.updateStockCategory(stockCategory);
+	@PostMapping("/updateStockCategory")
+	public ApiResponse updateStockCategory(@RequestBody StockCategory stockCategory) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "StockCategory updated!",
+					stockCategoryService.saveStockCategory(stockCategory));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StockCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneStockCategory(@PathVariable Integer id) {
-		return stockCategoryService.deleteOneStockCategory(id);
+	@PostMapping("/deleteStockCategory")
+	public ApiResponse deleteOneStockCategory(@RequestBody StockCategory stockCategory) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					stockCategoryService.deleteOneStockCategory(stockCategory), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"StockCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

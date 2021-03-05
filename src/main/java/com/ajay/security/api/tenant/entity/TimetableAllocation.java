@@ -2,15 +2,17 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -54,21 +56,20 @@ public class TimetableAllocation implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-//	// bi-directional many-to-one association to TimetableAllocationDetail
+	// bi-directional many-to-one association to TimetableAllocationDetail
 //	@OneToMany(mappedBy = "timetableAllocation")
-////	@JsonIgnoreProperties("timetableAllocation")
-//	private List<TimetableAllocationDetail> timetableAllocationDetails;
+	@OneToMany(targetEntity = TimetableAllocationDetail.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "timetable_allocation_id")
+	private List<TimetableAllocationDetail> timetableAllocationDetails;
 
 //	// bi-directional many-to-one association to ClassTiming
-	@ManyToOne(fetch = FetchType.LAZY , targetEntity = ClassTiming.class)
+	@ManyToOne(targetEntity = ClassTiming.class)
 	@JoinColumn(name = "class_timing_id")
-//	@JsonIgnoreProperties({ "timetableAllocations", "hibernateLazyInitializer" })
 	private ClassTiming classTiming;
 
-	// bi-directional many-to-one association to Timetable
-	@ManyToOne(fetch = FetchType.LAZY , targetEntity = Timetable.class)
-	@JoinColumn(name = "timetable_id")
-//	@JsonIgnoreProperties({ "timetableAllocations", "hibernateLazyInitializer" })
-	private Timetable timetable;
+//	// bi-directional many-to-one association to Timetable
+//	@ManyToOne(targetEntity = Timetable.class)
+//	@JoinColumn(name = "timetable_id")
+//	private Timetable timetable;
 
 }

@@ -24,18 +24,18 @@ public class TelescopeMonitoringService {
 		return telescopeMonitoringRepository.findByTag(tag);
 	}
 
-	public String saveTelescopeMonitoring(TelescopeMonitoring telescopeMonitoring) {
-		return telescopeMonitoringRepository.save(telescopeMonitoring) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
-	}
-
-	public String updateTelescopeMonitoring(TelescopeMonitoring telescopeMonitoring) {
-		return telescopeMonitoringRepository.save(telescopeMonitoring) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
+	public TelescopeMonitoring saveTelescopeMonitoring(TelescopeMonitoring telescopeMonitoring) {
+		return telescopeMonitoringRepository.save(telescopeMonitoring);
 	}
 
 	public String deleteOneTelescopeMonitoring(TelescopeMonitoring telescopeMonitoring) {
-		telescopeMonitoringRepository.delete(telescopeMonitoring);
-		return " successfully deleted!";
+		String result = null;
+		if (telescopeMonitoringRepository.existsById(telescopeMonitoring.getTag())) {
+			telescopeMonitoringRepository.delete(telescopeMonitoring);
+			result = " TelescopeMonitoring deleted!";
+		} else {
+			result = "TelescopeMonitoring Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

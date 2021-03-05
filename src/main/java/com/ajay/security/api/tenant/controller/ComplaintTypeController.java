@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.ComplaintType;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.ComplaintTypeService;
 
 @RestController
 @RequestMapping("/complaintType")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ComplaintTypeController {
 
 	@Autowired
 	private ComplaintTypeService complaintTypeService;
 
-	@GetMapping("/all")
-	public List<ComplaintType> getAllComplaintType() {
-		return complaintTypeService.getAllComplaintTypes();
+	@GetMapping("/listAllComplaintType")
+	public ApiResponse getAllComplaintType() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of ComplaintType",
+					complaintTypeService.getAllComplaintTypes());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ComplaintType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public ComplaintType getOneComplaintType(@PathVariable Integer id) {
-		return complaintTypeService.getOneComplaintType(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneComplaintType(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ComplaintType",
+					complaintTypeService.getOneComplaintType(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ComplaintType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveComplaintType(@RequestBody ComplaintType complaintType) {
-		return complaintTypeService.saveComplaintType(complaintType);
+	@PostMapping("/saveComplaintType")
+	public ApiResponse saveComplaintType(@RequestBody ComplaintType complaintType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ComplaintType saved!",
+					complaintTypeService.saveComplaintType(complaintType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ComplaintType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateComplaintType(@RequestBody ComplaintType complaintType) {
-		return complaintTypeService.updateComplaintType(complaintType);
+	@PostMapping("/updateComplaintType")
+	public ApiResponse updateComplaintType(@RequestBody ComplaintType complaintType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "ComplaintType updated!",
+					complaintTypeService.saveComplaintType(complaintType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ComplaintType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneComplaintType(@PathVariable Integer id) {
-		return complaintTypeService.deleteOneComplaintType(id);
+	@PostMapping("/deleteComplaintType")
+	public ApiResponse deleteOneComplaintType(@RequestBody ComplaintType complaintType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					complaintTypeService.deleteOneComplaintType(complaintType), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"ComplaintType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

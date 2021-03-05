@@ -8,18 +8,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the employee_qualifications database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -37,6 +41,7 @@ public class EmployeeQualification implements Serializable {
 	private String boardName;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(length = 50)
@@ -61,13 +66,14 @@ public class EmployeeQualification implements Serializable {
 	private String startPeriod;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
 	private String uploadToken;
 
-	// bi-directional many-to-one association to Employee
-	@ManyToOne
-	private Employee employee;
+//	// bi-directional many-to-one association to Employee
+//	@ManyToOne
+//	private Employee employee;
 
 }

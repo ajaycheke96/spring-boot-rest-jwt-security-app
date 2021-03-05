@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,39 @@ public class PayrollService {
 		return payrollRepository.findById(id).get();
 	}
 
-	public String savePayroll(Payroll payroll) {
-		return payrollRepository.save(payroll) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Payroll savePayroll(Payroll payroll) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+		if (payroll.getCreatedAt() == null)
+			payroll.setCreatedAt(currentTimestamp);
+		payroll.setUpdatedAt(currentTimestamp);
+
+		// For payrollDetails list
+		if (!payroll.getPayrollDetails().isEmpty())
+			payroll.getPayrollDetails().forEach(payrollDetail -> {
+				if (payrollDetail.getCreatedAt() == null)
+					payrollDetail.setCreatedAt(currentTimestamp);
+				payrollDetail.setUpdatedAt(currentTimestamp);
+			});
+
+		// For Transactions list
+		if (!payroll.getTransactions().isEmpty())
+			payroll.getTransactions().forEach(transaction -> {
+				if (transaction.getCreatedAt() == null)
+					transaction.setCreatedAt(currentTimestamp);
+				transaction.setUpdatedAt(currentTimestamp);
+			});
+		return payrollRepository.save(payroll);
 	}
 
-	public String updatePayroll(Payroll payroll) {
-		return payrollRepository.save(payroll) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOnePayroll(Integer id) {
-		payrollRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOnePayroll(Payroll payroll) {
+		String result = null;
+		if (payrollRepository.existsById(payroll.getId())) {
+			payrollRepository.delete(payroll);
+			result = "Payroll deleted!";
+		} else {
+			result = "Payroll not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

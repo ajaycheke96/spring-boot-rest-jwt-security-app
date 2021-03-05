@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,11 +54,12 @@ public class MeetingBatch implements Serializable {
 	// bi-directional many-to-one association to Batch
 	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
+	@JsonIgnoreProperties({ "course", "examGrade", "examObservation" })
 	private Batch batch;
 
-	// bi-directional many-to-one association to Meeting
-	@ManyToOne(targetEntity = Meeting.class)
-	@JoinColumn(name = "meeting_id")
-	private Meeting meeting;
+//	// bi-directional many-to-one association to Meeting
+//	@ManyToOne(targetEntity = Meeting.class)
+//	@JoinColumn(name = "meeting_id")
+//	private Meeting meeting;
 
 }

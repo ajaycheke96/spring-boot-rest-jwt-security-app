@@ -25,25 +25,23 @@ public class IdCardTemplateService {
 		return idCardTemplateRepository.findById(id).get();
 	}
 
-	public String saveIdCardTemplate(IdCardTemplate idCardTemplate) {
+	public IdCardTemplate saveIdCardTemplate(IdCardTemplate idCardTemplate) {
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-		idCardTemplate.setCreatedAt(currentTimestamp);
+		if (idCardTemplate.getCreatedAt() == null)
+			idCardTemplate.setCreatedAt(currentTimestamp);
 		idCardTemplate.setUpdatedAt(currentTimestamp);
 
-		return idCardTemplateRepository.save(idCardTemplate) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+		return idCardTemplateRepository.save(idCardTemplate);
 	}
 
-	public String updateIdCardTemplate(IdCardTemplate idCardTemplate) {
-		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-		idCardTemplate.setUpdatedAt(currentTimestamp);
-
-		return idCardTemplateRepository.save(idCardTemplate) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneIdCardTemplate(Integer id) {
-		idCardTemplateRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneIdCardTemplate(IdCardTemplate idCardTemplate) {
+		String result = null;
+		if (idCardTemplateRepository.existsById(idCardTemplate.getId())) {
+			idCardTemplateRepository.delete(idCardTemplate);
+			result = " IdCardTemplate deleted!";
+		} else {
+			result = "IdCardTemplate Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

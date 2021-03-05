@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,15 +17,21 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the visitor_logs database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -48,6 +55,7 @@ public class VisitorLog implements Serializable {
 	private String contactNumber;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.DATE)
@@ -76,6 +84,7 @@ public class VisitorLog implements Serializable {
 	private String type;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -88,15 +97,21 @@ public class VisitorLog implements Serializable {
 	private int visitorCount;
 
 	// bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(targetEntity = Employee.class)
+	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 	// bi-directional many-to-one association to Student
-	@ManyToOne
+	@ManyToOne(targetEntity = Student.class)
+	@JoinColumn(name = "student_id")
+	@JsonIgnoreProperties({ "studentAccounts", "studentDocuments", "studentRecords", "studentParent", "user" })
 	private Student student;
 
 	// bi-directional many-to-one association to VisitingPurpos
-	@ManyToOne
+	@ManyToOne(targetEntity = VisitingPurpose.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "visiting_purpose_id")
 	private VisitingPurpose visitingPurpos;
 

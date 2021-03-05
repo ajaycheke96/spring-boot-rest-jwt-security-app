@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class NoteService {
 		return noteRepository.findById(id).get();
 	}
 
-	public String saveNote(Note note) {
-		return noteRepository.save(note) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Note saveNote(Note note) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (note.getCreatedAt() == null)
+			note.setCreatedAt(currentTimestamp);
+		note.setUpdatedAt(currentTimestamp);
+		return noteRepository.save(note);
 	}
 
-	public String updateNote(Note note) {
-		return noteRepository.save(note) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneNote(Integer id) {
-		noteRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneNote(Note note) {
+		String result = null;
+		if (noteRepository.existsById(note.getId())) {
+			noteRepository.delete(note);
+			result = "Note deleted!";
+		} else {
+			result = "Note not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

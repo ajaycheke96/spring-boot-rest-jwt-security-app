@@ -1,49 +1,79 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Student;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.StudentService;
 
 @RestController
 @RequestMapping("/student")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class StudentController {
 
 	@Autowired
 	private StudentService studentService;
 
-	@GetMapping("/all")
-	public List<Student> getAllStudent() {
-		return studentService.getAllStudents();
+	@RequestMapping("/listAllStudent")
+	public ApiResponse getAllStudent() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Student", studentService.getAllStudents());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Student Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Student getOneStudent(@PathVariable Integer id) {
-		return studentService.getOneStudent(id);
+	@RequestMapping("/{id}")
+	public ApiResponse getOneStudent(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Student", studentService.getOneStudent(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Student Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveStudent(@RequestBody Student student) {
-		return studentService.saveStudent(student);
+	@RequestMapping(value = "/saveStudent", method = RequestMethod.POST)
+	public ApiResponse saveStudent(@RequestBody Student student) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Student saved!",
+					studentService.saveStudent(student));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Student Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateStudent(@RequestBody Student student) {
-		return studentService.updateStudent(student);
+	@RequestMapping(value = "/updateStudent", method = RequestMethod.POST)
+	public ApiResponse updateStudent(@RequestBody Student student) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Student updated!",
+					studentService.saveStudent(student));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Student Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneStudent(@PathVariable Integer id) {
-		return studentService.deleteOneStudent(id);
+	@RequestMapping(value = "/deleteStudent", method = RequestMethod.POST)
+	public ApiResponse deleteOneStudent(@RequestBody Student student) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Student deleted!",
+					studentService.deleteOneStudent(student));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Student Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

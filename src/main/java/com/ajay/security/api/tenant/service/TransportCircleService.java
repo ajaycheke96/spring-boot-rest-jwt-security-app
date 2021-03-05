@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class TransportCircleService {
 		return transportCircleRepository.findById(id).get();
 	}
 
-	public String saveTransportCircle(TransportCircle transportCircle) {
-		return transportCircleRepository.save(transportCircle) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public TransportCircle saveTransportCircle(TransportCircle transportCircle) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (transportCircle.getCreatedAt() == null)
+			transportCircle.setCreatedAt(currentTimestamp);
+		transportCircle.setUpdatedAt(currentTimestamp);
+		return transportCircleRepository.save(transportCircle);
 	}
 
-	public String updateTransportCircle(TransportCircle transportCircle) {
-		return transportCircleRepository.save(transportCircle) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneTransportCircle(Integer id) {
-		transportCircleRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTransportCircle(TransportCircle transportCircle) {
+		String result = null;
+		if (transportCircleRepository.existsById(transportCircle.getId())) {
+			transportCircleRepository.delete(transportCircle);
+			result = " TransportCircle deleted!";
+		} else {
+			result = "TransportCircle Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

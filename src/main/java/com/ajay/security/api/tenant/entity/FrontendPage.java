@@ -7,23 +7,27 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the frontend_pages database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -37,10 +41,10 @@ public class FrontendPage implements Serializable {
 	@Column(length = 20)
 	private Integer id;
 
-	@Lob
 	private String body;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Column(name = "is_draft")
@@ -53,6 +57,7 @@ public class FrontendPage implements Serializable {
 	private String title;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -62,7 +67,10 @@ public class FrontendPage implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to FrontendMenus
-	@OneToMany(mappedBy = "frontendPage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@OneToMany(mappedBy = "frontendPage", cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = FrontendMenus.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "frontend_page_id")
+//	@JsonIgnoreProperties("frontendPage")
 	private List<FrontendMenus> frontendMenuses;
 
 }

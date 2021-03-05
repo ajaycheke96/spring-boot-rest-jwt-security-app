@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class RoomService {
 		return roomRepository.findById(id).get();
 	}
 
-	public String saveRoom(Room room) {
-		return roomRepository.save(room) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Room saveRoom(Room room) {
+		Timestamp cuurentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (room.getCreatedAt() == null)
+			room.setCreatedAt(cuurentTimestamp);
+		room.setUpdatedAt(cuurentTimestamp);
+		return roomRepository.save(room);
 	}
 
-	public String updateRoom(Room room) {
-		return roomRepository.save(room) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneRoom(Integer id) {
-		roomRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneRoom(Room room) {
+		String result = null;
+		if (roomRepository.existsById(room.getId())) {
+			roomRepository.delete(room);
+			result = "Room deleted!";
+		} else {
+			result = "Room not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,30 @@ public class TransportRouteService {
 		return transportRouteRepository.findById(id).get();
 	}
 
-	public String saveTransportRoute(TransportRoute transportRoute) {
-		return transportRouteRepository.save(transportRoute) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public TransportRoute saveTransportRoute(TransportRoute transportRoute) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (transportRoute.getCreatedAt() == null)
+			transportRoute.setCreatedAt(currentTimestamp);
+		transportRoute.setUpdatedAt(currentTimestamp);
+
+		// For transportRouteDetails list
+		if (!transportRoute.getTransportRouteDetails().isEmpty())
+			transportRoute.getTransportRouteDetails().forEach(transportRouteDetail -> {
+				if (transportRouteDetail.getCreatedAt() == null)
+					transportRouteDetail.setCreatedAt(currentTimestamp);
+				transportRouteDetail.setUpdatedAt(currentTimestamp);
+			});
+		return transportRouteRepository.save(transportRoute);
 	}
 
-	public String updateTransportRoute(TransportRoute transportRoute) {
-		return transportRouteRepository.save(transportRoute) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneTransportRoute(Integer id) {
-		transportRouteRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTransportRoute(TransportRoute transportRoute) {
+		String result = null;
+		if (transportRouteRepository.existsById(transportRoute.getId())) {
+			transportRouteRepository.delete(transportRoute);
+			result = " TransportRoute deleted!";
+		} else {
+			result = "TransportRoute Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

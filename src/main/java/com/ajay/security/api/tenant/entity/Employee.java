@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -169,45 +170,53 @@ public class Employee implements Serializable {
 //	@JsonIgnoreProperties("employee")
 //	private List<Bill> bills;
 
-	// bi-directional many-to-one association to BookLog
-	@OneToMany(mappedBy = "employee")
-	private List<BookLog> bookLogs;
+//	// bi-directional many-to-one association to BookLog
+//	@OneToMany(mappedBy = "employee")
+//	private List<BookLog> bookLogs;
 
 	// bi-directional many-to-one association to Certificate
-	@OneToMany(mappedBy = "employee")
+//	@OneToMany(mappedBy = "employee")
+	@OneToMany(targetEntity = Certificate.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_id")
 	private List<Certificate> certificates;
 
 //	// bi-directional many-to-one association to ClassTeacher
 //	@OneToMany(mappedBy = "employee")
 //	private List<ClassTeacher> classTeachers;
 
-	// bi-directional many-to-one association to CommunicationEmployee
-	@OneToMany(mappedBy = "employee")
-	private List<CommunicationEmployee> communicationEmployees;
+//	// bi-directional many-to-one association to CommunicationEmployee
+//	@OneToMany(mappedBy = "employee")
+//	private List<CommunicationEmployee> communicationEmployees;
 
-	// bi-directional many-to-one association to Complaint
-	@OneToMany(mappedBy = "employee")
-	private List<Complaint> complaints;
+//	// bi-directional many-to-one association to Complaint
+//	@OneToMany(mappedBy = "employee")
+//	private List<Complaint> complaints;
 
 	// bi-directional many-to-one association to EmployeeAccount
-	@OneToMany(mappedBy = "employee")
+//	@OneToMany(mappedBy = "employee")
+	@OneToMany(targetEntity = EmployeeAccount.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_id")
 	private List<EmployeeAccount> employeeAccounts;
 
-	// bi-directional many-to-one association to EmployeeAttendance
-	@OneToMany(mappedBy = "employee")
-	private List<EmployeeAttendance> employeeAttendances;
+//	// bi-directional many-to-one association to EmployeeAttendance
+//	@OneToMany(mappedBy = "employee")
+//	private List<EmployeeAttendance> employeeAttendances;
 
 	// bi-directional many-to-one association to EmployeeDesignation
-	@OneToMany(mappedBy = "employee")
+//	@OneToMany(mappedBy = "employee")
+	@OneToMany(targetEntity = EmployeeDesignation.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_id")
 	private List<EmployeeDesignation> employeeDesignations;
 
 	// bi-directional many-to-one association to EmployeeDocument
-	@OneToMany(mappedBy = "employee")
+//	@OneToMany(mappedBy = "employee")
+	@OneToMany(targetEntity = EmployeeDocument.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_id")
 	private List<EmployeeDocument> employeeDocuments;
 
-	// bi-directional many-to-one association to EmployeeGroupCollection
-	@OneToMany(mappedBy = "employee")
-	private List<EmployeeGroupCollection> employeeGroupCollections;
+//	// bi-directional many-to-one association to EmployeeGroupCollection
+//	@OneToMany(mappedBy = "employee")
+//	private List<EmployeeGroupCollection> employeeGroupCollections;
 
 //	// bi-directional many-to-one association to EmployeeLeaveAllocation
 //	@OneToMany(mappedBy = "employee")
@@ -218,12 +227,14 @@ public class Employee implements Serializable {
 //	private List<EmployeeLeaveRequest> employeeLeaveRequests;
 
 	// bi-directional many-to-one association to EmployeeQualification
-	@OneToMany(mappedBy = "employee")
+//	@OneToMany(mappedBy = "employee")
+	@OneToMany(targetEntity = EmployeeQualification.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_id")
 	private List<EmployeeQualification> employeeQualifications;
 
 	// bi-directional many-to-one association to EmployeeSalary
 //	@OneToMany(mappedBy = "employee")
-	@OneToMany(targetEntity = EmployeeSalary.class)
+	@OneToMany(targetEntity = EmployeeSalary.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "employee_id")
 	private List<EmployeeSalary> employeeSalaries;
 
@@ -270,7 +281,7 @@ public class Employee implements Serializable {
 
 	// bi-directional many-to-one association to Income
 //	@OneToMany(mappedBy = "employee")
-	@OneToMany(targetEntity = Income.class)
+	@OneToMany(targetEntity = Income.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "employee_id")
 	private List<Income> incomes;
 
@@ -278,9 +289,9 @@ public class Employee implements Serializable {
 //	@OneToMany(mappedBy = "employee")
 //	private List<LessonPlan> lessonPlans;
 
-	// bi-directional many-to-one association to MeetingEmployee
-	@OneToMany(mappedBy = "employee")
-	private List<MeetingEmployee> meetingEmployees;
+//	// bi-directional many-to-one association to MeetingEmployee
+//	@OneToMany(mappedBy = "employee")
+//	private List<MeetingEmployee> meetingEmployees;
 
 //	// bi-directional many-to-one association to Note
 //	@OneToMany(mappedBy = "employee")
@@ -288,7 +299,7 @@ public class Employee implements Serializable {
 
 	// bi-directional many-to-one association to Payroll
 //	@OneToMany(mappedBy = "employee")
-	@OneToMany(targetEntity = Payroll.class)
+	@OneToMany(targetEntity = Payroll.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "employee_id")
 	private List<Payroll> payrolls;
 
@@ -309,18 +320,18 @@ public class Employee implements Serializable {
 //	@OneToMany(mappedBy = "employee")
 //	private List<Transaction> transactions;
 
-	// bi-directional many-to-one association to VehicleIncharge
-	@OneToMany(mappedBy = "employee")
-	@JsonIgnoreProperties("employee")
-	private List<VehicleIncharge> vehicleIncharges;
+//	// bi-directional many-to-one association to VehicleIncharge
+//	@OneToMany(mappedBy = "employee")
+//	@JsonIgnoreProperties("employee")
+//	private List<VehicleIncharge> vehicleIncharges;
 
-	// bi-directional many-to-one association to VehicleServiceRecord
-	@OneToMany(mappedBy = "employee")
-	@JsonIgnoreProperties("employee")
-	private List<VehicleServiceRecord> vehicleServiceRecords;
+//	// bi-directional many-to-one association to VehicleServiceRecord
+//	@OneToMany(mappedBy = "employee")
+//	@JsonIgnoreProperties("employee")
+//	private List<VehicleServiceRecord> vehicleServiceRecords;
 
-	// bi-directional many-to-one association to VisitorLog
-	@OneToMany(mappedBy = "employee")
-	private List<VisitorLog> visitorLogs;
+//	// bi-directional many-to-one association to VisitorLog
+//	@OneToMany(mappedBy = "employee")
+//	private List<VisitorLog> visitorLogs;
 
 }

@@ -28,34 +28,27 @@ public class CallLogService {
 		return callLogRepository.findById(id).get();
 	}
 
-	public String saveCallLog(CallLog callLog) {
+	public CallLog saveCallLog(CallLog callLog) {
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-		callLog.setCreatedAt(currentTimestamp);
+		if (callLog.getCreatedAt() == null)
+			callLog.setCreatedAt(currentTimestamp);
 		callLog.setUpdatedAt(currentTimestamp);
 
-		callLog.getCallingPurpos().setCreatedAt(currentTimestamp);
+		if (callLog.getCallingPurpos().getCreatedAt() == null)
+			callLog.getCallingPurpos().setCreatedAt(currentTimestamp);
 		callLog.getCallingPurpos().setUpdatedAt(currentTimestamp);
 
-		/*
-		 * User user = callLog.getUser(); if (user.getId() != null) { User existedUser =
-		 * userRepository.findById(user.getId()).orElseThrow();
-		 * existedUser.setCallLogs(List.of(callLog)); callLog.setUser(existedUser); }
-		 */
-
-		return callLogRepository.save(callLog) != null ? " successfully saved!" : "Failed! Please try again!!";
+		return callLogRepository.save(callLog);
 	}
 
-	public String updateCallLog(CallLog callLog) {
-		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-		callLog.setUpdatedAt(currentTimestamp);
-
-		callLog.getCallingPurpos().setUpdatedAt(currentTimestamp);
-
-		return callLogRepository.save(callLog) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneCallLog(Integer id) {
-		callLogRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneCallLog(CallLog callLog) {
+		String result = null;
+		if (callLogRepository.existsById(callLog.getId())) {
+			callLogRepository.delete(callLog);
+			result = " CallLog deleted!";
+		} else {
+			result = "CallLog Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

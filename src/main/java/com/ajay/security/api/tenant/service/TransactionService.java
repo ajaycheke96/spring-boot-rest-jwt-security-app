@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,26 @@ public class TransactionService {
 		return transactionRepository.findById(id).get();
 	}
 
-	public String saveTransaction(Transaction transaction) {
-		return transactionRepository.save(transaction) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Transaction saveTransaction(Transaction transaction) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (transaction.getCreatedAt() == null)
+			transaction.setCreatedAt(currentTimestamp);
+		transaction.setUpdatedAt(currentTimestamp);
+
+		if (transaction.getTransaction().getCreatedAt() == null)
+			transaction.getTransaction().setCreatedAt(currentTimestamp);
+		transaction.getTransaction().setUpdatedAt(currentTimestamp);
+		return transactionRepository.save(transaction);
 	}
 
-	public String updateTransaction(Transaction transaction) {
-		return transactionRepository.save(transaction) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneTransaction(Integer id) {
-		transactionRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneTransaction(Transaction transaction) {
+		String result = null;
+		if (transactionRepository.existsById(transaction.getId())) {
+			transactionRepository.delete(transaction);
+			result = " Transaction deleted!";
+		} else {
+			result = "Transaction Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

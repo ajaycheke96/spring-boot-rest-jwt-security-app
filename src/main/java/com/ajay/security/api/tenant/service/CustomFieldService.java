@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,22 @@ public class CustomFieldService {
 		return customFieldRepository.findById(id).get();
 	}
 
-	public String saveCustomField(CustomField customField) {
-		return customFieldRepository.save(customField) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public CustomField saveCustomField(CustomField customField) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (customField.getCreatedAt() == null)
+			customField.setCreatedAt(currentTimestamp);
+		customField.setUpdatedAt(currentTimestamp);
+		return customFieldRepository.save(customField);
 	}
 
-	public String updateCustomField(CustomField customField) {
-		return customFieldRepository.save(customField) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneCustomField(Integer id) {
-		customFieldRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneCustomField(CustomField customField) {
+		String result = null;
+		if (customFieldRepository.existsById(customField.getId())) {
+			customFieldRepository.delete(customField);
+			result = " CustomField deleted!";
+		} else {
+			result = "CustomField Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

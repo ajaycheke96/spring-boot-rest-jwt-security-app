@@ -25,24 +25,22 @@ public class VisitorMessageService {
 		return visitorMessageRepository.findById(id).get();
 	}
 
-	public String saveVisitorMessage(VisitorMessage visitorMessage) {
+	public VisitorMessage saveVisitorMessage(VisitorMessage visitorMessage) {
 		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
-		visitorMessage.setCreatedAt(curTimestamp);
+		if (visitorMessage.getCreatedAt() == null)
+			visitorMessage.setCreatedAt(curTimestamp);
 		visitorMessage.setUpdatedAt(curTimestamp);
-
-		return visitorMessageRepository.save(visitorMessage) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+		return visitorMessageRepository.save(visitorMessage);
 	}
 
-	public String updateVisitorMessage(VisitorMessage visitorMessage) {
-		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
-		visitorMessage.setUpdatedAt(curTimestamp);
-		return visitorMessageRepository.save(visitorMessage) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneVisitorMessage(Integer id) {
-		visitorMessageRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVisitorMessage(VisitorMessage visitorMessage) {
+		String result = null;
+		if (visitorMessageRepository.existsById(visitorMessage.getId())) {
+			visitorMessageRepository.delete(visitorMessage);
+			result = " VisitorMessage deleted!";
+		} else {
+			result = "VisitorMessage Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

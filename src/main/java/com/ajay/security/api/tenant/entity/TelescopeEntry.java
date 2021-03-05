@@ -7,24 +7,27 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the telescope_entries database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -44,8 +47,8 @@ public class TelescopeEntry implements Serializable {
 	@Column(length = 100)
 	private String content;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Date createdAt;
 
 	@Column(name = "family_hash", length = 50)
@@ -61,7 +64,10 @@ public class TelescopeEntry implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to TelescopeEntriesTag
-	@OneToMany(mappedBy = "telescopeEntry", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "telescopeEntry", cascade = CascadeType.ALL)
+//	@OneToMany(targetEntity = TelescopeEntriesTag.class, cascade = CascadeType.ALL)
+//	@JoinColumn(name = "entry_uuid")
+	@JsonIgnoreProperties("telescopeEntry")
 	private List<TelescopeEntriesTag> telescopeEntriesTags;
 
 }

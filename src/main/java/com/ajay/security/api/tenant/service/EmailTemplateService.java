@@ -25,23 +25,22 @@ public class EmailTemplateService {
 		return emailTemplateRepository.findById(id).get();
 	}
 
-	public String saveEmailTemplate(EmailTemplate emailTemplate) {
+	public EmailTemplate saveEmailTemplate(EmailTemplate emailTemplate) {
 		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
-		emailTemplate.setCreatedAt(curTimestamp);
+		if (emailTemplate.getCreatedAt() == null)
+			emailTemplate.setCreatedAt(curTimestamp);
 		emailTemplate.setUpdatedAt(curTimestamp);
-		return emailTemplateRepository.save(emailTemplate) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+		return emailTemplateRepository.save(emailTemplate);
 	}
 
-	public String updateEmailTemplate(EmailTemplate emailTemplate) {
-		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
-		emailTemplate.setUpdatedAt(curTimestamp);
-		return emailTemplateRepository.save(emailTemplate) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmailTemplate(Integer id) {
-		emailTemplateRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmailTemplate(EmailTemplate emailTemplate) {
+		String result = null;
+		if (emailTemplateRepository.existsById(emailTemplate.getId())) {
+			emailTemplateRepository.delete(emailTemplate);
+			result = " EmailTemplate deleted!";
+		} else {
+			result = "EmailTemplate Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

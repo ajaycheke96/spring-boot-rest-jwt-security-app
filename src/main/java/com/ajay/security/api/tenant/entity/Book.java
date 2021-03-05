@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -47,7 +46,6 @@ public class Book implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Lob
 	@Column(length = 50)
 	private String description;
 
@@ -84,7 +82,7 @@ public class Book implements Serializable {
 
 	// bi-directional many-to-one association to BookPost
 //	@OneToMany(mappedBy = "book")
-	@OneToMany(targetEntity = BookPost.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(targetEntity = BookPost.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "book_id")
 	private List<BookPost> bookPosts;
 
@@ -107,7 +105,7 @@ public class Book implements Serializable {
 	private BookPublisher bookPublisher;
 
 	// bi-directional many-to-one association to BookTopic
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "book_topic_id")
 	@JsonIgnoreProperties("books")
 	private BookTopic bookTopic;

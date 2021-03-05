@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class AccountTransferService {
 		return accountTransferRepository.findById(id).get();
 	}
 
-	public String saveAccountTransfer(AccountTransfer accountTransfer) {
-		return accountTransferRepository.save(accountTransfer) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public AccountTransfer saveAccountTransfer(AccountTransfer accountTransfer) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (accountTransfer.getCreatedAt() == null)
+			accountTransfer.setCreatedAt(currentTimestamp);
+		accountTransfer.setUpdatedAt(currentTimestamp);
+		return accountTransferRepository.save(accountTransfer);
 	}
 
-	public String updateAccountTransfer(AccountTransfer accountTransfer) {
-		return accountTransferRepository.save(accountTransfer) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneAccountTransfer(Integer id) {
-		accountTransferRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneAccountTransfer(AccountTransfer accountTransfer) {
+		String result = null;
+		if (accountTransferRepository.existsById(accountTransfer.getId())) {
+			accountTransferRepository.delete(accountTransfer);
+			result = " AccountTransfer deleted!";
+		} else {
+			result = "AccountTransfer Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

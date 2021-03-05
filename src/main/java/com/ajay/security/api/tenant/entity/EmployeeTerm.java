@@ -14,10 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,12 +47,12 @@ public class EmployeeTerm implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_joining")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfJoining;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "date_of_leaving")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfLeaving;
 
 	@Column(name = "joining_remarks", length = 50)
@@ -81,6 +80,9 @@ public class EmployeeTerm implements Serializable {
 	// bi-directional many-to-one association to Employee
 	@ManyToOne(targetEntity = Employee.class)
 	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 }

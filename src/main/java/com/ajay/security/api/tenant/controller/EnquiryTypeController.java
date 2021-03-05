@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.ajay.security.api.tenant.service.EnquiryTypeService;
 
 @RestController
 @RequestMapping("/enquiryType")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class EnquiryTypeController {
 
 	@Autowired
@@ -69,8 +71,8 @@ public class EnquiryTypeController {
 	@RequestMapping(value = "/deleteEnquiryType", method = RequestMethod.POST)
 	public ApiResponse deleteOneEnquiryType(@RequestBody EnquiryType enquiryType) {
 		try {
-			return new ApiResponse(LocalDateTime.now(), 200, null, "EnquiryType deleted!",
-					enquiryTypeService.deleteOneEnquiryType(enquiryType));
+			return new ApiResponse(LocalDateTime.now(), 200, null, enquiryTypeService.deleteOneEnquiryType(enquiryType),
+					null);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
 					"EnquiryType Service exception : " + e.getLocalizedMessage());

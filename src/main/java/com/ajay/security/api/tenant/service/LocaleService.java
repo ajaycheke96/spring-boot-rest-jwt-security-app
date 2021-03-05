@@ -25,21 +25,22 @@ public class LocaleService {
 		return localeRepository.findById(id).get();
 	}
 
-	public String saveLocale(Locale locale) {
+	public Locale saveLocale(Locale locale) {
 		Timestamp currTimeStamp = new Timestamp(System.currentTimeMillis());
-		locale.setCreatedAt(currTimeStamp);
+		if (locale.getCreatedAt() == null)
+			locale.setCreatedAt(currTimeStamp);
 		locale.setUpdatedAt(currTimeStamp);
-		return localeRepository.save(locale) != null ? " successfully saved!" : "Failed! Please try again!!";
+		return localeRepository.save(locale);
 	}
 
-	public String updateLocale(Locale locale) {
-		Timestamp currTimeStamp = new Timestamp(System.currentTimeMillis());
-		locale.setUpdatedAt(currTimeStamp);
-		return localeRepository.save(locale) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneLocale(Integer id) {
-		localeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneLocale(Locale locale) {
+		String result = null;
+		if (localeRepository.existsById(locale.getId())) {
+			localeRepository.delete(locale);
+			result = " Locale deleted!";
+		} else {
+			result = "Locale Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

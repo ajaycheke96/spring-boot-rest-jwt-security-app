@@ -8,5 +8,4 @@ import com.ajay.security.api.tenant.entity.TelescopeEntry;
 @Repository
 public interface TelescopeEntryRepository extends JpaRepository<TelescopeEntry, Integer> {
 
-	public TelescopeEntry findBySequence(Integer sequence);
 }

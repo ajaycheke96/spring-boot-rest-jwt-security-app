@@ -75,7 +75,8 @@ public class Upload implements Serializable {
 //	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
 //	@JoinColumn(name = "user_id")
 	@ManyToOne
-	@JsonIgnoreProperties(value = {"uploads"})
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 }

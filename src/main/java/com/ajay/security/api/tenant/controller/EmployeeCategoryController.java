@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.EmployeeCategory;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.EmployeeCategoryService;
 
 @RestController
 @RequestMapping("/employeeCategory")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class EmployeeCategoryController {
 
 	@Autowired
 	private EmployeeCategoryService employeeCategoryService;
 
-	@GetMapping("/all")
-	public List<EmployeeCategory> getAllEmployeeCategory() {
-		return employeeCategoryService.getAllEmployeeCategorys();
+	@GetMapping("/listAllEmployeeCategory")
+	public ApiResponse getAllEmployeeCategory() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of EmployeeCategory",
+					employeeCategoryService.getAllEmployeeCategorys());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public EmployeeCategory getOneEmployeeCategory(@PathVariable Integer id) {
-		return employeeCategoryService.getOneEmployeeCategory(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneEmployeeCategory(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EmployeeCategory",
+					employeeCategoryService.getOneEmployeeCategory(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveEmployeeCategory(@RequestBody EmployeeCategory employeeCategory) {
-		return employeeCategoryService.saveEmployeeCategory(employeeCategory);
+	@PostMapping("/saveEmployeeCategory")
+	public ApiResponse saveEmployeeCategory(@RequestBody EmployeeCategory employeeCategory) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EmployeeCategory saved!",
+					employeeCategoryService.saveEmployeeCategory(employeeCategory));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateEmployeeCategory(@RequestBody EmployeeCategory employeeCategory) {
-		return employeeCategoryService.updateEmployeeCategory(employeeCategory);
+	@PostMapping("/updateEmployeeCategory")
+	public ApiResponse updateEmployeeCategory(@RequestBody EmployeeCategory employeeCategory) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "EmployeeCategory updated!",
+					employeeCategoryService.saveEmployeeCategory(employeeCategory));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneEmployeeCategory(@PathVariable Integer id) {
-		return employeeCategoryService.deleteOneEmployeeCategory(id);
+	@PostMapping("/deleteEmployeeCategory")
+	public ApiResponse deleteOneEmployeeCategory(@RequestBody EmployeeCategory employeeCategory) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					employeeCategoryService.deleteOneEmployeeCategory(employeeCategory), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"EmployeeCategory Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

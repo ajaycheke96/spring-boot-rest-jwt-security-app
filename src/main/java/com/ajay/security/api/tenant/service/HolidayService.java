@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class HolidayService {
 		return holidayRepository.findById(id).get();
 	}
 
-	public String saveHoliday(Holiday holiday) {
-		return holidayRepository.save(holiday) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Holiday saveHoliday(Holiday holiday) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (holiday.getCreatedAt() == null)
+			holiday.setCreatedAt(currentTimestamp);
+		holiday.setUpdatedAt(currentTimestamp);
+		return holidayRepository.save(holiday);
 	}
 
-	public String updateHoliday(Holiday holiday) {
-		return holidayRepository.save(holiday) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneHoliday(Integer id) {
-		holidayRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneHoliday(Holiday holiday) {
+		String result = null;
+		if (holidayRepository.existsById(holiday.getId())) {
+			holidayRepository.delete(holiday);
+			result = " Holiday deleted!";
+		} else {
+			result = "Holiday Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

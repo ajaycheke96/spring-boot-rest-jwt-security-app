@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,22 @@ public class EmployeeAttendanceTypeService {
 		return employeeAttendanceTypeRepository.findById(id).get();
 	}
 
-	public String saveEmployeeAttendanceType(EmployeeAttendanceType employeeAttendanceType) {
-		return employeeAttendanceTypeRepository.save(employeeAttendanceType) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeAttendanceType saveEmployeeAttendanceType(EmployeeAttendanceType employeeAttendanceType) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeAttendanceType.getCreatedAt() == null)
+			employeeAttendanceType.setCreatedAt(currentTimestamp);
+		employeeAttendanceType.setUpdatedAt(currentTimestamp);
+		return employeeAttendanceTypeRepository.save(employeeAttendanceType);
 	}
 
-	public String updateEmployeeAttendanceType(EmployeeAttendanceType employeeAttendanceType) {
-		return employeeAttendanceTypeRepository.save(employeeAttendanceType) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeAttendanceType(Integer id) {
-		employeeAttendanceTypeRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeAttendanceType(EmployeeAttendanceType employeeAttendanceType) {
+		String result = null;
+		if (employeeAttendanceTypeRepository.existsById(employeeAttendanceType.getId())) {
+			employeeAttendanceTypeRepository.delete(employeeAttendanceType);
+			result = " EmployeeAttendanceType deleted!";
+		} else {
+			result = "EmployeeAttendanceType Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

@@ -79,7 +79,8 @@ public class StockTransferReturn implements Serializable {
 	// bi-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties(value = { "uploads", "userPreferences", "userPushTokens" })
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 }

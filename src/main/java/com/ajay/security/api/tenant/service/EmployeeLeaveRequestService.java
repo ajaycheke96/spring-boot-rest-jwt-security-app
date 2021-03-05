@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,30 @@ public class EmployeeLeaveRequestService {
 		return employeeLeaveRequestRepository.findById(id).get();
 	}
 
-	public String saveEmployeeLeaveRequest(EmployeeLeaveRequest employeeLeaveRequest) {
-		return employeeLeaveRequestRepository.save(employeeLeaveRequest) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeLeaveRequest saveEmployeeLeaveRequest(EmployeeLeaveRequest employeeLeaveRequest) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeLeaveRequest.getCreatedAt() == null)
+			employeeLeaveRequest.setCreatedAt(currentTimestamp);
+		employeeLeaveRequest.setUpdatedAt(currentTimestamp);
+
+		// For employeeLeaveRequestDetails list
+		if (!employeeLeaveRequest.getEmployeeLeaveRequestDetails().isEmpty())
+			employeeLeaveRequest.getEmployeeLeaveRequestDetails().forEach(employeeLeaveRequestDetail -> {
+				if (employeeLeaveRequestDetail.getCreatedAt() == null)
+					employeeLeaveRequestDetail.setCreatedAt(currentTimestamp);
+				employeeLeaveRequestDetail.setUpdatedAt(currentTimestamp);
+			});
+		return employeeLeaveRequestRepository.save(employeeLeaveRequest);
 	}
 
-	public String updateEmployeeLeaveRequest(EmployeeLeaveRequest employeeLeaveRequest) {
-		return employeeLeaveRequestRepository.save(employeeLeaveRequest) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeLeaveRequest(Integer id) {
-		employeeLeaveRequestRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeLeaveRequest(EmployeeLeaveRequest employeeLeaveRequest) {
+		String result = null;
+		if (employeeLeaveRequestRepository.existsById(employeeLeaveRequest.getId())) {
+			employeeLeaveRequestRepository.delete(employeeLeaveRequest);
+			result = " EmployeeLeaveRequest deleted!";
+		} else {
+			result = "EmployeeLeaveRequest Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

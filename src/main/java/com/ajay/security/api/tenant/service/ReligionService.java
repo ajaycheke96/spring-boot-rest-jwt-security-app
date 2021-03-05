@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class ReligionService {
 		return religionRepository.findById(id).get();
 	}
 
-	public String saveReligion(Religion religion) {
-		return religionRepository.save(religion) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Religion saveReligion(Religion religion) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (religion.getCreatedAt() == null)
+			religion.setCreatedAt(currentTimestamp);
+		religion.setUpdatedAt(currentTimestamp);
+		return religionRepository.save(religion);
 	}
 
-	public String updateReligion(Religion religion) {
-		return religionRepository.save(religion) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneReligion(Integer id) {
-		religionRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneReligion(Religion religion) {
+		String result = null;
+		if (religionRepository.existsById(religion.getId())) {
+			religionRepository.delete(religion);
+			result = " Religion deleted!";
+		} else {
+			result = "Religion Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

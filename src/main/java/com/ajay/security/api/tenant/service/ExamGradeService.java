@@ -30,11 +30,24 @@ public class ExamGradeService {
 		if (examGrade.getCreatedAt() == null)
 			examGrade.setCreatedAt(currentTimestamp);
 		examGrade.setUpdatedAt(currentTimestamp);
+
+		if (!examGrade.getExamGradeDetails().isEmpty())
+			examGrade.getExamGradeDetails().forEach(examGradeDetail -> {
+				if (examGradeDetail.getCreatedAt() == null)
+					examGradeDetail.setCreatedAt(currentTimestamp);
+				examGradeDetail.setUpdatedAt(currentTimestamp);
+			});
 		return examGradeRepository.save(examGrade);
 	}
 
 	public String deleteOneExamGrade(ExamGrade examGrade) {
-		examGradeRepository.delete(examGrade);
-		return " successfully deleted!";
+		String result = null;
+		if (examGradeRepository.existsById(examGrade.getId())) {
+			examGradeRepository.delete(examGrade);
+			result = " ExamGrade deleted!";
+		} else {
+			result = "ExamGrade Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

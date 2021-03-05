@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class EmployeeTermService {
 		return employeeTermRepository.findById(id).get();
 	}
 
-	public String saveEmployeeTerm(EmployeeTerm employeeTerm) {
-		return employeeTermRepository.save(employeeTerm) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeTerm saveEmployeeTerm(EmployeeTerm employeeTerm) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeTerm.getCreatedAt() == null)
+			employeeTerm.setCreatedAt(currentTimestamp);
+		employeeTerm.setUpdatedAt(currentTimestamp);
+		return employeeTermRepository.save(employeeTerm);
 	}
 
-	public String updateEmployeeTerm(EmployeeTerm employeeTerm) {
-		return employeeTermRepository.save(employeeTerm) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeTerm(Integer id) {
-		employeeTermRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeTerm(EmployeeTerm employeeTerm) {
+		String result = null;
+		if (employeeTermRepository.existsById(employeeTerm.getId())) {
+			employeeTermRepository.delete(employeeTerm);
+			result = " EmployeeTerm deleted!";
+		} else {
+			result = "EmployeeTerm Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

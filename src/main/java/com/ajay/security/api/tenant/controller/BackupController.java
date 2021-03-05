@@ -1,49 +1,77 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Backup;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.BackupService;
 
 @RestController
 @RequestMapping("/backup")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class BackupController {
 
 	@Autowired
 	private BackupService backupService;
 
-	@GetMapping("/all")
-	public List<Backup> getAllBackup() {
-		return backupService.getAllBackups();
+	@GetMapping("/listAllBackup")
+	public ApiResponse getAllBackup() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Backup", backupService.getAllBackups());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Backup Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Backup getOneBackup(@PathVariable Integer id) {
-		return backupService.getOneBackup(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneBackup(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Backup", backupService.getOneBackup(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Backup Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveBackup(@RequestBody Backup backup) {
-		return backupService.saveBackup(backup);
+	@PostMapping("/saveBackup")
+	public ApiResponse saveBackup(@RequestBody Backup backup) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Backup saved!", backupService.saveBackup(backup));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Backup Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateBackup(@RequestBody Backup backup) {
-		return backupService.updateBackup(backup);
+	@PostMapping("/updateBackup")
+	public ApiResponse updateBackup(@RequestBody Backup backup) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Backup updated!", backupService.saveBackup(backup));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Backup Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneBackup(@PathVariable Integer id) {
-		return backupService.deleteOneBackup(id);
+	@PostMapping("/deleteBackup")
+	public ApiResponse deleteOneBackup(@RequestBody Backup backup) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, backupService.deleteOneBackup(backup), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Backup Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

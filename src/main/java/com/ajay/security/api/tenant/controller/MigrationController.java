@@ -1,49 +1,81 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Migration;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.MigrationService;
 
 @RestController
 @RequestMapping("/migration")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class MigrationController {
 
 	@Autowired
 	private MigrationService migrationService;
 
-	@GetMapping("/all")
-	public List<Migration> getAllMigration() {
-		return migrationService.getAllMigrations();
+	@GetMapping("/listAllMigration")
+	public ApiResponse getAllMigration() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Migration",
+					migrationService.getAllMigrations());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Migration Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Migration getOneMigration(@PathVariable Integer id) {
-		return migrationService.getOneMigration(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneMigration(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Migration", migrationService.getOneMigration(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Migration Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveMigration(@RequestBody Migration migration) {
-		return migrationService.saveMigration(migration);
+	@PostMapping("/saveMigration")
+	public ApiResponse saveMigration(@RequestBody Migration migration) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Migration saved!",
+					migrationService.saveMigration(migration));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Migration Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateMigration(@RequestBody Migration migration) {
-		return migrationService.updateMigration(migration);
+	@PostMapping("/updateMigration")
+	public ApiResponse updateMigration(@RequestBody Migration migration) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Migration updated!",
+					migrationService.saveMigration(migration));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Migration Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneMigration(@PathVariable Integer id) {
-		return migrationService.deleteOneMigration(id);
+	@PostMapping("/deleteMigration")
+	public ApiResponse deleteOneMigration(@RequestBody Migration migration) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, migrationService.deleteOneMigration(migration),
+					null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Migration Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

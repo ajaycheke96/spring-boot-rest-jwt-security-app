@@ -34,7 +34,13 @@ public class EnquiryFollowUpService {
 	}
 
 	public String deleteOneEnquiryFollowUp(EnquiryFollowUp enquiryFollowUp) {
-		enquiryFollowUpRepository.delete(enquiryFollowUp);
-		return " successfully deleted!";
+		String result = null;
+		if (enquiryFollowUpRepository.existsById(enquiryFollowUp.getId())) {
+			enquiryFollowUpRepository.delete(enquiryFollowUp);
+			result = " EnquiryFollowUp deleted!";
+		} else {
+			result = "EnquiryFollowUp Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

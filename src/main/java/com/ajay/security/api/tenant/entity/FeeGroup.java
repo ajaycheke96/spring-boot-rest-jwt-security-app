@@ -2,7 +2,6 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -67,10 +65,10 @@ public class FeeGroup implements Serializable {
 	@JoinColumn(name = "academic_session_id")
 	private AcademicSession academicSession;
 
-	// bi-directional many-to-one association to FeeHead
-//	@OneToMany(mappedBy = "feeGroup")
-	@OneToMany(targetEntity = FeeHead.class)
-	@JoinColumn(name = "fee_group_id")
-	private List<FeeHead> feeHeads;
+//	// bi-directional many-to-one association to FeeHead
+////	@OneToMany(mappedBy = "feeGroup")
+//	@OneToMany(targetEntity = FeeHead.class)
+//	@JoinColumn(name = "fee_group_id")
+//	private List<FeeHead> feeHeads;
 
 }

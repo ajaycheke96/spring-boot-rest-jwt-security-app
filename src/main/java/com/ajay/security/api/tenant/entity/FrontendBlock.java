@@ -8,10 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,12 +39,13 @@ public class FrontendBlock implements Serializable {
 	private String body;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Column(name = "featured_icon",length = 100)
+	@Column(name = "featured_icon", length = 100)
 	private String featuredIcon;
 
-	@Column(name = "featured_image",length = 100)
+	@Column(name = "featured_image", length = 100)
 	private String featuredImage;
 
 	@Column(name = "is_draft")
@@ -60,6 +61,7 @@ public class FrontendBlock implements Serializable {
 	private String title;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	@Column(name = "upload_token")
@@ -71,9 +73,10 @@ public class FrontendBlock implements Serializable {
 	@Column(length = 50)
 	private String uuid;
 
-	// bi-directional many-to-one association to FrontendMenus
-	@ManyToOne
-	@JoinColumn(name = "frontend_menu_id")
-	private FrontendMenus frontendMenus;
+//	// bi-directional many-to-one association to FrontendMenus
+//	@ManyToOne
+//	@JoinColumn(name = "frontend_menu_id")
+//	@JsonIgnoreProperties("frontendBlocks")
+//	private FrontendMenus frontendMenus;
 
 }

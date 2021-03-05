@@ -7,17 +7,14 @@ import java.sql.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,7 +44,6 @@ public class ClassTimingSession implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Lob
 	@Column(length = 50)
 	private String description;
 
@@ -59,7 +55,6 @@ public class ClassTimingSession implements Serializable {
 	@Column(length = 20)
 	private String name;
 
-	@Lob
 	@Column(length = 50)
 	private String options;
 
@@ -73,9 +68,8 @@ public class ClassTimingSession implements Serializable {
 	private String uuid;
 
 	// bi-directional many-to-one association to ClassTiming
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = ClassTiming.class, cascade = CascadeType.ALL)
+	@ManyToOne(targetEntity = ClassTiming.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "class_timing_id")
-	@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 	private ClassTiming classTiming;
 
 //	// bi-directional many-to-one association to TimetableAllocationDetail

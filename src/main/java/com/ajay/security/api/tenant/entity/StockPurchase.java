@@ -15,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -50,7 +48,7 @@ public class StockPurchase implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
-	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 
 	@Column(length = 50)
@@ -78,12 +76,14 @@ public class StockPurchase implements Serializable {
 	// bi-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties(value = { "uploads", "userPreferences", "userPushTokens" })
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 	// bi-directional many-to-one association to Vendor
 	@ManyToOne(targetEntity = Vendor.class)
 	@JoinColumn(name = "vendor_id")
+	@JsonIgnoreProperties("vendorAccounts")
 	private Vendor vendor;
 
 }

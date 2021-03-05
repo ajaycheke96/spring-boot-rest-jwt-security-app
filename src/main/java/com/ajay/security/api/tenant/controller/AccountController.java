@@ -1,49 +1,79 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Account;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.AccountService;
 
 @RestController
 @RequestMapping("/account")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AccountController {
 
 	@Autowired
 	private AccountService accountService;
 
-	@GetMapping("/all")
-	public List<Account> getAllAccounts() {
-		return accountService.getAllAccounts();
+	@GetMapping("/listAllAccount")
+	public ApiResponse getAllAccounts() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Account", accountService.getAllAccounts());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Account Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Account getOneAccount(@PathVariable Integer id) {
-		return accountService.getOneAccount(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneAccount(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Account", accountService.getOneAccount(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Account Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveAccount(@RequestBody Account account) {
-		return accountService.saveAccount(account);
+	@PostMapping("/saveAccount")
+	public ApiResponse saveAccount(@RequestBody Account account) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Account saved!",
+					accountService.saveAccount(account));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Account Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateAccount(@RequestBody Account account) {
-		return accountService.updateAccount(account);
+	@PostMapping("/updateAccount")
+	public ApiResponse updateAccount(@RequestBody Account account) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Account updated!",
+					accountService.saveAccount(account));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Account Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneAccount(@PathVariable Integer id) {
-		return accountService.deleteOneAccount(id);
+	@PostMapping("/deleteAccount")
+	public ApiResponse deleteOneAccount(@RequestBody Account account) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, accountService.deleteOneAccount(account), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Account Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

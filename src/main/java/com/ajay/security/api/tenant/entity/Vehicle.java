@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -93,42 +94,53 @@ public class Vehicle implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to Bill
-	@OneToMany(mappedBy = "vehicle1")
-	@JsonIgnoreProperties("vehicle1")
-	private List<Bill> bills1;
+//	// bi-directional many-to-one association to Bill
+//	@OneToMany(mappedBy = "vehicle1")
+//	@JsonIgnoreProperties("vehicle1")
+//	private List<Bill> bills1;
 
-	// bi-directional many-to-one association to Bill
-	@OneToMany(mappedBy = "vehicle2")
-	@JsonIgnoreProperties("vehicle2")
-	private List<Bill> bills2;
+//	// bi-directional many-to-one association to Bill
+//	@OneToMany(mappedBy = "vehicle2")
+//	@JsonIgnoreProperties("vehicle2")
+//	private List<Bill> bills2;
 
 	// bi-directional many-to-one association to VehicleDocument
-	@OneToMany(mappedBy = "vehicle")
+//	@OneToMany(mappedBy = "vehicle")
+	@OneToMany(targetEntity = VehicleDocument.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "vehicle_id")
 	private List<VehicleDocument> vehicleDocuments;
 
 	// bi-directional many-to-one association to VehicleFuel
-	@OneToMany(mappedBy = "vehicle")
+//	@OneToMany(mappedBy = "vehicle")
+	@OneToMany(targetEntity = VehicleFuel.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "vehicle_id")
 	private List<VehicleFuel> vehicleFuels;
 
 	// bi-directional many-to-one association to VehicleIncharge
+//	@OneToMany(targetEntity = VehicleIncharge.class, cascade = CascadeType.ALL)
 	@OneToMany(mappedBy = "vehicle")
+	@JsonIgnoreProperties("vehicle")
 	private List<VehicleIncharge> vehicleIncharges;
 
 	// bi-directional many-to-one association to VehicleLog
+//	@OneToMany(targetEntity = VehicleLog.class)
 	@OneToMany(mappedBy = "vehicle")
+	@JsonIgnoreProperties("vehicle")
 	private List<VehicleLog> vehicleLogs;
 
 	// bi-directional many-to-one association to VehiclePerformanceCriteria
+//	@OneToMany(targetEntity = VehiclePerformanceCriteria.class, cascade = CascadeType.ALL)
 	@OneToMany(mappedBy = "vehicle")
+	@JsonIgnoreProperties("vehicle")
 	private List<VehiclePerformanceCriteria> vehiclePerformanceCriterias;
 
-	// bi-directional many-to-one association to VehicleServiceRecord
-	@OneToMany(mappedBy = "vehicle")
-	private List<VehicleServiceRecord> vehicleServiceRecords;
+//	// bi-directional many-to-one association to VehicleServiceRecord
+//	@OneToMany(mappedBy = "vehicle")
+//	@JsonIgnoreProperties("vehicle")
+//	private List<VehicleServiceRecord> vehicleServiceRecords;
 
 	// bi-directional many-to-one association to VehicleFuelType
-	@ManyToOne
+	@ManyToOne(targetEntity = VehicleFuelType.class)
 	@JoinColumn(name = "vehicle_fuel_type_id")
 	private VehicleFuelType vehicleFuelType;
 

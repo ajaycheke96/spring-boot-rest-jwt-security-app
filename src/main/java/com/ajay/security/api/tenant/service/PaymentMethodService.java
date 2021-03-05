@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class PaymentMethodService {
 		return paymentMethodRepository.findById(id).get();
 	}
 
-	public String savePaymentMethod(PaymentMethod paymentMethod) {
-		return paymentMethodRepository.save(paymentMethod) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public PaymentMethod savePaymentMethod(PaymentMethod paymentMethod) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (paymentMethod.getCreatedAt() == null)
+			paymentMethod.setCreatedAt(currentTimestamp);
+		paymentMethod.setUpdatedAt(currentTimestamp);
+		return paymentMethodRepository.save(paymentMethod);
 	}
 
-	public String updatePaymentMethod(PaymentMethod paymentMethod) {
-		return paymentMethodRepository.save(paymentMethod) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOnePaymentMethod(Integer id) {
-		paymentMethodRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOnePaymentMethod(PaymentMethod paymentMethod) {
+		String result = null;
+		if (paymentMethodRepository.existsById(paymentMethod.getId())) {
+			paymentMethodRepository.delete(paymentMethod);
+			result = " PaymentMethod deleted!";
+		} else {
+			result = "PaymentMethod Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

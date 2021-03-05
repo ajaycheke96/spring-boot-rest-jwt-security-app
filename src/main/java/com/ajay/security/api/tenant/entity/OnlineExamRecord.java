@@ -16,15 +16,21 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the online_exam_records database table.
  * 
  */
-@Data
+//@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -42,6 +48,7 @@ public class OnlineExamRecord implements Serializable {
 	private String answers;
 
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp createdAt;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -54,16 +61,18 @@ public class OnlineExamRecord implements Serializable {
 	private Date start;
 
 	@Column(name = "updated_at")
+	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to OnlineExam
-	@ManyToOne
+	@ManyToOne(targetEntity = OnlineExam.class)
 	@JoinColumn(name = "online_exam_id")
+	@JsonIgnoreProperties({ "onlineExamQuestions", "academicSession", "batch", })
 	private OnlineExam onlineExam;
 
-	// bi-directional many-to-one association to StudentRecord
-	@ManyToOne
-	@JoinColumn(name = "student_record_id")
-	private StudentRecord studentRecord;
+//	// bi-directional many-to-one association to StudentRecord
+//	@ManyToOne
+//	@JoinColumn(name = "student_record_id")
+//	private StudentRecord studentRecord;
 
 }

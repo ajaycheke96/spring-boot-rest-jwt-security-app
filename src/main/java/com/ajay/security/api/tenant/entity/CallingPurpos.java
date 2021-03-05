@@ -2,18 +2,15 @@ package com.ajay.security.api.tenant.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,9 +54,9 @@ public class CallingPurpos implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd 'T' HH:mm:ss", timezone = "IST")
 	private Timestamp updatedAt;
 
-	// bi-directional many-to-one association to CallLog
-	@OneToMany(mappedBy = "callingPurpos")
-	@JsonIgnoreProperties("callingPurpos")
-	private List<CallLog> callLogs;
+//	// bi-directional many-to-one association to CallLog
+//	@OneToMany(mappedBy = "callingPurpos")
+//	@JsonIgnoreProperties("callingPurpos")
+//	private List<CallLog> callLogs;
 
 }

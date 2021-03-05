@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -84,7 +85,7 @@ public class StockTransfer implements Serializable {
 
 	// bi-directional many-to-one association to StockTransferDetail
 //	@OneToMany(mappedBy = "stockTransfer")
-	@OneToMany(targetEntity = StockTransferDetail.class)
+	@OneToMany(targetEntity = StockTransferDetail.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "stock_transfer_id")
 	private List<StockTransferDetail> stockTransferDetails;
 
@@ -96,6 +97,9 @@ public class StockTransfer implements Serializable {
 	// bi-directional many-to-one association to Employee
 	@ManyToOne(targetEntity = Employee.class)
 	@JoinColumn(name = "employee_id")
+	@JsonIgnoreProperties(value = { "payrolls", "incomes", "user", "religion", "category", "caste", "bloodGroup",
+			"employeeSalaries", "employeeQualifications", "employeeDocuments", "employeeDesignations",
+			"employeeAccounts", "certificates" })
 	private Employee employee;
 
 	// bi-directional many-to-one association to Room
@@ -106,12 +110,14 @@ public class StockTransfer implements Serializable {
 	// bi-directional many-to-one association to Student
 	@ManyToOne(targetEntity = Student.class)
 	@JoinColumn(name = "student_id")
+	@JsonIgnoreProperties({ "studentAccounts", "studentDocuments", "studentRecords", "user" })
 	private Student student;
 
 	// bi-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties(value = { "uploads", "userPreferences", "userPushTokens" })
+	@JsonIgnoreProperties(value = { "backups", "userPushTokens", "userPreferences", "uploads", "todos", "password",
+			"postalRecords", "activationToken" })
 	private User user;
 
 }

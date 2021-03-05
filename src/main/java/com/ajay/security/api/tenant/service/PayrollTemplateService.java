@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,30 @@ public class PayrollTemplateService {
 		return payrollTemplateRepository.findById(id).get();
 	}
 
-	public String savePayrollTemplate(PayrollTemplate payrollTemplate) {
-		return payrollTemplateRepository.save(payrollTemplate) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public PayrollTemplate savePayrollTemplate(PayrollTemplate payrollTemplate) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (payrollTemplate.getCreatedAt() == null)
+			payrollTemplate.setCreatedAt(currentTimestamp);
+		payrollTemplate.setUpdatedAt(currentTimestamp);
+
+		// For PayrollTemplateDetails list
+		if (!payrollTemplate.getPayrollTemplateDetails().isEmpty())
+			payrollTemplate.getPayrollTemplateDetails().forEach(payrollTemplateDetail -> {
+				if (payrollTemplateDetail.getCreatedAt() == null)
+					payrollTemplateDetail.setCreatedAt(currentTimestamp);
+				payrollTemplateDetail.setUpdatedAt(currentTimestamp);
+			});
+		return payrollTemplateRepository.save(payrollTemplate);
 	}
 
-	public String updatePayrollTemplate(PayrollTemplate payrollTemplate) {
-		return payrollTemplateRepository.save(payrollTemplate) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOnePayrollTemplate(Integer id) {
-		payrollTemplateRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOnePayrollTemplate(PayrollTemplate payrollTemplate) {
+		String result = null;
+		if (payrollTemplateRepository.existsById(payrollTemplate.getId())) {
+			payrollTemplateRepository.delete(payrollTemplate);
+			result = "PayrollTemplate deleted!";
+		} else {
+			result = "PayrollTemplate not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

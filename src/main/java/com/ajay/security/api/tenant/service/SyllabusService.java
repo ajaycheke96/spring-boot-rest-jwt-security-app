@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,39 @@ public class SyllabusService {
 		return syllabusRepository.findById(id).get();
 	}
 
-	public String saveSyllabus(Syllabus syllabus) {
-		return syllabusRepository.save(syllabus) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Syllabus saveSyllabus(Syllabus syllabus) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (syllabus.getCreatedAt() == null)
+			syllabus.setCreatedAt(currentTimestamp);
+		syllabus.setUpdatedAt(currentTimestamp);
+
+		// For SyllabusDetails list
+		if (!syllabus.getSyllabusDetails().isEmpty())
+			syllabus.getSyllabusDetails().forEach(syllabusDetail -> {
+				if (syllabusDetail.getCreatedAt() == null)
+					syllabusDetail.setCreatedAt(currentTimestamp);
+				syllabusDetail.setUpdatedAt(currentTimestamp);
+			});
+
+		// For SyllabusTopics list
+		if (!syllabus.getSyllabusTopics().isEmpty())
+			syllabus.getSyllabusTopics().forEach(syllabusTopic -> {
+				if (syllabusTopic.getCreatedAt() == null)
+					syllabusTopic.setCreatedAt(currentTimestamp);
+				syllabusTopic.setUpdatedAt(currentTimestamp);
+			});
+
+		return syllabusRepository.save(syllabus);
 	}
 
-	public String updateSyllabus(Syllabus syllabus) {
-		return syllabusRepository.save(syllabus) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneSyllabus(Integer id) {
-		syllabusRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneSyllabus(Syllabus syllabus) {
+		String result = null;
+		if (syllabusRepository.existsById(syllabus.getId())) {
+			syllabusRepository.delete(syllabus);
+			result = " Syllabus deleted!";
+		} else {
+			result = "Syllabus Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

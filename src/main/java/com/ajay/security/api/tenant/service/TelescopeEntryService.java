@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +21,26 @@ public class TelescopeEntryService {
 		return telescopeEntryRepository.findAll();
 	}
 
-	public TelescopeEntry getOneTelescopeEntry(Integer sequence) {
-		return telescopeEntryRepository.findBySequence(sequence);
+	public TelescopeEntry getOneTelescopeEntry(Integer id) {
+		return telescopeEntryRepository.findById(id).get();
 	}
 
-	public String saveTelescopeEntry(TelescopeEntry telescopeEntry) {
-		return telescopeEntryRepository.save(telescopeEntry) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
-	}
-
-	public String updateTelescopeEntry(TelescopeEntry telescopeEntry) {
-		return telescopeEntryRepository.save(telescopeEntry) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
+	public TelescopeEntry saveTelescopeEntry(TelescopeEntry telescopeEntry) {
+		Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
+		telescopeEntry.setCreatedAt(curTimestamp);
+		telescopeEntry.getTelescopeEntriesTags()
+				.forEach(telescopeEntriesTag -> telescopeEntriesTag.setTelescopeEntry(telescopeEntry));
+		return telescopeEntryRepository.save(telescopeEntry);
 	}
 
 	public String deleteOneTelescopeEntry(TelescopeEntry telescopeEntry) {
-		telescopeEntryRepository.delete(telescopeEntry);
-		return " successfully deleted!";
+		String result = null;
+		if (telescopeEntryRepository.existsById(telescopeEntry.getSequence())) {
+			telescopeEntryRepository.delete(telescopeEntry);
+			result = " TelescopeEntry deleted!";
+		} else {
+			result = "TelescopeEntry Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

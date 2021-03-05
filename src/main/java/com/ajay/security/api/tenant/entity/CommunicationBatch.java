@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,9 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,12 +49,13 @@ public class CommunicationBatch implements Serializable {
 	private Timestamp updatedAt;
 
 	// bi-directional many-to-one association to Batch
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Batch.class)
+	@ManyToOne(targetEntity = Batch.class)
 	@JoinColumn(name = "batch_id")
+	@JsonIgnoreProperties({ "course", "examGrade", "examObservation" })
 	private Batch batch;
 
-	// bi-directional many-to-one association to Communication
-	@ManyToOne
-	private Communication communication;
+//	// bi-directional many-to-one association to Communication
+//	@ManyToOne
+//	private Communication communication;
 
 }

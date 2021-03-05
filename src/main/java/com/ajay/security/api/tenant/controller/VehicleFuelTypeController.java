@@ -1,49 +1,82 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.VehicleFuelType;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.VehicleFuelTypeService;
 
 @RestController
 @RequestMapping("/vehicleFuelType")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class VehicleFuelTypeController {
 
 	@Autowired
 	private VehicleFuelTypeService vehicleFuelTypeService;
 
-	@GetMapping("/all")
-	public List<VehicleFuelType> getAllVehicleFuelType() {
-		return vehicleFuelTypeService.getAllVehicleFuelTypes();
+	@GetMapping("/listAllVehicleFuelType")
+	public ApiResponse getAllVehicleFuelType() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of VehicleFuelType",
+					vehicleFuelTypeService.getAllVehicleFuelTypes());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleFuelType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public VehicleFuelType getOneVehicleFuelType(@PathVariable Integer id) {
-		return vehicleFuelTypeService.getOneVehicleFuelType(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneVehicleFuelType(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleFuelType",
+					vehicleFuelTypeService.getOneVehicleFuelType(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleFuelType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveVehicleFuelType(@RequestBody VehicleFuelType vehicleFuelType) {
-		return vehicleFuelTypeService.saveVehicleFuelType(vehicleFuelType);
+	@PostMapping("/saveVehicleFuelType")
+	public ApiResponse saveVehicleFuelType(@RequestBody VehicleFuelType vehicleFuelType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleFuelType saved!",
+					vehicleFuelTypeService.saveVehicleFuelType(vehicleFuelType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleFuelType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateVehicleFuelType(@RequestBody VehicleFuelType vehicleFuelType) {
-		return vehicleFuelTypeService.updateVehicleFuelType(vehicleFuelType);
+	@PostMapping("/updateVehicleFuelType")
+	public ApiResponse updateVehicleFuelType(@RequestBody VehicleFuelType vehicleFuelType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "VehicleFuelType updated!",
+					vehicleFuelTypeService.saveVehicleFuelType(vehicleFuelType));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleFuelType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneVehicleFuelType(@PathVariable Integer id) {
-		return vehicleFuelTypeService.deleteOneVehicleFuelType(id);
+	@PostMapping("/deleteVehicleFuelType")
+	public ApiResponse deleteOneVehicleFuelType(@RequestBody VehicleFuelType vehicleFuelType) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null,
+					vehicleFuelTypeService.deleteOneVehicleFuelType(vehicleFuelType), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"VehicleFuelType Service exception : " + e.getLocalizedMessage());
+		}
 	}
 }

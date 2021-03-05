@@ -25,23 +25,22 @@ public class InstituteDocumentService {
 		return instituteDocumentRepository.findById(id).get();
 	}
 
-	public String saveInstituteDocument(InstituteDocument instituteDocument) {
+	public InstituteDocument saveInstituteDocument(InstituteDocument instituteDocument) {
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-		instituteDocument.setCreatedAt(currentTimestamp);
+		if (instituteDocument.getCreatedAt() == null)
+			instituteDocument.setCreatedAt(currentTimestamp);
 		instituteDocument.setUpdatedAt(currentTimestamp);
-		return instituteDocumentRepository.save(instituteDocument) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+		return instituteDocumentRepository.save(instituteDocument);
 	}
 
-	public String updateInstituteDocument(InstituteDocument instituteDocument) {
-		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-		instituteDocument.setUpdatedAt(currentTimestamp);
-		return instituteDocumentRepository.save(instituteDocument) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneInstituteDocument(Integer id) {
-		instituteDocumentRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneInstituteDocument(InstituteDocument instituteDocument) {
+		String result = null;
+		if (instituteDocumentRepository.existsById(instituteDocument.getId())) {
+			instituteDocumentRepository.delete(instituteDocument);
+			result = " InstituteDocument deleted!";
+		} else {
+			result = "InstituteDocument Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

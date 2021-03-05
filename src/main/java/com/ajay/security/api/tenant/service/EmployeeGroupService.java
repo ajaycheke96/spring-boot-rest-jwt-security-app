@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class EmployeeGroupService {
 		return employeeGroupRepository.findById(id).get();
 	}
 
-	public String saveEmployeeGroup(EmployeeGroup employeeGroup) {
-		return employeeGroupRepository.save(employeeGroup) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public EmployeeGroup saveEmployeeGroup(EmployeeGroup employeeGroup) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (employeeGroup.getCreatedAt() == null)
+			employeeGroup.setCreatedAt(currentTimestamp);
+		employeeGroup.setUpdatedAt(currentTimestamp);
+		return employeeGroupRepository.save(employeeGroup);
 	}
 
-	public String updateEmployeeGroup(EmployeeGroup employeeGroup) {
-		return employeeGroupRepository.save(employeeGroup) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneEmployeeGroup(Integer id) {
-		employeeGroupRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneEmployeeGroup(EmployeeGroup employeeGroup) {
+		String result = null;
+		if (employeeGroupRepository.existsById(employeeGroup.getId())) {
+			employeeGroupRepository.delete(employeeGroup);
+			result = " EmployeeGroup deleted!";
+		} else {
+			result = "EmployeeGroup Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

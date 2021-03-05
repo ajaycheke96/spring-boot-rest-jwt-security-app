@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class PayHeadService {
 		return payHeadRepository.findById(id).get();
 	}
 
-	public String savePayHead(PayHead payHead) {
-		return payHeadRepository.save(payHead) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public PayHead savePayHead(PayHead payHead) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (payHead.getCreatedAt() == null)
+			payHead.setCreatedAt(currentTimestamp);
+		payHead.setUpdatedAt(currentTimestamp);
+		return payHeadRepository.save(payHead);
 	}
 
-	public String updatePayHead(PayHead payHead) {
-		return payHeadRepository.save(payHead) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOnePayHead(Integer id) {
-		payHeadRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOnePayHead(PayHead payHead) {
+		String result = null;
+		if (payHeadRepository.existsById(payHead.getId())) {
+			payHeadRepository.delete(payHead);
+			result = "PayHead deleted!";
+		} else {
+			result = "PayHead not found! Or Already deleted!";
+		}
+		return result;
 	}
 }

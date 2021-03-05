@@ -34,7 +34,13 @@ public class ExamScheduleService {
 	}
 
 	public String deleteOneExamSchedule(ExamSchedule examSchedule) {
-		examScheduleRepository.delete(examSchedule);
-		return " successfully deleted!";
+		String result = null;
+		if (examScheduleRepository.existsById(examSchedule.getId())) {
+			examScheduleRepository.delete(examSchedule);
+			result = " ExamSchedule deleted!";
+		} else {
+			result = "ExamSchedule Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

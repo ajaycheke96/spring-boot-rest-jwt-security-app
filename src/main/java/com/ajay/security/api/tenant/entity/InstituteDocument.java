@@ -40,6 +40,7 @@ public class InstituteDocument implements Serializable {
 	private Timestamp createdAt;
 
 	@Column(name = "date_of_expiry")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfExpiry;
 
 	@Column(length = 50)

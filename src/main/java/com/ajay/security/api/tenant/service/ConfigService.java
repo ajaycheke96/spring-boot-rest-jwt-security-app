@@ -22,18 +22,18 @@ public class ConfigService {
 		return configRepository.findById(id).get();
 	}
 
-	public String saveConfig(Config config) {
-		return configRepository.save(config) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public Config saveConfig(Config config) {
+		return configRepository.save(config);
 	}
 
-	public String updateConfig(Config config) {
-		return configRepository.save(config) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneConfig(Integer id) {
-		configRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneConfig(Config config) {
+		String result = null;
+		if (configRepository.existsById(config.getId())) {
+			configRepository.delete(config);
+			result = " Config deleted!";
+		} else {
+			result = "Config Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

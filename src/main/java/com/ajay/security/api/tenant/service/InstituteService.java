@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class InstituteService {
 		return instituteRepository.findById(id).get();
 	}
 
-	public String saveInstitute(Institute institute) {
-		return instituteRepository.save(institute) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Institute saveInstitute(Institute institute) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (institute.getCreatedAt() == null)
+			institute.setCreatedAt(currentTimestamp);
+		institute.setUpdatedAt(currentTimestamp);
+		return instituteRepository.save(institute);
 	}
 
-	public String updateInstitute(Institute institute) {
-		return instituteRepository.save(institute) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneInstitute(Integer id) {
-		instituteRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneInstitute(Institute institute) {
+		String result = null;
+		if (instituteRepository.existsById(institute.getId())) {
+			instituteRepository.delete(institute);
+			result = " Institute deleted!";
+		} else {
+			result = "Institute Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

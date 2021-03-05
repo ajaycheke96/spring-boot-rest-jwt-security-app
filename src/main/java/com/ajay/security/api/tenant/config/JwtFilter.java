@@ -36,10 +36,13 @@ public class JwtFilter extends OncePerRequestFilter {
 		String tenantHeader = httpServletRequest.getHeader("X-Tenant");
 		String token = null;
 		String username = null;
-		
-		if(tenantHeader!=null)
-			System.out.println("Tenant : "+tenantHeader);
-		
+
+		httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+		httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,HEAD,PUT");
+
+		if (tenantHeader != null)
+			System.out.println("Tenant : " + tenantHeader);
+
 		TenantStorage.setCurrentTenent(tenantHeader);
 
 		if (autherizationHeader != null && autherizationHeader.startsWith("Bearer ")) {
@@ -66,5 +69,4 @@ public class JwtFilter extends OncePerRequestFilter {
 		filterChain.doFilter(httpServletRequest, httpServletResponse);
 	}
 
-	
 }

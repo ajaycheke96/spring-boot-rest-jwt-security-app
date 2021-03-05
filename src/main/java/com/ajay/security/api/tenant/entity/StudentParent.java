@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -130,6 +131,8 @@ public class StudentParent implements Serializable {
 	// bi-directional many-to-one association to User
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties({ "userPushTokens", "userPreferences", "uploads", "todos", "postalRecords", "backups",
+			"password" })
 	private User user;
 
 //	// bi-directional many-to-one association to Student

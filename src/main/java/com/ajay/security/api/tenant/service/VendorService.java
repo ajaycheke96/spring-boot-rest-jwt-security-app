@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,30 @@ public class VendorService {
 		return vendorRepository.findById(id).get();
 	}
 
-	public String saveVendor(Vendor vendor) {
-		return vendorRepository.save(vendor) != null ? " successfully saved!" : "Failed! Please try again!!";
+	public Vendor saveVendor(Vendor vendor) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (vendor.getCreatedAt() == null)
+			vendor.setCreatedAt(currentTimestamp);
+		vendor.setUpdatedAt(currentTimestamp);
+
+		// For VendorAccounts list
+		if (!vendor.getVendorAccounts().isEmpty())
+			vendor.getVendorAccounts().forEach(vendorAccount -> {
+				if (vendorAccount.getCreatedAt() == null)
+					vendorAccount.setCreatedAt(currentTimestamp);
+				vendorAccount.setUpdatedAt(currentTimestamp);
+			});
+		return vendorRepository.save(vendor);
 	}
 
-	public String updateVendor(Vendor vendor) {
-		return vendorRepository.save(vendor) != null ? " successfully updated!" : "Failed! Please try again!!";
-	}
-
-	public String deleteOneVendor(Integer id) {
-		vendorRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneVendor(Vendor vendor) {
+		String result = null;
+		if (vendorRepository.existsById(vendor.getId())) {
+			vendorRepository.delete(vendor);
+			result = " Vendor deleted!";
+		} else {
+			result = "Vendor Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

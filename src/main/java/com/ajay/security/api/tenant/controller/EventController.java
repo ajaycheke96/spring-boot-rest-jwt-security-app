@@ -1,49 +1,72 @@
 package com.ajay.security.api.tenant.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ajay.security.api.tenant.entity.Event;
+import com.ajay.security.api.tenant.model.ApiResponse;
 import com.ajay.security.api.tenant.service.EventService;
 
 @RestController
 @RequestMapping("/event")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class EventController {
 
 	@Autowired
 	private EventService eventService;
 
-	@GetMapping("/all")
-	public List<Event> getAllEvent() {
-		return eventService.getAllEvents();
+	@GetMapping("/listAllEvent")
+	public ApiResponse getAllEvent() {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "list of Event", eventService.getAllEvents());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Event" + e.getLocalizedMessage());
+		}
 	}
 
-	@GetMapping("/one/{id}")
-	public Event getOneEvent(@PathVariable Integer id) {
-		return eventService.getOneEvent(id);
+	@GetMapping("/{id}")
+	public ApiResponse getOneEvent(@PathVariable Integer id) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Event", eventService.getOneEvent(id));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Event" + e.getLocalizedMessage());
+		}
 	}
 
-	@PostMapping("/save")
-	public String saveEvent(@RequestBody Event event) {
-		return eventService.saveEvent(event);
+	@PostMapping("/saveEvent")
+	public ApiResponse saveEvent(@RequestBody Event event) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Event saved!", eventService.saveEvent(event));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Event" + e.getLocalizedMessage());
+		}
 	}
 
-	@PutMapping("/update")
-	public String updateEvent(@RequestBody Event event) {
-		return eventService.updateEvent(event);
+	@PostMapping("/updateEvent")
+	public ApiResponse updateEvent(@RequestBody Event event) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, "Event updated!", eventService.saveEvent(event));
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Event" + e.getLocalizedMessage());
+		}
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteOneEvent(@PathVariable Integer id) {
-		return eventService.deleteOneEvent(id);
+	@PostMapping("/deleteEvent")
+	public ApiResponse deleteOneEvent(@RequestBody Event event) {
+		try {
+			return new ApiResponse(LocalDateTime.now(), 200, null, eventService.deleteOneEvent(event), null);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Event" + e.getLocalizedMessage());
+		}
 	}
 }
