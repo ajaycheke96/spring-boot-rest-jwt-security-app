@@ -70,9 +70,11 @@ public class OnlineExamRecord implements Serializable {
 	@JsonIgnoreProperties({ "onlineExamQuestions", "academicSession", "batch", })
 	private OnlineExam onlineExam;
 
-//	// bi-directional many-to-one association to StudentRecord
-//	@ManyToOne
-//	@JoinColumn(name = "student_record_id")
-//	private StudentRecord studentRecord;
+	// bi-directional many-to-one association to StudentRecord
+	@ManyToOne
+	@JoinColumn(name = "student_record_id")
+	@JsonIgnoreProperties({ "certificates", "incomes", "onlineExamRecords", "studentFeeRecords", "feeAllocation",
+			"admission", "transferCertificates", "transportRouteStudents" })
+	private StudentRecord studentRecord;
 
 }

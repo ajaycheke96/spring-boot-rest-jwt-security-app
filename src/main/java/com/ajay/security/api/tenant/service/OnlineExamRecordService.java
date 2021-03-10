@@ -1,5 +1,6 @@
 package com.ajay.security.api.tenant.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,22 @@ public class OnlineExamRecordService {
 		return onlineExamRecordRepository.findById(id).get();
 	}
 
-	public String saveOnlineExamRecord(OnlineExamRecord onlineExamRecord) {
-		return onlineExamRecordRepository.save(onlineExamRecord) != null ? " successfully saved!"
-				: "Failed! Please try again!!";
+	public OnlineExamRecord saveOnlineExamRecord(OnlineExamRecord onlineExamRecord) {
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		if (onlineExamRecord.getCreatedAt() == null)
+			onlineExamRecord.setCreatedAt(currentTimestamp);
+		onlineExamRecord.setUpdatedAt(currentTimestamp);
+		return onlineExamRecordRepository.save(onlineExamRecord);
 	}
 
-	public String updateOnlineExamRecord(OnlineExamRecord onlineExamRecord) {
-		return onlineExamRecordRepository.save(onlineExamRecord) != null ? " successfully updated!"
-				: "Failed! Please try again!!";
-	}
-
-	public String deleteOneOnlineExamRecord(Integer id) {
-		onlineExamRecordRepository.deleteById(id);
-		return " successfully deleted!";
+	public String deleteOneOnlineExamRecord(OnlineExamRecord onlineExamRecord) {
+		String result = null;
+		if (onlineExamRecordRepository.existsById(onlineExamRecord.getId())) {
+			onlineExamRecordRepository.delete(onlineExamRecord);
+			result = " OnlineExamRecord deleted!";
+		} else {
+			result = "OnlineExamRecord Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }

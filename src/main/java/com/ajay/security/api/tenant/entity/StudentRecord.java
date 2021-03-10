@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -112,9 +113,10 @@ public class StudentRecord implements Serializable {
 //	private List<MeetingStudentRecord> meetingStudentRecords;
 
 	// bi-directional many-to-one association to OnlineExamRecord
-//	@OneToMany(mappedBy = "studentRecord")
-	@OneToMany(targetEntity = OnlineExamRecord.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "student_record_id")
+	@OneToMany(mappedBy = "studentRecord")
+//	@OneToMany(targetEntity = OnlineExamRecord.class, cascade = CascadeType.ALL)
+//	@JoinColumn(name = "student_record_id")
+	@JsonIgnoreProperties({"studentRecord", ""})
 	private List<OnlineExamRecord> onlineExamRecords;
 
 	// bi-directional many-to-one association to StudentFeeRecord

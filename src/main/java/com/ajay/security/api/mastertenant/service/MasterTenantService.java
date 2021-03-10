@@ -18,35 +18,36 @@ public class MasterTenantService {
 
 	@Autowired
 	private MasterTenantRepository masterTenantRepository;
-	
+
 	public MasterTenantEntity findById(Integer id) throws NotFoundException {
 		Optional<MasterTenantEntity> optional = masterTenantRepository.findById(id);
-		if(optional.isEmpty()) {
+		if (optional.isEmpty()) {
 			System.out.println("Datasource Not Found!! Please try again");
 			throw new NotFoundException("Not Found!! Please try again");
 		}
 		return optional.get();
 	}
-	
-	public MasterTenantEntity findByName(String tenantId){
+
+	public MasterTenantEntity findByName(String tenantId) {
 		return masterTenantRepository.findByTenantId(tenantId);
 	}
-	
-	public List<MasterTenantEntity> findAllTenants(){
+
+	public List<MasterTenantEntity> findAllTenants() {
 		return masterTenantRepository.findAll();
 	}
-	
-	public String saveOrUpdateTenant(MasterTenantEntity tenantEntity) {
-		String msg=(tenantEntity.getId()!=null) ? "Tenant has updated successfully!!" : "Tenant has saved successfully!!";
-		
-		MasterTenantEntity savedTenant = masterTenantRepository.save(tenantEntity);
-		msg=(savedTenant==null) ? null : msg;
-		
-		return msg;
+
+	public MasterTenantEntity saveOrUpdateTenant(MasterTenantEntity tenantEntity) {
+		return masterTenantRepository.save(tenantEntity);
 	}
-	
-	public String deleteTenantById(Integer id) {
-		masterTenantRepository.deleteById(id);
-		return "Tenant has deleted successfully!!";
+
+	public String deleteTenantById(MasterTenantEntity tenantEntity) {
+		String result = null;
+		if (masterTenantRepository.existsById(tenantEntity.getId())) {
+			masterTenantRepository.delete(tenantEntity);
+			result = " MasterTenantEntity deleted!";
+		} else {
+			result = "MasterTenantEntity Not Found! or Already deleted!";
+		}
+		return result;
 	}
 }
